@@ -84,7 +84,7 @@ namespace Pes
 
             format.Alignment = PdfTextAlignment.Left;
 
-            g.DrawString("A suivi avec succès une formation, de 07 mois aux '" + sess?.NomSession + "' organisée par le centre de télé-ensignement \r\n(programme en annexe).", NormalFont, PdfBrushes.Black, new RectangleF(40, 355, page.Graphics.ClientSize.Width, 100), format);
+            g.DrawString("durant l'année universitaire " + sess?.NomSession + " (programme en annexe).", NormalFont, PdfBrushes.Black, new RectangleF(50, 375, page.Graphics.ClientSize.Width, 100), format);
 
 
             format.Alignment = PdfTextAlignment.Right;
