@@ -1,0 +1,55 @@
+﻿@page "/rang-etabs"
+@layout MainLayout
+@inherits Pes.Pages.RangEtabsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>RangEtabs</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="calculate" style="margin-right: 5px" Text="Calculer Rangs" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="save_alt" Text="Exporter" Click="@Button1Click">
+        </RadzenButton>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getRangsEtabsResult" EditMode="DataGridEditMode.Single" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.RangsEtab" PageSize="50" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.RangsEtab" Property="Rang" TextAlign="TextAlign.Center" Title="Rang" Width="100px">
+              <Template Context="pesModelsDMdelRangsEtab">
+                <RadzenBadge style="font-size: 17px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; padding-top: 5px" Text="@(pesModelsDMdelRangsEtab.Rang.ToString("N0"))">
+                </RadzenBadge>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.RangsEtab" FilterProperty="Etablissement.NomEtablissement" GroupProperty="Etablissement.NomEtablissement" Property="Etabid" SortProperty="Etablissement.NomEtablissement" Title="Etablissement" Width="300px">
+              <EditTemplate Context="pesModelsDMdelRangsEtab">
+                <RadzenDropDown Data="@getEtablissementsResult" style="display: block; width: 100%" TextProperty="NomEtablissement" @bind-Value="@(pesModelsDMdelRangsEtab.Etabid)" ValueProperty="Id" Name="Etabid">
+                </RadzenDropDown>
+              </EditTemplate>
+              <Template Context="data">
+              @(data.Etablissement?.NomEtablissement)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.RangsEtab" FormatString="{0:P2}" Property="Moyenne" TextAlign="TextAlign.Left" Title="Moyenne" Width="150px">
+              <EditTemplate Context="pesModelsDMdelRangsEtab">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelRangsEtab.Rang)" Name="Rang">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="Rang" Popup="true">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

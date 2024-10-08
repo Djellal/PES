@@ -1,0 +1,38 @@
+﻿@page "/echelle"
+@layout MainLayout
+@inherits Pes.Pages.EchelleComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin")]
+<PageTitle>Echelle</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Echelles d'évaluation">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Ajouter" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="false" AllowPaging="false" AllowSorting="false" Data="@getEchellesResult" FilterMode="Radzen.FilterMode.Advanced" TItem="Pes.Models.DMdel.Echelle" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Property="Id" Title="Echelle">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Property="Val" Title="Valeur">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelEchelle">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelEchelle))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

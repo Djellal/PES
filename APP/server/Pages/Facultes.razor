@@ -1,0 +1,69 @@
+﻿@page "/facultes"
+@layout MainLayout
+@inherits Pes.Pages.FacultesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur")]
+<PageTitle>Facultes</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Facultés & Départements">
+        </RadzenHeading>
+      </div>
+      <div class="col-md-12 align-items-center d-flex justify-content-between">
+        <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 404px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+        </RadzenDropDown>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getFacultesResult" ExpandMode="DataGridExpandMode.Single" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Faculte" PageSize="20" RowExpand="@Grid0RowExpand" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Faculte" Property="NomFaculte" Title="Nom Faculté">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Faculte" FilterProperty="Etablissement.NomEtablissement" GroupProperty="Etablissement.NomEtablissement" Property="Etabid" SortProperty="Etablissement.NomEtablissement" Title="Etablissement" Width="300px">
+              <Template Context="data">
+              @(data.Etablissement?.NomEtablissement)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Faculte" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelFaculte">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelFaculte))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+          <Template Context="pesModelsDMdelFaculte">
+            <div class="row">
+              <div class="col-md-12" style="background-color: #e6ecef">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle_outline"  Text="Ajouter" Click="@((args) =>DepartementAddButtonClick(args, pesModelsDMdelFaculte))">
+                </RadzenButton>
+                <RadzenDataGrid @ref="grid1" AllowFiltering="false" AllowPaging="true" AllowSorting="true" Data="@(pesModelsDMdelFaculte.Departements)" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Departement" PageSize="20" RowSelect="@((args) =>Grid1RowSelect(args, pesModelsDMdelFaculte))">
+                  <Columns>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Property="NomDepartement" Title="Nom de Département">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                      <Template Context="pesModelsDMdelDepartement">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>DepartementDeleteButtonClick(args, pesModelsDMdelDepartement))" @onclick:stopPropagation="true">
+                        </RadzenButton>
+                      </Template>
+                    </RadzenDataGridColumn>
+                  </Columns>
+                </RadzenDataGrid>
+              </div>
+            </div>
+          </Template>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

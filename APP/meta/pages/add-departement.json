@@ -1,0 +1,178 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-12",
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "NomDepartement",
+                                  "name": "NomDepartementLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Nom de Département",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "maxLength": 300,
+                                  "name": "NomDepartement",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${departement.NomDepartement}",
+                                  "valueType": "string"
+                                },
+                                {
+                                  "component": "NomDepartement",
+                                  "name": "NomDepartementRequiredValidator",
+                                  "style": {
+                                    "position": "absolute"
+                                  },
+                                  "text": "Nom de Département est requis",
+                                  "type": "required-validator"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col offset-sm-3",
+                              "components": [
+                                {
+                                  "buttonStyle": "primary",
+                                  "buttonType": "submit",
+                                  "icon": "save",
+                                  "name": "button0",
+                                  "text": "",
+                                  "type": "button"
+                                },
+                                {
+                                  "buttonStyle": "light",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "type": "close-popup"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "cancel",
+                                  "name": "button1",
+                                  "style": {
+                                    "marginLeft": "1rem"
+                                  },
+                                  "text": "",
+                                  "type": "button"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row2",
+                          "type": "row"
+                        }
+                      ],
+                      "data": "${departement}",
+                      "events": {
+                        "submit": [
+                          {
+                            "code": "departement.Facid = int.Parse($\"{Facid}\");",
+                            "type": "execute"
+                          },
+                          {
+                            "error": [
+                              {
+                                "detail": "Unable to create new Departement!",
+                                "severity": "error",
+                                "summary": "Error",
+                                "type": "notify"
+                              }
+                            ],
+                            "name": "DMdel.createDepartement",
+                            "parameters": [
+                              {
+                                "name": "Departement",
+                                "value": "${departement}"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "result": "${departement}",
+                                "type": "close-popup"
+                              }
+                            ],
+                            "type": "invoke"
+                          }
+                        ]
+                      },
+                      "itemType": "Pes.Models.DMdel.Departement",
+                      "name": "form0",
+                      "type": "template-form",
+                      "visible": "${departement != null}"
+                    }
+                  ],
+                  "name": "col0",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "type": "row"
+            }
+          ],
+          "name": "card0",
+          "type": "card",
+          "visible": true
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "departement",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Departement(){}",
+        "valueType": "Pes.Models.DMdel.Departement"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Departement"
+}

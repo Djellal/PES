@@ -1,0 +1,32 @@
+﻿@page "/select-etablissement"
+@layout MainLayout
+@inherits Pes.Pages.SelectEtablissementComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>SelectEtablissement</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenCard>
+      <ChildContent>
+        <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Sélectionner l'Etablissements">
+        </RadzenHeading>
+        <RadzenDropDown Data="@getEtablissementsResult" Placeholder="Sélectionner l'Etablissements" style="margin-top: 15px; width: 100%" @bind-Value="@SelectedEtabId" Name="Dropdown0">
+        </RadzenDropDown>
+        <div style="background-color: #88989b; margin-left: 5px; margin-right: 5px; margin-top: 25px" class="row">
+          <div class="col  justify-content-around d-flex">
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 37px" Text="Valider" Click="@Button0Click">
+            </RadzenButton>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Annuler" Click="@Button1Click">
+            </RadzenButton>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenCard>
+  </ChildContent>
+</RadzenContent>

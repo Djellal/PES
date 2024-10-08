@@ -1,0 +1,63 @@
+{
+  "access": "Everybody",
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "style": {
+            "backgroundColor": "#dd0606",
+            "borderRadius": "10px",
+            "color": "#ffffff",
+            "marginTop": "40px",
+            "textAlign": "center"
+          },
+          "text": "Non autorisé",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-center d-flex",
+              "components": [
+                {
+                  "content": "<p>L'utilisateur actuel n'est pas autorisé à voir cette page.</p>",
+                  "name": "html0",
+                  "type": "html"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-center d-flex",
+              "components": [
+                {
+                  "name": "image0",
+                  "path": "/assets/images/access-denied.png",
+                  "style": {
+                    "width": "500px"
+                  },
+                  "type": "image"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "layout": "Main",
+  "name": "Unauthorized"
+}

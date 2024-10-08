@@ -1,0 +1,56 @@
+﻿@page "/regions"
+@layout MainLayout
+@inherits Pes.Pages.RegionsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin")]
+<PageTitle>Regions</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Regions">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Ajouter" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getRegionsResult" EditMode="DataGridEditMode.Single" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Region" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Region" Property="Id" Title="Id" Width="100px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Region" Property="NomRegion" Title="Nom Region">
+              <EditTemplate Context="pesModelsDMdelRegion">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelRegion.NomRegion)" Name="NomRegion">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="NomRegion" Popup="true">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Region" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelRegion">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, pesModelsDMdelRegion))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="pesModelsDMdelRegion">
+                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) =>SaveButtonClick(args, pesModelsDMdelRegion))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Click="@((args) =>CancelButtonClick(args, pesModelsDMdelRegion))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Region" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelRegion">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelRegion))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

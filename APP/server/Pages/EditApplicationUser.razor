@@ -1,0 +1,140 @@
+﻿@page "/edit-application-user/{Id}"
+@layout MainLayout
+@inherits Pes.Pages.EditApplicationUserComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>Edit Application User</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@user" TItem="ApplicationUser" style="background-color: #e6ecef; padding-bottom: 20px; padding-left: 10px; padding-right: 10px; padding-top: 20px" Visible="@(user != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="UserName" style="text-align: right; width: 100%" Text="Nom Utilisateur">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox Disabled="true" style="width: 100%" @bind-Value="@(user.UserName)" Name="UserName">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Email" style="text-align: right; width: 100%" Text="Tél">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(user.PhoneNumber)" Name="Textbox0">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Email" style="text-align: right; width: 100%" Text="Email">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="width: 100%" @bind-Value="@(user.Email)" Name="Email">
+                </RadzenTextBox>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="RoleNames" style="text-align: right; width: 100%" Text="Roles">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@roles" Multiple="true" style="width: 100%" TextProperty="Name" @bind-Value="@(user.RoleNames)" ValueProperty="Name" Name="RoleNames">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <RadzenCard style="background-color: #e6ecef; margin-bottom: 11px" Visible="@RegionEtabVisible">
+              <ChildContent>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="RoleNames" style="text-align: right; width: 100%" Text="Region">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenDropDown Data="@getRegionsResult" Multiple="false" style="width: 100%" TextProperty="NomRegion" @bind-Value="@(user.Regid)" ValueProperty="Id" Name="Regiondropdown" Change="@RegiondropdownChange">
+                    </RadzenDropDown>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="RoleNames" style="text-align: right; width: 100%" Text="Etablissement">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Multiple="false" style="width: 100%" TextProperty="NomEtablissement" @bind-Value="@(user.Etabid)" ValueProperty="Id" Name="Etabdropdown">
+                    </RadzenDropDown>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenCard>
+            <RadzenCard style="background-color: #e6ecef" Visible="@FacDepVisible">
+              <ChildContent>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="RoleNames" style="text-align: right; width: 100%" Text="Faculté">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenDropDown AllowFiltering="true" Data="@getFacultesResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Multiple="false" Placeholder="Choisir la faculté" style="width: 100%" TextProperty="NomFaculte" @bind-Value="@(user.Facultid)" ValueProperty="Id" Name="Facultedropdown" Change="@FacultedropdownChange">
+                    </RadzenDropDown>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="RoleNames" style="text-align: right; width: 100%" Text="Département">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenDropDown AllowFiltering="true" Data="@getDepartementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Multiple="false" Placeholder="Choisir le département" style="width: 100%" TextProperty="NomDepartement" @bind-Value="@(user.Departid)" ValueProperty="Id" Name="Departementdropdown">
+                    </RadzenDropDown>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenCard>
+            <div style="margin-bottom: 1rem; margin-top: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Password" style="text-align: right; width: 100%" Text="Mot de passe">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenPassword style="width: 100%" @bind-Value="@(user.Password)" Name="Password">
+                </RadzenPassword>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="ConfirmPassword" style="text-align: right; width: 100%" Text="Confirmer mot de  passe">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenPassword style="width: 100%" @bind-Value="@(user.ConfirmPassword)" Name="ConfirmPassword">
+                </RadzenPassword>
+              </div>
+            </div>
+            <div style="background-color: #88989b; margin-left: 2px; margin-right: 2px; padding-bottom: 7px; padding-left: 5px; padding-right: 3px; padding-top: 6px" class="row">
+              <div class="col offset-sm-3 justify-content-around d-flex">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Valider">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Annuler" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

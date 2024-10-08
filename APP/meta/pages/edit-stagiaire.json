@@ -1,0 +1,667 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur",
+    "expert"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "alertStyle": "AlertStyle.Success",
+                          "allowClose": false,
+                          "icon": "perm_identity",
+                          "name": "alert0",
+                          "size": "AlertSize.ExtraSmall",
+                          "text": "${\"Faculté : \" +stagiaire.Faculte?.NomFaculte+\" ;Département : \" +stagiaire.Departement?.NomDepartement}",
+                          "title": "${\"Stagiaire  : \"+ stagiaire.Nom+\" \" + stagiaire.Prenom}",
+                          "type": "alert"
+                        },
+                        {
+                          "class": "justify-content-between",
+                          "components": [
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Primary",
+                                  "allowClose": false,
+                                  "icon": "link",
+                                  "name": "alert3",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "title": "URL Cours",
+                                  "type": "alert"
+                                },
+                                {
+                                  "icon": "link",
+                                  "name": "link1",
+                                  "path": "${stagiaire.URLcour}",
+                                  "style": {
+                                    "textAlign": "center"
+                                  },
+                                  "target": "_blank",
+                                  "text": "URL Cour",
+                                  "type": "link"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Primary",
+                                  "allowClose": false,
+                                  "icon": "link",
+                                  "name": "alert6",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "style": {
+                                    "display": "inline-block"
+                                  },
+                                  "title": "Cours en ligne",
+                                  "type": "alert"
+                                },
+                                {
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "error": [
+                                          {
+                                            "detail": "${result.Message}",
+                                            "severity": "error",
+                                            "summary": "Erreur",
+                                            "type": "notify"
+                                          }
+                                        ],
+                                        "name": "CalculerNote",
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      }
+                                    ]
+                                  },
+                                  "name": "checkbox0",
+                                  "style": {
+                                    "height": "31px",
+                                    "width": "36px"
+                                  },
+                                  "type": "checkbox",
+                                  "value": "${stagiaire.CourEnligne}",
+                                  "valueType": "bool?"
+                                }
+                              ],
+                              "name": "col8",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Primary",
+                                  "allowClose": false,
+                                  "icon": "spellcheck",
+                                  "name": "alert2",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "title": "Note du Cours",
+                                  "type": "alert"
+                                },
+                                {
+                                  "disabled": false,
+                                  "format": "P2",
+                                  "name": "notenumeric",
+                                  "readOnly": true,
+                                  "style": {
+                                    "backgroundColor": "rgba(93, 191, 116, 0.29)",
+                                    "fontFamily": "tahoma,geneva,sans-serif",
+                                    "fontWeight": "bold",
+                                    "width": "100%"
+                                  },
+                                  "textAlign": "TextAlign.Center",
+                                  "type": "numeric",
+                                  "value": "${stagiaire.Note}",
+                                  "valueType": "double"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Primary",
+                                  "allowClose": false,
+                                  "icon": "spellcheck",
+                                  "name": "alert4",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "title": "Eval.continue",
+                                  "type": "alert"
+                                },
+                                {
+                                  "disabled": "",
+                                  "format": "P2",
+                                  "max": 1,
+                                  "min": 0,
+                                  "name": "numeric0",
+                                  "readOnly": "${!Security.IsInRole(new String[]{Constants.admin})}",
+                                  "step": "0.01",
+                                  "style": {
+                                    "backgroundColor": "rgba(93, 191, 116, 0.29)",
+                                    "fontFamily": "tahoma,geneva,sans-serif",
+                                    "fontWeight": "bold",
+                                    "width": "100%"
+                                  },
+                                  "textAlign": "TextAlign.Center",
+                                  "type": "numeric",
+                                  "value": "${stagiaire.NoteCC}",
+                                  "valueType": "double"
+                                }
+                              ],
+                              "name": "col6",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-2",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Primary",
+                                  "allowClose": false,
+                                  "icon": "spellcheck",
+                                  "name": "alert5",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "title": "Note Finale",
+                                  "type": "alert"
+                                },
+                                {
+                                  "format": "P2",
+                                  "name": "numeric1",
+                                  "readOnly": true,
+                                  "style": {
+                                    "backgroundColor": "rgba(93, 191, 116, 0.29)",
+                                    "fontFamily": "tahoma,geneva,sans-serif",
+                                    "fontWeight": "bold",
+                                    "width": "100%"
+                                  },
+                                  "textAlign": "TextAlign.Center",
+                                  "type": "numeric",
+                                  "value": "${stagiaire.NoteFinale}",
+                                  "valueType": "double"
+                                }
+                              ],
+                              "name": "col7",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "style": {
+                            "backgroundColor": "#e6ecef",
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "badgeStyle": "BadgeStyle.Danger",
+                          "name": "badge0",
+                          "style": {
+                            "fontSize": "16px",
+                            "paddingBottom": "5px",
+                            "paddingTop": "5px",
+                            "width": "100%"
+                          },
+                          "text": "NB: Le cours doit être en ligne pour que l'évaluation soit calculée",
+                          "type": "badge"
+                        }
+                      ],
+                      "name": "card1",
+                      "style": {
+                        "backgroundColor": "#e6ecef"
+                      },
+                      "type": "card",
+                      "visible": true
+                    },
+                    {
+                      "components": [
+                        {
+                          "allGroupsExpanded": true,
+                          "allowFiltering": false,
+                          "allowGrouping": true,
+                          "allowMultiColumnSorting": true,
+                          "allowPaging": true,
+                          "allowSorting": true,
+                          "allowVirtualization": true,
+                          "columns": [
+                            {
+                              "editTemplate": "",
+                              "frozen": true,
+                              "groupFooterTemplate": "",
+                              "headerTemplate": "",
+                              "property": "NomRubrique",
+                              "template": "",
+                              "title": "Rubrique"
+                            },
+                            {
+                              "editTemplate": "",
+                              "frozen": true,
+                              "property": "NomElement",
+                              "title": "Element",
+                              "width": "200px"
+                            },
+                            {
+                              "editTemplate": "",
+                              "filterProperty": "Critere.NomCritere",
+                              "groupProperty": "Critere.NomCritere",
+                              "property": "Criterid",
+                              "sortProperty": "Critere.NomCritere",
+                              "template": "${data.Critere?.NomCritere}",
+                              "title": "Critere"
+                            },
+                            {
+                              "editTemplate": [
+                                {
+                                  "data": "${getEchellesResult}",
+                                  "events": {
+                                    "change": []
+                                  },
+                                  "name": "Echellid",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "Id",
+                                  "type": "dropdown",
+                                  "value": "${data.Echellid}",
+                                  "valueProperty": "Id"
+                                }
+                              ],
+                              "filterProperty": "Echelle.Id",
+                              "groupProperty": "Echelle.Id",
+                              "property": "Echellid",
+                              "sortProperty": "Echelle.Id",
+                              "template": "${data.Echelle?.Id}",
+                              "title": "Echelle",
+                              "visible": "${Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury})}",
+                              "width": "150px"
+                            },
+                            {
+                              "editTemplate": [
+                                {
+                                  "format": "N0",
+                                  "max": 5,
+                                  "min": 0,
+                                  "name": "numeric2",
+                                  "showUpDown": true,
+                                  "step": "0",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textAlign": "TextAlign.Center",
+                                  "type": "numeric",
+                                  "value": "${data.NoteSynthese}",
+                                  "valueType": "double"
+                                }
+                              ],
+                              "format": "",
+                              "property": "NoteSynthese",
+                              "title": "Note Synthese",
+                              "type": "number",
+                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur,Constants.expert})}"
+                            },
+                            {
+                              "editTemplate": [
+                                {
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "code": "${this.grid0.UpdateRow(data)}",
+                                        "type": "execute"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "save",
+                                  "name": "saveButton",
+                                  "size": "sm",
+                                  "text": "Sauvegarder",
+                                  "type": "button"
+                                },
+                                {
+                                  "buttonStyle": "secondary",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "code": "${this.grid0.CancelEditRow(data)}",
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "name": "DMdel.cancelEvaluationChanges",
+                                        "parameters": [
+                                          {
+                                            "name": "Evaluation",
+                                            "value": "${data}"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "cancel",
+                                  "name": "cancelButton",
+                                  "size": "sm",
+                                  "text": "Annuler",
+                                  "type": "button"
+                                }
+                              ],
+                              "filterable": false,
+                              "sortable": false,
+                              "template": [
+                                {
+                                  "disabled": "",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "code": "${this.grid0.EditRow(data)}",
+                                        "type": "execute"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "",
+                                  "name": "editButton",
+                                  "size": "sm",
+                                  "text": "Evaluer",
+                                  "type": "button"
+                                }
+                              ],
+                              "textAlign": "center",
+                              "visible": "${Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury})}",
+                              "width": "180px"
+                            }
+                          ],
+                          "data": "${Evals}",
+                          "density": "Density.Default",
+                          "editMode": "single",
+                          "events": {
+                            "loadData": [],
+                            "render": [
+                              {
+                                "code": "if (args.FirstRender)\n{\n    args.Grid.Groups.Add(new GroupDescriptor() { Property = \"NomRubrique\", SortOrder = SortOrder.Descending, Title = \"Rubrique\" });\n    //args.Grid.Groups.Add(new GroupDescriptor() { Property = \"NomElement\", SortOrder = SortOrder.Descending,Title= \"Element\" });\n    StateHasChanged();\n};",
+                                "type": "execute"
+                              }
+                            ],
+                            "rowCreate": [
+                              {
+                                "name": "DMdel.createEvaluation",
+                                "parameters": [
+                                  {
+                                    "name": "Evaluation",
+                                    "value": "${event}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "type": "execute"
+                                  },
+                                  {
+                                    "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ],
+                            "rowUpdate": [
+                              {
+                                "name": "DMdel.updateEvaluation",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${event.Id}"
+                                  },
+                                  {
+                                    "name": "Evaluation",
+                                    "value": "${event}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              },
+                              {
+                                "name": "Calculer",
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              }
+                            ]
+                          },
+                          "filterMode": "advanced",
+                          "groupFootersAlwaysVisible": false,
+                          "groupPanelText": "Faites glisser un en-tête de colonne ici et déposez-le pour regrouper par cette colonne",
+                          "hideGroupedColumn": true,
+                          "itemType": "Pes.Models.DMdel.Evaluation",
+                          "keyProperty": "Id",
+                          "name": "grid0",
+                          "pageSize": 100,
+                          "pageSizeText": "",
+                          "showExpandColumn": true,
+                          "showPagingSummary": true,
+                          "title": "",
+                          "type": "datagrid"
+                        }
+                      ],
+                      "name": "card0",
+                      "type": "card",
+                      "visible": true
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col  d-flex justify-content-around",
+                          "components": [
+                            {
+                              "buttonStyle": "success",
+                              "buttonType": "submit",
+                              "icon": "print",
+                              "name": "button0",
+                              "style": {
+                                "height": "40px"
+                              },
+                              "text": "Imprimer Attestation",
+                              "type": "button",
+                              "visible": "${stagiaire.NoteFinale>50}"
+                            },
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "name": "button3",
+                              "style": {
+                                "height": "40px"
+                              },
+                              "text": "Sauvegarder",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "icon": "cancel",
+                              "name": "button1",
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Fermer",
+                              "type": "button"
+                            }
+                          ],
+                          "name": "col3",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "style": {
+                        "marginTop": "20px"
+                      },
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${stagiaire}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to update Stagiaire",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "DMdel.updateStagiaire",
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${parameters.Id}"
+                          },
+                          {
+                            "name": "Stagiaire",
+                            "value": "${stagiaire}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "condition": "",
+                            "result": "${stagiaire}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "name": "Calculer",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "itemType": "Pes.Models.DMdel.Stagiaire",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${stagiaire != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "error": [],
+        "name": "DMdel.getStagiaireById",
+        "parameters": [
+          {
+            "name": "Id",
+            "value": "${parameters.Id}"
+          }
+        ],
+        "then": [
+          {
+            "name": "stagiaire",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "Pes.Models.DMdel.Stagiaire"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getEtablissementsForEtabidResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getEchelles",
+        "parameters": [
+          {
+            "name": "$orderby",
+            "value": "c=>c.Val"
+          }
+        ],
+        "then": [
+          {
+            "name": "getEchellesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Echelle>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getCriteres",
+        "then": [
+          {
+            "name": "getCriteresResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Critere>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "LoadEvalutions",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      },
+      {
+        "name": "Calculer",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Edit Stagiaire"
+}

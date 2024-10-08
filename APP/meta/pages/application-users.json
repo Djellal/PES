@@ -1,0 +1,293 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "heading0",
+          "size": "H2",
+          "style": {
+            "backgroundColor": "rgb(0, 120, 212)",
+            "borderRadius": "5px",
+            "color": "#e6ecef",
+            "fontFamily": "times new roman,times,serif",
+            "paddingBottom": "4px",
+            "paddingTop": "2px",
+            "textAlign": "center"
+          },
+          "text": "Utilisateurs",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12 justify-content-between d-flex",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "data": "${getEtablissementsResult}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "LoadUsers",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "filterCaseSensitivity": "caseInsensitive",
+                  "name": "dropdown0",
+                  "placeholder": "Filtrer par établissement",
+                  "style": {
+                    "width": "400px"
+                  },
+                  "textProperty": "NomEtablissement",
+                  "type": "dropdown",
+                  "value": "${SelectedEtab}",
+                  "valueProperty": "Id",
+                  "valueTemplate": "",
+                  "valueType": "int?",
+                  "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                },
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "closeDialogOnOverlayClick": true,
+                        "draggable": true,
+                        "path": "add-application-user",
+                        "resizable": true,
+                        "then": [
+                          {
+                            "code": "await Load();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "${await grid0.Reload()}",
+                            "type": "execute"
+                          }
+                        ],
+                        "title": "Ajouter Un utilisateur",
+                        "type": "popup",
+                        "width": 800
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {},
+                  "text": "Ajouter",
+                  "type": "button"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "style": {
+            "border": "3px solid #0078d4",
+            "borderRadius": "5px",
+            "paddingBottom": "10px",
+            "paddingTop": "10px"
+          },
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "UserName",
+                      "title": "User Name"
+                    },
+                    {
+                      "format": "",
+                      "property": "Etabid",
+                      "template": "${GetEtabName(data.Etabid)}\n\n",
+                      "title": "Etablissement",
+                      "type": "integer"
+                    },
+                    {
+                      "format": "",
+                      "property": "RoleNames",
+                      "template": [
+                        {
+                          "data": "${data.RoleNames}",
+                          "disabled": true,
+                          "multiple": true,
+                          "name": "selectbar0",
+                          "size": "ButtonSize.Small",
+                          "style": {
+                            "height": "25px",
+                            "width": "100%"
+                          },
+                          "textProperty": "Name",
+                          "type": "selectbar",
+                          "value": "${data.RoleNames}",
+                          "valueProperty": "Name",
+                          "valueType": "string"
+                        }
+                      ],
+                      "title": "Roles",
+                      "type": "array"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "argType": "ApplicationUser",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete user",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "Security.deleteUser",
+                                "parameters": [
+                                  {
+                                    "name": "id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await Load();",
+                                    "type": "execute"
+                                  },
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${users}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "argType": "ApplicationUser",
+                        "closeDialogOnOverlayClick": true,
+                        "draggable": true,
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          }
+                        ],
+                        "path": "edit-application-user",
+                        "resizable": true,
+                        "then": [
+                          {
+                            "code": "await Load();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "${await grid0.Reload()}",
+                            "type": "execute"
+                          }
+                        ],
+                        "title": "Modifier utilisateur",
+                        "type": "popup",
+                        "width": 800
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "ApplicationUser",
+                  "name": "grid0",
+                  "pageSize": 30,
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "SelectedEtab",
+        "type": "set",
+        "value": "null",
+        "valueType": "int?"
+      },
+      {
+        "name": "users",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.ApplicationUser>"
+      },
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getEtablissementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "LoadUsers",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Application Users"
+}

@@ -1,0 +1,118 @@
+﻿@page "/edit-stagiaire/{Id}"
+@layout MainLayout
+@inherits Pes.Pages.EditStagiaireComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert")]
+<PageTitle>Edit Stagiaire</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@stagiaire" TItem="Pes.Models.DMdel.Stagiaire" Visible="@(stagiaire != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <RadzenCard style="background-color: #e6ecef">
+              <ChildContent>
+                <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="perm_identity" Size="AlertSize.ExtraSmall" Text="@("Faculté : " +stagiaire.Faculte?.NomFaculte+" ;Département : " +stagiaire.Departement?.NomDepartement)" Title="@("Stagiaire  : "+ stagiaire.Nom+" " + stagiaire.Prenom)">
+                </RadzenAlert>
+                <div class="row justify-content-between" style="background-color: #e6ecef; margin-bottom: 1rem">
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="link" Size="AlertSize.ExtraSmall" Title="URL Cours">
+                    </RadzenAlert>
+                    <RadzenLink Icon="link" Path="@($"{stagiaire.URLcour}")" style="text-align: center" Target="_blank" Text="URL Cour">
+                    </RadzenLink>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="link" Size="AlertSize.ExtraSmall" style="display: inline-block" Title="Cours en ligne">
+                    </RadzenAlert>
+                    <RadzenCheckBox style="height: 31px; width: 36px" @bind-Value="@(stagiaire.CourEnligne)" TValue="bool?" Name="Checkbox0" Change="@Checkbox0Change">
+                    </RadzenCheckBox>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note du Cours">
+                    </RadzenAlert>
+                    <RadzenNumeric Disabled="false" Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.Note)" Name="Notenumeric">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Eval.continue">
+                    </RadzenAlert>
+                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteCC)" Name="Numeric0">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note Finale">
+                    </RadzenAlert>
+                    <RadzenNumeric Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteFinale)" Name="Numeric1">
+                    </RadzenNumeric>
+                  </div>
+                </div>
+                <RadzenBadge BadgeStyle="BadgeStyle.Danger" style="font-size: 16px; padding-bottom: 5px; padding-top: 5px; width: 100%" Text="NB: Le cours doit être en ligne pour que l'évaluation soit calculée">
+                </RadzenBadge>
+              </ChildContent>
+            </RadzenCard>
+            <RadzenCard>
+              <ChildContent>
+                <RadzenDataGrid @ref="grid0" AllGroupsExpanded="true" AllowFiltering="false" AllowGrouping="true" AllowMultiColumnSorting="true" AllowPaging="true" AllowSorting="true" AllowVirtualization="true" Data="@Evals" Density="Density.Default" EditMode="DataGridEditMode.Single" FilterMode="Radzen.FilterMode.Advanced" GroupFootersAlwaysVisible="false" GroupPanelText="Faites glisser un en-tête de colonne ici et déposez-le pour regrouper par cette colonne" HideGroupedColumn="true" TItem="Pes.Models.DMdel.Evaluation" KeyProperty="Id" PageSize="100" ShowExpandColumn="true" ShowPagingSummary="true" Render="@Grid0Render" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+                  <Columns>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Frozen="true" Property="NomRubrique" Title="Rubrique">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Frozen="true" Property="NomElement" Title="Element" Width="200px">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Critere.NomCritere" GroupProperty="Critere.NomCritere" Property="Criterid" SortProperty="Critere.NomCritere" Title="Critere">
+                      <Template Context="data">
+                      @(data.Critere?.NomCritere)
+                      </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Echelle.Id" GroupProperty="Echelle.Id" Property="Echellid" SortProperty="Echelle.Id" Title="Echelle" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury}))" Width="150px">
+                      <EditTemplate Context="pesModelsDMdelEvaluation">
+                        <RadzenDropDown Data="@getEchellesResult" style="display: block; width: 100%" TextProperty="Id" @bind-Value="@(pesModelsDMdelEvaluation.Echellid)" ValueProperty="Id" Name="Echellid">
+                        </RadzenDropDown>
+                      </EditTemplate>
+                      <Template Context="data">
+                      @(data.Echelle?.Id)
+                      </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur,Constants.expert}))">
+                      <EditTemplate Context="pesModelsDMdelEvaluation">
+                        <RadzenNumeric Format="N0" Max="5" Min="0" ShowUpDown="true" Step="0" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
+                        </RadzenNumeric>
+                      </EditTemplate>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury}))" Width="180px">
+                      <Template Context="pesModelsDMdelEvaluation">
+                        <RadzenButton Size="ButtonSize.Small" Text="Evaluer" Click="@((args) =>EditButtonClick(args, pesModelsDMdelEvaluation))">
+                        </RadzenButton>
+                      </Template>
+                      <EditTemplate Context="pesModelsDMdelEvaluation">
+                        <RadzenButton Icon="save" Size="ButtonSize.Small" Text="Sauvegarder" Click="@((args) =>SaveButtonClick(args, pesModelsDMdelEvaluation))">
+                        </RadzenButton>
+                        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Text="Annuler" Click="@((args) =>CancelButtonClick(args, pesModelsDMdelEvaluation))">
+                        </RadzenButton>
+                      </EditTemplate>
+                    </RadzenDataGridColumn>
+                  </Columns>
+                </RadzenDataGrid>
+              </ChildContent>
+            </RadzenCard>
+            <div style="margin-top: 20px" class="row">
+              <div class="col  d-flex justify-content-around">
+                <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" style="height: 40px" Text="Imprimer Attestation" Visible="@(stagiaire.NoteFinale>50)">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 40px" Text="Sauvegarder">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="margin-left: 1rem" Text="Fermer" Click="@Button1Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

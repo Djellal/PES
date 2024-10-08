@@ -1,0 +1,48 @@
+﻿@page "/edit-departement/{Id}"
+@layout MainLayout
+@inherits Pes.Pages.EditDepartementComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur")]
+<PageTitle>Edit Departement</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenCard>
+      <ChildContent>
+        <div class="row">
+          <div class="col-md-12">
+            <RadzenTemplateForm Data="@departement" TItem="Pes.Models.DMdel.Departement" Visible="@(departement != null)" Submit="@Form0Submit">
+              <ChildContent>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="NomDepartement" style="width: 100%" Text="Nom de Département">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenTextBox MaxLength="300" style="display: block; width: 100%" @bind-Value="@(departement.NomDepartement)" Name="NomDepartement">
+                    </RadzenTextBox>
+                    <RadzenRequiredValidator Component="NomDepartement" style="position: absolute" Text="Nom de Département est requis">
+                    </RadzenRequiredValidator>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col offset-sm-3">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save">
+                    </RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="margin-left: 1rem" Click="@Button1Click">
+                    </RadzenButton>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenTemplateForm>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenCard>
+  </ChildContent>
+</RadzenContent>

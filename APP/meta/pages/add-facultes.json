@@ -1,0 +1,241 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-12",
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "Etabid",
+                                  "name": "EtabidLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Etablissement",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "data": "${getEtablissementsForEtabidResult}",
+                                  "name": "Etabid",
+                                  "placeholder": "Choisir Etablissement",
+                                  "showSearch": false,
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "NomEtablissement",
+                                  "type": "dropdown-datagrid",
+                                  "value": "${faculte.Etabid}",
+                                  "valueProperty": "Id",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "NomFaculte",
+                                  "name": "NomFaculteLabel",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "text": "Nom Faculté",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "maxLength": 300,
+                                  "name": "NomFaculte",
+                                  "style": {
+                                    "display": "block",
+                                    "width": "100%"
+                                  },
+                                  "type": "textbox",
+                                  "value": "${faculte.NomFaculte}",
+                                  "valueType": "string"
+                                },
+                                {
+                                  "component": "NomFaculte",
+                                  "name": "NomFaculteRequiredValidator",
+                                  "style": {
+                                    "position": "absolute"
+                                  },
+                                  "text": "Nom de Faculté est requis",
+                                  "type": "required-validator"
+                                }
+                              ],
+                              "name": "col4",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row2",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col offset-sm-3  d-flex justify-content-around",
+                              "components": [
+                                {
+                                  "buttonStyle": "primary",
+                                  "buttonType": "submit",
+                                  "icon": "save",
+                                  "name": "button0",
+                                  "style": {
+                                    "height": "50px",
+                                    "width": "50px"
+                                  },
+                                  "text": "",
+                                  "type": "button"
+                                },
+                                {
+                                  "buttonStyle": "light",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "type": "close-popup"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "clear",
+                                  "name": "button1",
+                                  "style": {
+                                    "height": "50px",
+                                    "marginLeft": "1rem",
+                                    "width": "50px"
+                                  },
+                                  "template": "",
+                                  "text": "",
+                                  "type": "button"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row3",
+                          "type": "row"
+                        }
+                      ],
+                      "data": "${faculte}",
+                      "events": {
+                        "submit": [
+                          {
+                            "error": [
+                              {
+                                "detail": "Unable to create new Faculte!",
+                                "severity": "error",
+                                "summary": "Error",
+                                "type": "notify"
+                              }
+                            ],
+                            "name": "DMdel.createFaculte",
+                            "parameters": [
+                              {
+                                "name": "Faculte",
+                                "value": "${faculte}"
+                              }
+                            ],
+                            "then": [
+                              {
+                                "result": "${faculte}",
+                                "type": "close-popup"
+                              }
+                            ],
+                            "type": "invoke"
+                          }
+                        ]
+                      },
+                      "itemType": "Pes.Models.DMdel.Faculte",
+                      "name": "form0",
+                      "type": "template-form",
+                      "visible": "${faculte != null}"
+                    }
+                  ],
+                  "name": "col0",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "type": "row"
+            }
+          ],
+          "name": "card0",
+          "type": "card",
+          "visible": true
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "faculte",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Faculte(){}",
+        "valueType": "Pes.Models.DMdel.Faculte"
+      },
+      {
+        "name": "getEtablissementsForEtabidResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+      },
+      {
+        "name": "LoadEtablissement",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Facultes"
+}

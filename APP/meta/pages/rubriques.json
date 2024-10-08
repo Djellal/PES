@@ -1,0 +1,325 @@
+{
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "heading0",
+          "size": "H2",
+          "style": {
+            "backgroundColor": "rgb(0, 120, 212)",
+            "borderRadius": "5px",
+            "color": "#e6ecef",
+            "fontFamily": "times new roman,times,serif",
+            "paddingBottom": "4px",
+            "paddingTop": "2px",
+            "textAlign": "center"
+          },
+          "text": "Rubriques",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "code": "await this.grid0.InsertRow(new Pes.Models.DMdel.Rubrique{ NomRubrique=\"Nouvelle rubrique\", Coeff=1})",
+                        "type": "execute"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Ajouter",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "NomRubrique",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "type": "textbox",
+                          "value": "${data.NomRubrique}"
+                        },
+                        {
+                          "component": "NomRubrique",
+                          "popup": true,
+                          "type": "required-validator"
+                        }
+                      ],
+                      "property": "NomRubrique",
+                      "title": "Nom Rubrique"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "numeric0",
+                          "style": {
+                            "fontSize": "16px",
+                            "fontStyle": "oblique",
+                            "fontWeight": "600",
+                            "width": "100%"
+                          },
+                          "textAlign": "TextAlign.Center",
+                          "type": "numeric",
+                          "value": "${data.Coeff}",
+                          "valueType": "double"
+                        }
+                      ],
+                      "filterTemplate": "",
+                      "format": "double",
+                      "property": "Coeff",
+                      "textAlign": "center",
+                      "title": "Coefficient",
+                      "type": "number",
+                      "width": "200px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "code": "${this.grid0.UpdateRow(data)}",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "icon": "save",
+                          "name": "saveButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        },
+                        {
+                          "buttonStyle": "secondary",
+                          "events": {
+                            "click": [
+                              {
+                                "code": "${this.grid0.CancelEditRow(data)}",
+                                "type": "execute"
+                              },
+                              {
+                                "name": "DMdel.cancelRubriqueChanges",
+                                "parameters": [
+                                  {
+                                    "name": "Rubrique",
+                                    "value": "${data}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "cancel",
+                          "name": "cancelButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "editItem != null",
+                                "name": "DMdel.cancelRubriqueChanges",
+                                "parameters": [
+                                  {
+                                    "name": "Rubrique",
+                                    "value": "${editItem}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              },
+                              {
+                                "code": "${await this.Load()}",
+                                "type": "execute"
+                              },
+                              {
+                                "code": "${await this.grid0.Reload()}",
+                                "type": "execute"
+                              },
+                              {
+                                "code": "${this.grid0.EditRow(data)}",
+                                "type": "execute"
+                              },
+                              {
+                                "name": "editItem",
+                                "type": "set",
+                                "value": "${data}",
+                                "valueType": "Pes.Models.DMdel.Rubrique"
+                              }
+                            ]
+                          },
+                          "icon": "edit",
+                          "name": "editButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "disabled": false,
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Voulez-vous vraiment supprimer cette ligne ?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Rubrique",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "DMdel.deleteRubrique",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getRubriquesResult}",
+                  "editMode": "single",
+                  "events": {
+                    "loadData": [],
+                    "rowCreate": [
+                      {
+                        "name": "DMdel.createRubrique",
+                        "parameters": [
+                          {
+                            "name": "Rubrique",
+                            "value": "${event}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ],
+                    "rowUpdate": [
+                      {
+                        "name": "DMdel.updateRubrique",
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          },
+                          {
+                            "name": "Rubrique",
+                            "value": "${event}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "filterMode": "advanced",
+                  "itemType": "Pes.Models.DMdel.Rubrique",
+                  "name": "grid0",
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "rubrique",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Rubrique(){}",
+        "valueType": "Pes.Models.DMdel.Rubrique"
+      },
+      {
+        "name": "DMdel.getRubriques",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getRubriquesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Rubrique>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Rubriques"
+}

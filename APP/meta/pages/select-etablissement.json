@@ -1,0 +1,128 @@
+{
+  "access": "Authenticated",
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "name": "heading0",
+              "size": "H2",
+              "style": {
+                "backgroundColor": "rgb(0, 120, 212)",
+                "borderRadius": "5px",
+                "color": "#e6ecef",
+                "fontFamily": "times new roman,times,serif",
+                "paddingBottom": "4px",
+                "paddingTop": "2px",
+                "textAlign": "center"
+              },
+              "text": "Sélectionner l'Etablissements",
+              "type": "heading"
+            },
+            {
+              "data": "${getEtablissementsResult}",
+              "name": "dropdown0",
+              "placeholder": "Sélectionner l'Etablissements",
+              "style": {
+                "marginTop": "15px",
+                "width": "100%"
+              },
+              "type": "dropdown",
+              "value": "${SelectedEtabId}",
+              "valueType": "int"
+            },
+            {
+              "components": [
+                {
+                  "class": "col  justify-content-around d-flex",
+                  "components": [
+                    {
+                      "buttonStyle": "primary",
+                      "buttonType": "submit",
+                      "events": {
+                        "click": [
+                          {
+                            "result": "${SelectedEtabId}",
+                            "type": "close-popup"
+                          }
+                        ]
+                      },
+                      "icon": "save",
+                      "name": "button0",
+                      "style": {
+                        "height": "37px"
+                      },
+                      "text": "Valider",
+                      "type": "button"
+                    },
+                    {
+                      "buttonStyle": "light",
+                      "events": {
+                        "click": [
+                          {
+                            "result": "null",
+                            "type": "close-popup"
+                          }
+                        ]
+                      },
+                      "icon": "cancel",
+                      "name": "button1",
+                      "text": "Annuler",
+                      "type": "button"
+                    }
+                  ],
+                  "name": "col0",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "style": {
+                "backgroundColor": "#88989b",
+                "marginLeft": "5px",
+                "marginRight": "5px",
+                "marginTop": "25px"
+              },
+              "type": "row"
+            }
+          ],
+          "name": "card0",
+          "type": "card",
+          "visible": true
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "SelectedEtabId",
+        "type": "set",
+        "value": "0",
+        "valueType": "int"
+      },
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [
+          {
+            "name": "$expand",
+            "value": "Region"
+          }
+        ],
+        "then": [
+          {
+            "name": "getEtablissementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "SelectEtablissement"
+}

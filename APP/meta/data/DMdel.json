@@ -1,0 +1,2795 @@
+{
+  "info": {
+    "title": "DMdel",
+    "x-type": "odata",
+    "x-connector": "postgresql"
+  },
+  "definitions": {
+    "Critere": {
+      "x-table": "public.Criteres",
+      "resource": "Criteres",
+      "required": [
+        "Id",
+        "NomCritere"
+      ],
+      "properties": {
+        "Element": {
+          "type": "object",
+          "$ref": "#/definitions/Element"
+        },
+        "Elementid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Elements",
+            "parentEntityType": "Element",
+            "type": "Element",
+            "principalKey": "Id",
+            "name": "Element",
+            "textProperty": "NomElement",
+            "navigationProperty": "Criteres"
+          }
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Critere",
+              "name": "Evaluations",
+              "type": "Evaluation"
+            }
+          ]
+        },
+        "NomCritere": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Evaluations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Evaluation"
+          }
+        }
+      }
+    },
+    "Departement": {
+      "x-table": "public.Departements",
+      "resource": "Departements",
+      "required": [
+        "Id",
+        "NomDepartement"
+      ],
+      "properties": {
+        "Faculte": {
+          "type": "object",
+          "$ref": "#/definitions/Faculte"
+        },
+        "Facid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Facultes",
+            "parentEntityType": "Faculte",
+            "type": "Faculte",
+            "principalKey": "Id",
+            "name": "Faculte",
+            "textProperty": "NomFaculte",
+            "navigationProperty": "Departements"
+          }
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Departement",
+              "name": "Stagiaires",
+              "type": "Stagiaire"
+            }
+          ]
+        },
+        "NomDepartement": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Stagiaires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stagiaire"
+          }
+        }
+      }
+    },
+    "Echelle": {
+      "x-table": "public.Echelles",
+      "resource": "Echelles",
+      "required": [
+        "Val",
+        "Id"
+      ],
+      "properties": {
+        "Val": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Id": {
+          "x-key": true,
+          "x-nullable": false,
+          "type": "string",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Echelle",
+              "name": "Evaluations",
+              "type": "Evaluation"
+            }
+          ]
+        },
+        "Evaluations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Evaluation"
+          }
+        }
+      }
+    },
+    "Element": {
+      "x-table": "public.Elements",
+      "resource": "Elements",
+      "required": [
+        "Id",
+        "NomElement"
+      ],
+      "properties": {
+        "Rubrique": {
+          "type": "object",
+          "$ref": "#/definitions/Rubrique"
+        },
+        "Rubid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Rubriques",
+            "parentEntityType": "Rubrique",
+            "type": "Rubrique",
+            "principalKey": "Id",
+            "name": "Rubrique",
+            "textProperty": "NomRubrique",
+            "navigationProperty": "Elements"
+          }
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Element",
+              "name": "Criteres",
+              "type": "Critere"
+            }
+          ]
+        },
+        "NomElement": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Criteres": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Critere"
+          }
+        }
+      }
+    },
+    "Etablissement": {
+      "x-table": "public.Etablissements",
+      "resource": "Etablissements",
+      "required": [
+        "Rang",
+        "Id",
+        "NomEtablissement"
+      ],
+      "properties": {
+        "Region": {
+          "type": "object",
+          "$ref": "#/definitions/Region"
+        },
+        "Regid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Regions",
+            "parentEntityType": "Region",
+            "type": "Region",
+            "principalKey": "Id",
+            "name": "Region",
+            "textProperty": "NomRegion",
+            "navigationProperty": "Etablissements"
+          }
+        },
+        "Rang": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Etablissement",
+              "name": "Facultes",
+              "type": "Faculte"
+            },
+            {
+              "inversePropertyName": "Etablissement",
+              "name": "RangsEtabs",
+              "type": "RangsEtab"
+            },
+            {
+              "inversePropertyName": "Etablissement",
+              "name": "Stagiaires",
+              "type": "Stagiaire"
+            }
+          ]
+        },
+        "NomEtablissement": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Facultes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Faculte"
+          }
+        },
+        "RangsEtabs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RangsEtab"
+          }
+        },
+        "Stagiaires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stagiaire"
+          }
+        }
+      }
+    },
+    "Evaluation": {
+      "x-table": "public.Evaluations",
+      "resource": "Evaluations",
+      "required": [
+        "Id",
+        "MembreId",
+        "NomRubrique",
+        "NomElement"
+      ],
+      "properties": {
+        "EstSynthese": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "Stagiaire": {
+          "type": "object",
+          "$ref": "#/definitions/Stagiaire"
+        },
+        "Stagid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Stagiaires",
+            "parentEntityType": "Stagiaire",
+            "type": "Stagiaire",
+            "principalKey": "Id",
+            "name": "Stagiaire",
+            "textProperty": "RefAttestation",
+            "navigationProperty": "Evaluations"
+          }
+        },
+        "Critere": {
+          "type": "object",
+          "$ref": "#/definitions/Critere"
+        },
+        "Criterid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Criteres",
+            "parentEntityType": "Critere",
+            "type": "Critere",
+            "principalKey": "Id",
+            "name": "Critere",
+            "textProperty": "NomCritere",
+            "navigationProperty": "Evaluations"
+          }
+        },
+        "NoteSynthese": {
+          "x-default-sql": "0.0",
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer"
+        },
+        "MembreId": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 100
+        },
+        "NomRubrique": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "NomElement": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Echelle": {
+          "type": "object",
+          "$ref": "#/definitions/Echelle"
+        },
+        "Echellid": {
+          "type": "string",
+          "x-foreignKey": {
+            "parentTable": "Echelles",
+            "parentEntityType": "Echelle",
+            "type": "Echelle",
+            "principalKey": "Id",
+            "name": "Echelle",
+            "textProperty": "Id",
+            "navigationProperty": "Evaluations"
+          }
+        }
+      }
+    },
+    "Faculte": {
+      "x-table": "public.Facultes",
+      "resource": "Facultes",
+      "required": [
+        "Id",
+        "NomFaculte"
+      ],
+      "properties": {
+        "Etablissement": {
+          "type": "object",
+          "$ref": "#/definitions/Etablissement"
+        },
+        "Etabid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Etablissements",
+            "parentEntityType": "Etablissement",
+            "type": "Etablissement",
+            "principalKey": "Id",
+            "name": "Etablissement",
+            "textProperty": "NomEtablissement",
+            "navigationProperty": "Facultes"
+          }
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Faculte",
+              "name": "Departements",
+              "type": "Departement"
+            },
+            {
+              "inversePropertyName": "Faculte",
+              "name": "Stagiaires",
+              "type": "Stagiaire"
+            }
+          ]
+        },
+        "NomFaculte": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Departements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Departement"
+          }
+        },
+        "Stagiaires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stagiaire"
+          }
+        }
+      }
+    },
+    "RangsEtab": {
+      "x-table": "public.RangsEtabs",
+      "resource": "RangsEtabs",
+      "required": [
+        "Rang",
+        "Id"
+      ],
+      "properties": {
+        "Etablissement": {
+          "type": "object",
+          "$ref": "#/definitions/Etablissement"
+        },
+        "Etabid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Etablissements",
+            "parentEntityType": "Etablissement",
+            "type": "Etablissement",
+            "principalKey": "Id",
+            "name": "Etablissement",
+            "textProperty": "NomEtablissement",
+            "navigationProperty": "RangsEtabs"
+          }
+        },
+        "Session": {
+          "type": "object",
+          "$ref": "#/definitions/Session"
+        },
+        "Sessionid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Sessions",
+            "parentEntityType": "Session",
+            "type": "Session",
+            "principalKey": "Id",
+            "name": "Session",
+            "textProperty": "NomSession",
+            "navigationProperty": "RangsEtabs"
+          }
+        },
+        "Rang": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Moyenne": {
+          "x-default-sql": "0.0",
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer"
+        }
+      }
+    },
+    "Region": {
+      "x-table": "public.Regions",
+      "resource": "Regions",
+      "required": [
+        "Id",
+        "NomRegion"
+      ],
+      "properties": {
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Region",
+              "name": "Etablissements",
+              "type": "Etablissement"
+            }
+          ]
+        },
+        "NomRegion": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Etablissements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Etablissement"
+          }
+        }
+      }
+    },
+    "Rubrique": {
+      "x-table": "public.Rubriques",
+      "resource": "Rubriques",
+      "required": [
+        "Id",
+        "NomRubrique"
+      ],
+      "properties": {
+        "Coeff": {
+          "x-default-sql": "0.0",
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Rubrique",
+              "name": "Elements",
+              "type": "Element"
+            }
+          ]
+        },
+        "NomRubrique": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Element"
+          }
+        }
+      }
+    },
+    "Session": {
+      "x-table": "public.Sessions",
+      "resource": "Sessions",
+      "required": [
+        "DateDebut",
+        "Id",
+        "NomSession"
+      ],
+      "properties": {
+        "DateDebut": {
+          "x-nullable": false,
+          "type": "string",
+          "format": "date-time"
+        },
+        "EnCours": {
+          "x-nullable": false,
+          "type": "boolean"
+        },
+        "DateFin": {
+          "x-default-sql": "'-infinity'::timestamp with time zone",
+          "x-nullable": false,
+          "type": "string",
+          "format": "date-time"
+        },
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Session",
+              "name": "RangsEtabs",
+              "type": "RangsEtab"
+            },
+            {
+              "inversePropertyName": "Session",
+              "name": "Stagiaires",
+              "type": "Stagiaire"
+            }
+          ]
+        },
+        "NomSession": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "CodeSession": {
+          "x-default-sql": "''::character varying",
+          "x-nullable": false,
+          "type": "string",
+          "length": 100
+        },
+        "RangsEtabs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RangsEtab"
+          }
+        },
+        "Stagiaires": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Stagiaire"
+          }
+        }
+      }
+    },
+    "Stagiaire": {
+      "x-table": "public.Stagiaires",
+      "resource": "Stagiaires",
+      "required": [
+        "Id",
+        "DateNaissance",
+        "NoteCC",
+        "Note",
+        "NoteFinale",
+        "email",
+        "portefolio",
+        "URLcour",
+        "Nom",
+        "Prenom"
+      ],
+      "properties": {
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Stagiaire",
+              "name": "Evaluations",
+              "type": "Evaluation"
+            }
+          ]
+        },
+        "DateNaissance": {
+          "x-nullable": false,
+          "type": "string",
+          "format": "date-time"
+        },
+        "Etablissement": {
+          "type": "object",
+          "$ref": "#/definitions/Etablissement"
+        },
+        "Etabid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Etablissements",
+            "parentEntityType": "Etablissement",
+            "type": "Etablissement",
+            "principalKey": "Id",
+            "name": "Etablissement",
+            "textProperty": "NomEtablissement",
+            "navigationProperty": "Stagiaires"
+          }
+        },
+        "Faculte": {
+          "type": "object",
+          "$ref": "#/definitions/Faculte"
+        },
+        "Facid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Facultes",
+            "parentEntityType": "Faculte",
+            "type": "Faculte",
+            "principalKey": "Id",
+            "name": "Faculte",
+            "textProperty": "NomFaculte",
+            "navigationProperty": "Stagiaires"
+          }
+        },
+        "Departement": {
+          "type": "object",
+          "$ref": "#/definitions/Departement"
+        },
+        "Departid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Departements",
+            "parentEntityType": "Departement",
+            "type": "Departement",
+            "principalKey": "Id",
+            "name": "Departement",
+            "textProperty": "NomDepartement",
+            "navigationProperty": "Stagiaires"
+          }
+        },
+        "Session": {
+          "type": "object",
+          "$ref": "#/definitions/Session"
+        },
+        "Sessionid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Sessions",
+            "parentEntityType": "Session",
+            "type": "Session",
+            "principalKey": "Id",
+            "name": "Session",
+            "textProperty": "NomSession",
+            "navigationProperty": "Stagiaires"
+          }
+        },
+        "NoteCC": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "Note": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "NoteFinale": {
+          "x-nullable": false,
+          "type": "number",
+          "format": "double"
+        },
+        "CourEnligne": {
+          "type": "boolean"
+        },
+        "RefAttestation": {
+          "x-default-sql": "''::text",
+          "x-nullable": false,
+          "type": "string"
+        },
+        "email": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "portefolio": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "URLcour": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "Nom": {
+          "x-nullable": false,
+          "type": "string",
+          "length": 300
+        },
+        "Prenom": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "Evaluations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Evaluation"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/Criteres": {
+      "get": {
+        "operationId": "getCriteres",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Critere"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createCritere",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Critere",
+            "schema": {
+              "$ref": "#/definitions/Critere"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Critere"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Departements": {
+      "get": {
+        "operationId": "getDepartements",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Departement"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createDepartement",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Departement",
+            "schema": {
+              "$ref": "#/definitions/Departement"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Departement"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Echelles": {
+      "get": {
+        "operationId": "getEchelles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Echelle"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createEchelle",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Echelle",
+            "schema": {
+              "$ref": "#/definitions/Echelle"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Echelle"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Elements": {
+      "get": {
+        "operationId": "getElements",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Element"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createElement",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Element",
+            "schema": {
+              "$ref": "#/definitions/Element"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Element"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Etablissements": {
+      "get": {
+        "operationId": "getEtablissements",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Etablissement"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createEtablissement",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Etablissement",
+            "schema": {
+              "$ref": "#/definitions/Etablissement"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Etablissement"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Evaluations": {
+      "get": {
+        "operationId": "getEvaluations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Evaluation"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createEvaluation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Evaluation",
+            "schema": {
+              "$ref": "#/definitions/Evaluation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Evaluation"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Facultes": {
+      "get": {
+        "operationId": "getFacultes",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Faculte"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createFaculte",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Faculte",
+            "schema": {
+              "$ref": "#/definitions/Faculte"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Faculte"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/RangsEtabs": {
+      "get": {
+        "operationId": "getRangsEtabs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/RangsEtab"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createRangsEtab",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "RangsEtab",
+            "schema": {
+              "$ref": "#/definitions/RangsEtab"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/RangsEtab"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Regions": {
+      "get": {
+        "operationId": "getRegions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Region"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createRegion",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Region",
+            "schema": {
+              "$ref": "#/definitions/Region"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Region"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Rubriques": {
+      "get": {
+        "operationId": "getRubriques",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Rubrique"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createRubrique",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Rubrique",
+            "schema": {
+              "$ref": "#/definitions/Rubrique"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Rubrique"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Sessions": {
+      "get": {
+        "operationId": "getSessions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Session"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createSession",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Session",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Stagiaires": {
+      "get": {
+        "operationId": "getStagiaires",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Stagiaire"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createStagiaire",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Stagiaire",
+            "schema": {
+              "$ref": "#/definitions/Stagiaire"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Stagiaire"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Criteres({Id})": {
+      "delete": {
+        "operationId": "deleteCritere",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getCritereById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Critere"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateCritere",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Critere",
+            "schema": {
+              "$ref": "#/definitions/Critere"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelCritereChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Critere",
+            "schema": {
+              "$ref": "#/definitions/Critere"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Departements({Id})": {
+      "delete": {
+        "operationId": "deleteDepartement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getDepartementById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Departement"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateDepartement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Departement",
+            "schema": {
+              "$ref": "#/definitions/Departement"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelDepartementChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Departement",
+            "schema": {
+              "$ref": "#/definitions/Departement"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Echelles('{Id}')": {
+      "delete": {
+        "operationId": "deleteEchelle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getEchelleById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Echelle"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateEchelle",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "Echelle",
+            "schema": {
+              "$ref": "#/definitions/Echelle"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelEchelleChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Echelle",
+            "schema": {
+              "$ref": "#/definitions/Echelle"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Elements({Id})": {
+      "delete": {
+        "operationId": "deleteElement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getElementById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Element"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateElement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Element",
+            "schema": {
+              "$ref": "#/definitions/Element"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelElementChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Element",
+            "schema": {
+              "$ref": "#/definitions/Element"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Etablissements({Id})": {
+      "delete": {
+        "operationId": "deleteEtablissement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getEtablissementById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Etablissement"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateEtablissement",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Etablissement",
+            "schema": {
+              "$ref": "#/definitions/Etablissement"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelEtablissementChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Etablissement",
+            "schema": {
+              "$ref": "#/definitions/Etablissement"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Evaluations({Id})": {
+      "delete": {
+        "operationId": "deleteEvaluation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getEvaluationById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Evaluation"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateEvaluation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Evaluation",
+            "schema": {
+              "$ref": "#/definitions/Evaluation"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelEvaluationChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Evaluation",
+            "schema": {
+              "$ref": "#/definitions/Evaluation"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Facultes({Id})": {
+      "delete": {
+        "operationId": "deleteFaculte",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getFaculteById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Faculte"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateFaculte",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Faculte",
+            "schema": {
+              "$ref": "#/definitions/Faculte"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelFaculteChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Faculte",
+            "schema": {
+              "$ref": "#/definitions/Faculte"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/RangsEtabs({Id})": {
+      "delete": {
+        "operationId": "deleteRangsEtab",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getRangsEtabById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/RangsEtab"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateRangsEtab",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "RangsEtab",
+            "schema": {
+              "$ref": "#/definitions/RangsEtab"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelRangsEtabChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "RangsEtab",
+            "schema": {
+              "$ref": "#/definitions/RangsEtab"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Regions({Id})": {
+      "delete": {
+        "operationId": "deleteRegion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getRegionById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Region"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateRegion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Region",
+            "schema": {
+              "$ref": "#/definitions/Region"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelRegionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Region",
+            "schema": {
+              "$ref": "#/definitions/Region"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Rubriques({Id})": {
+      "delete": {
+        "operationId": "deleteRubrique",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getRubriqueById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Rubrique"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateRubrique",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Rubrique",
+            "schema": {
+              "$ref": "#/definitions/Rubrique"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelRubriqueChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Rubrique",
+            "schema": {
+              "$ref": "#/definitions/Rubrique"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Sessions({Id})": {
+      "delete": {
+        "operationId": "deleteSession",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getSessionById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateSession",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Session",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelSessionChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Session",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Stagiaires({Id})": {
+      "delete": {
+        "operationId": "deleteStagiaire",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getStagiaireById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Stagiaire"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateStagiaire",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Stagiaire",
+            "schema": {
+              "$ref": "#/definitions/Stagiaire"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelStagiaireChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Stagiaire",
+            "schema": {
+              "$ref": "#/definitions/Stagiaire"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "basePath": "/odata/DMdel",
+  "host": "localhost:5000",
+  "schemes": [
+    "http"
+  ]
+}

@@ -1,0 +1,88 @@
+﻿@page "/sessions"
+@layout MainLayout
+@inherits Pes.Pages.SessionsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin")]
+<PageTitle>Sessions</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Sessions">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Ajouter" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="false" AllowPaging="true" AllowSorting="true" Data="@getSessionsResult" EditMode="DataGridEditMode.Single" FilterMode="Radzen.FilterMode.Advanced" TItem="Pes.Models.DMdel.Session" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Property="NomSession" Title="Nom Session">
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelSession.NomSession)" Name="NomSession">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="NomSession" Popup="true" Text="Le nom de session est requis">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Property="CodeSession" Title="Code Session">
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelSession.CodeSession)" Name="CodeSession">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="CodeSession" Popup="true" Text="Le code de session est requis">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" FormatString="{0:d}" Property="DateDebut" Title="Date Début">
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelSession.DateDebut)" Name="DateDebut">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="DateDebut" Popup="true" Text="Date de début est requise">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" FormatString="{0:d}" Property="DateFin" Title="Date Fin">
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenDatePicker style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelSession.DateFin)" Name="DateFin">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="DateFin" Popup="true" Text="Date de fin est requise">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Property="EnCours" Title="En Cours" Width="120px">
+              <Template Context="pesModelsDMdelSession">
+                <RadzenSwitch @bind-Value="@(pesModelsDMdelSession.EnCours)" Name="EnCourswitch" Change="@((args) =>EnCourswitchChange(args, pesModelsDMdelSession))">
+                </RadzenSwitch>
+              </Template>
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenSwitch Disabled="false" @bind-Value="@(pesModelsDMdelSession.EnCours)" Name="EnCourswitchedit" Change="@((args) =>EnCourswitcheditChange(args, pesModelsDMdelSession))">
+                </RadzenSwitch>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelSession">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, pesModelsDMdelSession))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="pesModelsDMdelSession">
+                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) =>SaveButtonClick(args, pesModelsDMdelSession))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Click="@((args) =>CancelButtonClick(args, pesModelsDMdelSession))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelSession">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelSession))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

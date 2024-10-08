@@ -1,0 +1,210 @@
+{
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Id",
+                              "name": "IdLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Echelle",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col0",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Id",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${echelle.Id}",
+                              "valueType": "string"
+                            },
+                            {
+                              "component": "Id",
+                              "name": "IdRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Id is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "name": "col1",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row0",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Val",
+                              "name": "ValLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Valeur",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Val",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${echelle.Val}",
+                              "valueType": "double"
+                            },
+                            {
+                              "component": "Val",
+                              "name": "ValRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Val is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "class": "justify-content-end",
+                      "components": [
+                        {
+                          "class": "col offset-sm-3 justify-content-end d-flex",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "size": "ButtonSize.Large",
+                              "text": "",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "icon": "cancel",
+                              "size": "ButtonSize.Large",
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${echelle}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Echelle!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "DMdel.createEchelle",
+                        "parameters": [
+                          {
+                            "name": "Echelle",
+                            "value": "${echelle}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${echelle}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "Pes.Models.DMdel.Echelle",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${echelle != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "echelle",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Echelle(){}",
+        "valueType": "Pes.Models.DMdel.Echelle"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Echelle"
+}

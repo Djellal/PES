@@ -1,0 +1,160 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Nom Critere",
+                              "component": "NomCritere",
+                              "name": "NomCritereLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "string",
+                              "maxLength": 300,
+                              "type": "textbox",
+                              "name": "NomCritere",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${critere.NomCritere}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "NomCritereRequiredValidator",
+                              "component": "NomCritere",
+                              "text": "NomCritere is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "type": "execute",
+                        "code": "critere.Elementid = int.Parse($\"{Elementid}\");"
+                      },
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Critere!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "DMdel.createCritere",
+                        "parameters": [
+                          {
+                            "name": "Critere",
+                            "value": "${critere}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${critere}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${critere}",
+                  "visible": "${critere != null}",
+                  "itemType": "Pes.Models.DMdel.Critere"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "critere",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Critere(){}",
+        "valueType": "Pes.Models.DMdel.Critere"
+      }
+    ]
+  },
+  "name": "Add Critere",
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
+  "layout": "Main"
+}

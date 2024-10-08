@@ -1,0 +1,707 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur",
+    "expert"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-12  d-flex justify-content-between align-items-center",
+                  "components": [
+                    {
+                      "disabled": "",
+                      "events": {
+                        "click": [
+                          {
+                            "condition": "",
+                            "name": "ExecuteAction",
+                            "parameters": [
+                              {
+                                "name": "act",
+                                "type": "int",
+                                "value": "${event.Value}"
+                              }
+                            ],
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          }
+                        ]
+                      },
+                      "icon": "flash_on",
+                      "items": [
+                        {
+                          "icon": "person_add",
+                          "text": "Ajouter un Stagiaire",
+                          "value": "0"
+                        },
+                        {
+                          "icon": "save_alt",
+                          "text": "Expoter à excel",
+                          "value": "1"
+                        },
+                        {
+                          "disabled": "",
+                          "icon": "delete_forever",
+                          "text": "Supprimer les stagiaires selectionnées",
+                          "value": "2",
+                          "visible": "${Security.IsInRole(Constants.admin)}"
+                        }
+                      ],
+                      "name": "splitbutton0",
+                      "size": "ButtonSize.Small",
+                      "text": "Actions",
+                      "type": "splitbutton"
+                    },
+                    {
+                      "accept": "xlsx",
+                      "auto": true,
+                      "chooseText": "Importer une Liste (Excel)",
+                      "events": {
+                        "MouseEnter": [
+                          {
+                            "duration": 5000,
+                            "position": "TooltipPosition.Bottom",
+                            "text": "Le nom de la faculté et de département doit exister dans la liste des faculté et départements de l'établissement",
+                            "type": "tooltip"
+                          }
+                        ],
+                        "complete": [
+                          {
+                            "name": "LoadStagiaires",
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          }
+                        ],
+                        "error": [
+                          {
+                            "code": "await DialogService.Alert(\"Il faut séléctionner l'établissement\")",
+                            "condition": "${SelectedEtab == null}",
+                            "type": "execute"
+                          }
+                        ]
+                      },
+                      "name": "uploadList",
+                      "type": "upload",
+                      "url": "${uploadUrl}",
+                      "visible": true
+                    },
+                    {
+                      "icon": "link",
+                      "name": "link0",
+                      "path": "docs/liste-stagiaires.xlsx",
+                      "style": {
+                        "fontSize": "12px",
+                        "fontWeight": "bold"
+                      },
+                      "target": "_blank",
+                      "text": "Télécharger le modèle en Excel",
+                      "type": "link",
+                      "visible": "${Security.IsInRole(new String[]{Constants.coordinateur,Constants.admin})}"
+                    },
+                    {
+                      "allowClear": true,
+                      "allowFiltering": true,
+                      "data": "${getEtablissementsResult}",
+                      "events": {
+                        "change": [
+                          {
+                            "name": "LoadStagiaires",
+                            "schema": {
+                              "$ref": "#/definitions/Task",
+                              "dotnetType": "System.Threading.Tasks.Task"
+                            },
+                            "type": "invoke-method"
+                          }
+                        ]
+                      },
+                      "filterCaseSensitivity": "caseInsensitive",
+                      "name": "dropdown0",
+                      "placeholder": "Filtrer par établissement",
+                      "style": {
+                        "width": "350px"
+                      },
+                      "textProperty": "NomEtablissement",
+                      "type": "dropdown",
+                      "value": "${SelectedEtab}",
+                      "valueProperty": "Id",
+                      "valueTemplate": "",
+                      "valueType": "int?",
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                    }
+                  ],
+                  "name": "col0",
+                  "style": {},
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "style": {
+                "marginLeft": "3px",
+                "marginRight": "3px"
+              },
+              "type": "row"
+            }
+          ],
+          "name": "card0",
+          "type": "card",
+          "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowRowSelectOnRowClick": false,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "headerTemplate": [
+                        {
+                          "events": {
+                            "change": [
+                              {
+                                "name": "ChangeSelectionStatus",
+                                "parameters": [
+                                  {
+                                    "name": "args",
+                                    "type": "bool?",
+                                    "value": "${event}"
+                                  }
+                                ],
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              }
+                            ]
+                          },
+                          "name": "switch1",
+                          "type": "switch",
+                          "value": "${SelectedStagiares != null && SelectedStagiares.Any()}"
+                        }
+                      ],
+                      "template": [
+                        {
+                          "events": {
+                            "change": [
+                              {
+                                "code": "grid0.SelectRow(data)",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "name": "switch0",
+                          "type": "switch",
+                          "value": "${SelectedStagiares != null && SelectedStagiares.Contains(data)}"
+                        }
+                      ],
+                      "title": "Selection",
+                      "width": "70px"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "filterable": false,
+                      "groupable": false,
+                      "pickable": false,
+                      "reorderable": false,
+                      "resizable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "icon": "perm_identity",
+                          "name": "icon0",
+                          "type": "icon"
+                        }
+                      ],
+                      "width": "50px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "Nom",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "type": "textbox",
+                          "value": "${data.Nom}"
+                        },
+                        {
+                          "component": "Nom",
+                          "popup": true,
+                          "text": "Le nom  est requis",
+                          "type": "required-validator"
+                        }
+                      ],
+                      "property": "Nom",
+                      "title": "Nom",
+                      "width": "150px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "Prenom",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "type": "textbox",
+                          "value": "${data.Prenom}"
+                        },
+                        {
+                          "component": "Prenom",
+                          "popup": true,
+                          "text": "Le Prénom  est requis",
+                          "type": "required-validator"
+                        }
+                      ],
+                      "property": "Prenom",
+                      "title": "Prénom",
+                      "width": "150px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "emailtextbox",
+                          "placeholder": "email",
+                          "style": {
+                            "width": "100%"
+                          },
+                          "type": "textbox",
+                          "value": "${data.email}"
+                        },
+                        {
+                          "component": "emailtextbox",
+                          "name": "emailValidator0",
+                          "popup": true,
+                          "text": "Veuiller saisir un une adresse email valide",
+                          "type": "email-validator"
+                        }
+                      ],
+                      "format": "",
+                      "property": "email",
+                      "title": "Email",
+                      "type": "string",
+                      "width": "220px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "allowFiltering": true,
+                          "data": "${getEtablissementsResult}",
+                          "filterCaseSensitivity": "caseInsensitive",
+                          "name": "Etabid",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "textProperty": "NomEtablissement",
+                          "type": "dropdown",
+                          "value": "${data.Etabid}",
+                          "valueProperty": "Id"
+                        },
+                        {
+                          "component": "Etabid",
+                          "name": "requiredValidator0",
+                          "text": "Létablissement est requise",
+                          "type": "required-validator"
+                        }
+                      ],
+                      "filterProperty": "Etablissement.NomEtablissement",
+                      "groupProperty": "Etablissement.NomEtablissement",
+                      "property": "Etabid",
+                      "sortProperty": "Etablissement.NomEtablissement",
+                      "template": "${data.Etablissement?.NomEtablissement}",
+                      "title": "Etablissement",
+                      "width": "300px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "allowFiltering": true,
+                          "data": "${getFacultesResult}",
+                          "events": {
+                            "change": [
+                              {
+                                "name": "DMdel.getDepartements",
+                                "parameters": [
+                                  {
+                                    "name": "$filter",
+                                    "value": "d=>d.Facid == ${event}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "name": "getDepartementsResult",
+                                    "type": "set",
+                                    "value": "${result}",
+                                    "valueType": "IEnumerable<Pes.Models.DMdel.Departement>"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "filterCaseSensitivity": "caseInsensitive",
+                          "multiple": false,
+                          "name": "facultedropdown",
+                          "placeholder": "Choisir la faculté",
+                          "style": {
+                            "width": "100%"
+                          },
+                          "template": "",
+                          "textProperty": "NomFaculte",
+                          "type": "dropdown",
+                          "value": "${data.Facid}",
+                          "valueProperty": "Id",
+                          "valueTemplate": "",
+                          "valueType": "int?"
+                        }
+                      ],
+                      "filterProperty": "Faculte.NomFaculte",
+                      "format": "",
+                      "groupProperty": "Faculte.NomFaculte",
+                      "property": "Facid",
+                      "template": "${data.Faculte?.NomFaculte}",
+                      "title": "Faculté",
+                      "type": "",
+                      "width": "250px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "allowFiltering": true,
+                          "data": "${getDepartementsResult}",
+                          "filterCaseSensitivity": "caseInsensitive",
+                          "multiple": false,
+                          "name": "departementdropdown",
+                          "placeholder": "Choisir le département",
+                          "style": {
+                            "width": "100%"
+                          },
+                          "template": "",
+                          "textProperty": "NomDepartement",
+                          "type": "dropdown",
+                          "value": "${data.Departid}",
+                          "valueProperty": "Id",
+                          "valueTemplate": "",
+                          "valueType": "int?"
+                        }
+                      ],
+                      "filterProperty": "Faculte.NomFaculte",
+                      "format": "",
+                      "groupProperty": "Faculte.NomFaculte",
+                      "property": "Departid",
+                      "template": "${data.Departement?.NomDepartement}",
+                      "title": "Département",
+                      "type": ""
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "urlcourtextbox",
+                          "style": {
+                            "width": "100%"
+                          },
+                          "type": "textbox",
+                          "value": "${data.URLcour}"
+                        }
+                      ],
+                      "filterTemplate": "",
+                      "format": "",
+                      "property": "URLcour",
+                      "template": [
+                        {
+                          "icon": "link",
+                          "name": "link1",
+                          "path": "${data.URLcour}",
+                          "style": {
+                            "textAlign": "center"
+                          },
+                          "target": "_blank",
+                          "text": "URL Cours",
+                          "type": "link"
+                        }
+                      ],
+                      "title": "URL cours",
+                      "type": "string"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "disabled": "",
+                          "format": "P0",
+                          "max": 1,
+                          "min": 0,
+                          "name": "NoteCCnumeric",
+                          "readOnly": "${!Security.IsInRole(new String[]{Constants.admin})}",
+                          "step": "0.1",
+                          "style": {
+                            "fontSize": "18px",
+                            "fontWeight": "bolder",
+                            "width": "100%"
+                          },
+                          "textAlign": "TextAlign.Center",
+                          "type": "numeric",
+                          "value": "${data.NoteCC}",
+                          "valueType": "double"
+                        }
+                      ],
+                      "format": "double",
+                      "formatString": "{0:P2}",
+                      "property": "NoteCC",
+                      "textAlign": "center",
+                      "title": "Note évaluation continue",
+                      "type": "number"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "code": "${this.grid0.UpdateRow(data)}",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "icon": "save",
+                          "name": "saveButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        },
+                        {
+                          "buttonStyle": "secondary",
+                          "events": {
+                            "click": [
+                              {
+                                "code": "${this.grid0.CancelEditRow(data)}",
+                                "type": "execute"
+                              },
+                              {
+                                "name": "DMdel.cancelStagiaireChanges",
+                                "parameters": [
+                                  {
+                                    "name": "Stagiaire",
+                                    "value": "${data}"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "cancel",
+                          "name": "cancelButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "events": {
+                            "click": [
+                              {
+                                "code": "${this.grid0.EditRow(data)}",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "icon": "edit",
+                          "name": "editButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}",
+                      "width": "70px"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "name": "GridDeleteButtonClicked",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "type": "int",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getStagiairesResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowCreate": [
+                      {
+                        "name": "DMdel.createStagiaire",
+                        "parameters": [
+                          {
+                            "name": "Stagiaire",
+                            "value": "${event}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ],
+                    "rowUpdate": [
+                      {
+                        "name": "DMdel.updateStagiaire",
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          },
+                          {
+                            "name": "Stagiaire",
+                            "value": "${event}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.Stagiaire",
+                  "name": "grid0",
+                  "pageSize": 20,
+                  "pageSizeText": "",
+                  "selectionMode": "DataGridSelectionMode.Multiple",
+                  "title": "",
+                  "type": "datagrid",
+                  "value": "${SelectedStagiares}"
+                },
+                {
+                  "buttonStyle": "success",
+                  "icon": "countertops",
+                  "name": "button1",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "text": "${\"Nbr de stagiaires \"+getStagiairesResult?.Count().ToString()}",
+                  "type": "button"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "SelectedEtab",
+        "type": "set",
+        "value": "null",
+        "valueType": "int?"
+      },
+      {
+        "name": "getEtablissementsResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+      },
+      {
+        "name": "stagiaire",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Stagiaire(){}",
+        "valueType": "Pes.Models.DMdel.Stagiaire"
+      },
+      {
+        "name": "getStagiairesResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Stagiaire>"
+      },
+      {
+        "name": "getFacultesResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Faculte>"
+      },
+      {
+        "name": "getDepartementsResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Departement>"
+      },
+      {
+        "name": "LoadStagiaires",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Stagiairelist"
+}

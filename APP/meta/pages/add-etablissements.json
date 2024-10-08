@@ -1,0 +1,211 @@
+{
+  "components": [
+    {
+      "type": "content",
+      "container": "main",
+      "components": [
+        {
+          "type": "row",
+          "components": [
+            {
+              "type": "col",
+              "class": "col-md-12",
+              "components": [
+                {
+                  "type": "template-form",
+                  "name": "form0",
+                  "components": [
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Region",
+                              "component": "Regid",
+                              "name": "RegidLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getRegionsResult}",
+                              "textProperty": "NomRegion",
+                              "valueProperty": "Id",
+                              "placeholder": "Choose Region",
+                              "valueType": "int?",
+                              "type": "dropdown",
+                              "name": "Regid",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "value": "${etablissement.Regid}"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "type": "label",
+                              "text": "Nom Etablissement",
+                              "component": "NomEtablissement",
+                              "name": "NomEtablissementLabel",
+                              "style": {
+                                "width": "100%"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "col",
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "valueType": "string",
+                              "maxLength": 300,
+                              "type": "textbox",
+                              "name": "NomEtablissement",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "value": "${etablissement.NomEtablissement}"
+                            },
+                            {
+                              "type": "required-validator",
+                              "name": "NomEtablissementRequiredValidator",
+                              "component": "NomEtablissement",
+                              "text": "NomEtablissement is required",
+                              "style": {
+                                "position": "absolute"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "row",
+                      "components": [
+                        {
+                          "type": "col",
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "type": "button",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "buttonStyle": "primary"
+                            },
+                            {
+                              "type": "button",
+                              "buttonStyle": "light",
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Etablissement!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "DMdel.createEtablissement",
+                        "parameters": [
+                          {
+                            "name": "Etablissement",
+                            "value": "${etablissement}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup",
+                            "result": "${etablissement}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "data": "${etablissement}",
+                  "visible": "${etablissement != null}",
+                  "itemType": "Pes.Models.DMdel.Etablissement"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "DMdel.getRegions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getRegionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Region>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "etablissement",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.Etablissement(){}",
+        "valueType": "Pes.Models.DMdel.Etablissement"
+      }
+    ]
+  },
+  "name": "Add Etablissements",
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
+  "layout": "Main"
+}

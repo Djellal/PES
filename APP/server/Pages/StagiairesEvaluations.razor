@@ -1,0 +1,125 @@
+﻿@page "/stagiaires-evaluations"
+@layout MainLayout
+@inherits Pes.Pages.StagiairesEvaluationsComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert, membre_jury, president_jury")]
+<PageTitle>StagiairesEvaluations</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin}))">
+          <ChildContent>
+            <div style="background-color: #e6ecef; border: 3px solid #0078d4; border-radius: 5px; margin-left: 3px; margin-right: 3px; padding-bottom: 10px; padding-top: 10px" class="row">
+              <div class="col-md-12  d-flex justify-content-between align-items-center">
+                <RadzenSplitButton Disabled="@SelectedStagiairesIsNullOrEmpty" Icon="flash_on" Size="ButtonSize.Small" Text="Actions" Click="@Splitbutton0Click">
+                  <ChildContent>
+                    <RadzenSplitButtonItem Icon="card_membership" Text="Imprimer Attestations" Value="0">
+                    </RadzenSplitButtonItem>
+                    <RadzenSplitButtonItem Icon="get_app" Text="Exporter à Excel" Value="1">
+                    </RadzenSplitButtonItem>
+                    <RadzenSplitButtonItem Icon="attach_email" Text="Envoyer attestation par email" Value="2">
+                    </RadzenSplitButtonItem>
+                  </ChildContent>
+                </RadzenSplitButton>
+                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Name="Dropdown0" Change="@Dropdown0Change">
+                </RadzenDropDown>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenCard>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowRowSelectOnRowClick="false" AllowSorting="true" Data="@getStagiairesResult" EditMode="DataGridEditMode.Single" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Stagiaire" PageSize="30" SelectionMode="DataGridSelectionMode.Multiple" @bind-Value="@SelectedStagiares">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" TextAlign="TextAlign.Center" Title="Selection" Width="70px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenSwitch Value="@(SelectedStagiares != null && SelectedStagiares.Contains(pesModelsDMdelStagiaire))" Name="Switch0" Change="@((args) =>Switch0Change(args, pesModelsDMdelStagiaire))">
+                </RadzenSwitch>
+              </Template>
+              <HeaderTemplate>
+                <RadzenSwitch Value="@(SelectedStagiares != null && SelectedStagiares.Any())" Name="Switch1" Change="@Switch1Change">
+                </RadzenSwitch>
+              </HeaderTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Width="40px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenIcon Icon="spellcheck">
+                </RadzenIcon>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="Nom" Title="Nom" Width="120px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="Prenom" Title="Prénom" Width="120px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="email" TextAlign="TextAlign.Center" Title="Email" Width="150px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FilterProperty="Etablissement.NomEtablissement" GroupProperty="Etablissement.NomEtablissement" Property="Etabid" SortProperty="Etablissement.NomEtablissement" Title="Etablissement" Width="250px">
+              <Template Context="data">
+              @(data.Etablissement?.NomEtablissement)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="NoteCC" Title="Eval.continue" Width="120px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="Note" Title="Note de cours" Width="120px">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="NoteFinale" Title="Note Finale" Width="200px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <div  class="row">
+                  <div class="col-md-12" style="height: 100%">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="true" style="background-color: rgb(16, 124, 16); font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Excellent")" Visible="@(pesModelsDMdelStagiaire.NoteFinale>0.9)">
+                    </RadzenBadge>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="true" style="background-color: rgb(16, 124, 16); font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Très Bien")" Visible="@(pesModelsDMdelStagiaire.NoteFinale<=0.9 && pesModelsDMdelStagiaire.NoteFinale>0.8)">
+                    </RadzenBadge>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="true" style="background-color: rgba(16, 124, 16, 0.65); font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Bien")" Visible="@(pesModelsDMdelStagiaire.NoteFinale<=0.8 && pesModelsDMdelStagiaire.NoteFinale>0.7)">
+                    </RadzenBadge>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="true" style="background-color: rgba(16, 124, 16, 0.31); font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Assez Bien")" Visible="@(pesModelsDMdelStagiaire.NoteFinale<=0.7 && pesModelsDMdelStagiaire.NoteFinale>0.6)">
+                    </RadzenBadge>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Secondary" IsPill="true" style="background-color: #6d787d; font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Passable")" Visible="@(pesModelsDMdelStagiaire.NoteFinale<=0.6 && pesModelsDMdelStagiaire.NoteFinale>=0.5)">
+                    </RadzenBadge>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Danger" IsPill="true" style="font-size: 15px; padding-bottom: 7px; padding-top: 7px; width: 100%" Text="@(pesModelsDMdelStagiaire.NoteFinale.ToString("P2")+" - Insuffisant")" Visible="@(pesModelsDMdelStagiaire.NoteFinale < 0.5)">
+                    </RadzenBadge>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="verified_user" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold; margin-top: 0px" Text="Compétences visées validées" Visible="@(pesModelsDMdelStagiaire.NoteFinale>=0.5)">
+                    </RadzenAlert>
+                    <RadzenAlert AlertStyle="AlertStyle.Danger" AllowClose="false" Icon="cancel" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold" Text="Compétences visées non validées" Visible="@(pesModelsDMdelStagiaire.NoteFinale<0.5)">
+                    </RadzenAlert>
+                  </div>
+                  <div class="col-md-12 justify-content-center d-flex align-items-center">
+                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
+                      <ChildContent>
+                        <RadzenSplitButtonItem Icon="print" Text="Imprimer" Value="0">
+                        </RadzenSplitButtonItem>
+                        <RadzenSplitButtonItem Icon="attach_email" Text="Envoyer par email" Value="1">
+                        </RadzenSplitButtonItem>
+                      </ChildContent>
+                    </RadzenSplitButton>
+                  </div>
+                </div>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Reorderable="false" Sortable="false" TextAlign="TextAlign.Left" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury,Constants.coordinateur}))" Width="100px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <div class="row">
+                  <div class="col-md-12">
+                    <RadzenButton Disabled="@(pesModelsDMdelStagiaire.NoteCC<=0)" Icon="edit" Size="ButtonSize.Medium" style="margin-right: 5px; width: 100%" Text="Evaluer" Click="@((args) =>EditButtonClick(args, pesModelsDMdelStagiaire))">
+                    </RadzenButton>
+                  </div>
+                </div>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="countertops" style="width: 100%" Text="@("Nbr de stagiaires "+getStagiairesResult?.Count().ToString())">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

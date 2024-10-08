@@ -1,0 +1,56 @@
+﻿@page "/edit-echelle/{Id}"
+@layout MainLayout
+@inherits Pes.Pages.EditEchelleComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin")]
+<PageTitle>Edit Echelle</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@echelle" TItem="Pes.Models.DMdel.Echelle" Visible="@(echelle != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Id" style="width: 100%" Text="Echelle">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(echelle.Id)" Name="Id">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Id" style="position: absolute" Text="Id is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Val" style="width: 100%" Text="Valeur">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(echelle.Val)" Name="Val">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="Val" style="position: absolute" Text="Val is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3  d-flex justify-content-center">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Size="ButtonSize.Large">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Size="ButtonSize.Large" style="margin-left: 1rem" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

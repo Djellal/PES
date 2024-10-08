@@ -1,0 +1,72 @@
+﻿@page "/add-stagiaire"
+@layout MainLayout
+@inherits Pes.Pages.AddStagiaireComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert")]
+<PageTitle>Add Stagiaire</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@stagiaire" TItem="Pes.Models.DMdel.Stagiaire" Visible="@(stagiaire != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <RadzenCard style="background-color: #e6ecef">
+              <ChildContent>
+                <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Size="AlertSize.ExtraSmall" Title="Informations sur le candidat">
+                </RadzenAlert>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-4">
+                    <RadzenLabel Component="Nom" style="width: 100%" Text="Nom">
+                    </RadzenLabel>
+                    <RadzenTextBox MaxLength="300" style="display: block; width: 100%" @bind-Value="@(stagiaire.Nom)" Name="Nom">
+                    </RadzenTextBox>
+                    <RadzenRequiredValidator Component="Nom" style="position: absolute" Text="Nom is required">
+                    </RadzenRequiredValidator>
+                  </div>
+                  <div class="col-md-4">
+                    <RadzenLabel Component="Prenom" style="width: 100%" Text="Prenom">
+                    </RadzenLabel>
+                    <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(stagiaire.Prenom)" Name="Prenom">
+                    </RadzenTextBox>
+                    <RadzenRequiredValidator Component="Prenom" style="position: absolute" Text="Prenom is required">
+                    </RadzenRequiredValidator>
+                  </div>
+                  <div class="col-md-4">
+                    <RadzenLabel Component="DateNaissance" style="width: 100%" Text="Date Naissance">
+                    </RadzenLabel>
+                    <RadzenDatePicker DateFormat="d" style="display: block; width: 100%" @bind-Value="@(stagiaire.DateNaissance)" Name="DateNaissance">
+                    </RadzenDatePicker>
+                    <RadzenRequiredValidator Component="DateNaissance" style="position: absolute" Text="DateNaissance is required">
+                    </RadzenRequiredValidator>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-12">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Size="AlertSize.ExtraSmall" Title="Etablissement">
+                    </RadzenAlert>
+                    <RadzenDropDownDataGrid Data="@getEtablissementsForEtabidResult" Placeholder="Choose Etablissement" ShowSearch="false" style="width: 100%" TextProperty="NomEtablissement" @bind-Value="@(stagiaire.Etabid)" ValueProperty="Id" Name="Etabid">
+                    </RadzenDropDownDataGrid>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col offset-sm-3 justify-content-center d-flex">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Sauvegarder">
+                    </RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="margin-left: 1rem" Text="Annuler" Click="@Button1Click">
+                    </RadzenButton>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenCard>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

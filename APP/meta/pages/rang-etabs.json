@@ -1,0 +1,289 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "Globals.ActiveSession != null",
+                        "name": "GenerateRangs",
+                        "parameters": [
+                          {
+                            "name": "sessionid",
+                            "type": "int",
+                            "value": "${Globals.ActiveSession.Id}"
+                          }
+                        ],
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "icon": "calculate",
+                  "name": "button0",
+                  "style": {
+                    "marginRight": "5px"
+                  },
+                  "text": "Calculer Rangs",
+                  "type": "button"
+                },
+                {
+                  "buttonStyle": "success",
+                  "events": {
+                    "click": [
+                      {
+                        "condition": "Globals.ActiveSession != null",
+                        "fileName": "rangs-etabs",
+                        "format": "xlsx",
+                        "name": "DMdel.getRangsEtabs",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "value": "r => r.Sessionid == ${Globals.ActiveSession.Id}"
+                          },
+                          {
+                            "name": "$expand",
+                            "value": "Etablissement"
+                          },
+                          {
+                            "name": "$orderby",
+                            "value": "r => r.Rang"
+                          },
+                          {
+                            "name": "$select",
+                            "value": "Rang,Etablissement.NomEtablissement,Moyenne"
+                          }
+                        ],
+                        "type": "export"
+                      }
+                    ]
+                  },
+                  "icon": "save_alt",
+                  "name": "button1",
+                  "text": "Exporter",
+                  "type": "button"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "format": "double",
+                      "property": "Rang",
+                      "template": [
+                        {
+                          "name": "badge0",
+                          "style": {
+                            "fontSize": "17px",
+                            "paddingBottom": "5px",
+                            "paddingLeft": "5px",
+                            "paddingRight": "5px",
+                            "paddingTop": "5px"
+                          },
+                          "text": "${data.Rang.ToString(\"N0\")}",
+                          "type": "badge"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "title": "Rang",
+                      "type": "number",
+                      "width": "100px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "data": "${getEtablissementsResult}",
+                          "name": "Etabid",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "textProperty": "NomEtablissement",
+                          "type": "dropdown",
+                          "value": "${data.Etabid}",
+                          "valueProperty": "Id"
+                        }
+                      ],
+                      "filterProperty": "Etablissement.NomEtablissement",
+                      "groupProperty": "Etablissement.NomEtablissement",
+                      "property": "Etabid",
+                      "sortProperty": "Etablissement.NomEtablissement",
+                      "template": "${data.Etablissement?.NomEtablissement}",
+                      "title": "Etablissement",
+                      "width": "300px"
+                    },
+                    {
+                      "editTemplate": [
+                        {
+                          "name": "Rang",
+                          "style": {
+                            "display": "block",
+                            "width": "100%"
+                          },
+                          "type": "numeric",
+                          "value": "${data.Rang}"
+                        },
+                        {
+                          "component": "Rang",
+                          "popup": true,
+                          "type": "required-validator"
+                        }
+                      ],
+                      "format": "double",
+                      "formatString": "{0:P2}",
+                      "property": "Moyenne",
+                      "template": "",
+                      "textAlign": "left",
+                      "title": "Moyenne",
+                      "type": "number",
+                      "width": "150px"
+                    }
+                  ],
+                  "data": "${getRangsEtabsResult}",
+                  "editMode": "single",
+                  "events": {
+                    "loadData": [],
+                    "rowCreate": [
+                      {
+                        "name": "DMdel.createRangsEtab",
+                        "parameters": [
+                          {
+                            "name": "RangsEtab",
+                            "value": "${event}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ],
+                    "rowUpdate": [
+                      {
+                        "name": "DMdel.updateRangsEtab",
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          },
+                          {
+                            "name": "RangsEtab",
+                            "value": "${event}"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.RangsEtab",
+                  "name": "grid0",
+                  "pageSize": 50,
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "DMdel.getSessions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getSessionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Session>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getEtablissementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "rangsetab",
+        "type": "set",
+        "value": "new Pes.Models.DMdel.RangsEtab(){}",
+        "valueType": "Pes.Models.DMdel.RangsEtab"
+      },
+      {
+        "name": "getRangsEtabsResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.RangsEtab>"
+      },
+      {
+        "condition": "Globals.ActiveSession != null",
+        "name": "GenerateRangs",
+        "parameters": [
+          {
+            "name": "sessionid",
+            "type": "int",
+            "value": "${Globals.ActiveSession.Id}"
+          }
+        ],
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "RangEtabs"
+}

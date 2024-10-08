@@ -1,0 +1,398 @@
+{
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "name": "heading0",
+                  "size": "H2",
+                  "style": {
+                    "backgroundColor": "rgb(0, 120, 212)",
+                    "borderRadius": "5px",
+                    "color": "#e6ecef",
+                    "fontFamily": "times new roman,times,serif",
+                    "paddingBottom": "4px",
+                    "paddingTop": "2px",
+                    "textAlign": "center"
+                  },
+                  "text": "Eléments",
+                  "type": "heading"
+                },
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-element",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Ajouter",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "filterProperty": "Rubrique.NomRubrique",
+                      "groupProperty": "Rubrique.NomRubrique",
+                      "property": "Rubid",
+                      "sortProperty": "Rubrique.NomRubrique",
+                      "template": "${data.Rubrique?.NomRubrique}",
+                      "title": "Rubrique"
+                    },
+                    {
+                      "property": "NomElement",
+                      "title": "Nom Element"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "disabled": false,
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Voulez-vous vraiment supprimer cette ligne ?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Element",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "DMdel.deleteElement",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getElementsResult}",
+                  "events": {
+                    "loadData": [],
+                    "render": [
+                      {
+                        "condition": "grid0.Query.Filter != lastFilter",
+                        "name": "master",
+                        "type": "set",
+                        "value": "grid0.View.FirstOrDefault()",
+                        "valueType": "Pes.Models.DMdel.Element"
+                      },
+                      {
+                        "code": "await grid0.SelectRow(master)",
+                        "condition": "grid0.Query.Filter != lastFilter",
+                        "then": [],
+                        "type": "execute"
+                      },
+                      {
+                        "name": "lastFilter",
+                        "type": "set",
+                        "value": "grid0.Query.Filter",
+                        "valueType": "string"
+                      }
+                    ],
+                    "rowDoubleClick": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Data.Id}"
+                          }
+                        ],
+                        "path": "edit-element",
+                        "then": [],
+                        "type": "popup"
+                      }
+                    ],
+                    "rowSelect": [
+                      {
+                        "name": "master",
+                        "type": "set",
+                        "value": "${event}",
+                        "valueType": "Pes.Models.DMdel.Element"
+                      },
+                      {
+                        "condition": "${event} == null",
+                        "name": "Criteres",
+                        "type": "set",
+                        "value": "null",
+                        "valueType": "IEnumerable<Pes.Models.DMdel.Critere>"
+                      },
+                      {
+                        "condition": "${event} != null",
+                        "name": "DMdel.getCriteres",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "value": "i => i.Elementid == ${event.Id}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "Criteres",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<Pes.Models.DMdel.Critere>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.Element",
+                  "name": "grid0",
+                  "pageSize": 20,
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "name": "col0",
+              "style": {
+                "backgroundColor": "#e6ecef"
+              },
+              "type": "col"
+            },
+            {
+              "class": "col-md-6",
+              "components": [
+                {
+                  "name": "heading2",
+                  "size": "H2",
+                  "style": {
+                    "backgroundColor": "rgb(0, 120, 212)",
+                    "borderRadius": "5px",
+                    "color": "#e6ecef",
+                    "fontFamily": "times new roman,times,serif",
+                    "paddingBottom": "4px",
+                    "paddingTop": "2px",
+                    "textAlign": "center"
+                  },
+                  "text": "Critères",
+                  "type": "heading"
+                },
+                {
+                  "disabled": "${this.master == null}",
+                  "events": {
+                    "click": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Elementid",
+                            "type": "integer",
+                            "value": "${master.Id}"
+                          }
+                        ],
+                        "path": "add-critere",
+                        "then": [
+                          {
+                            "code": "await grid1.Reload();",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "CritereAddButton",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "template": "",
+                  "text": "Ajouter",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "NomCritere",
+                      "title": "Nom Critere"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "disabled": false,
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Voulez-vous vraiment supprimer cette ligne ?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Element",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "DMdel.deleteCritere",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid1.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "CritereDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${Criteres}",
+                  "events": {
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          }
+                        ],
+                        "path": "edit-critere",
+                        "then": [
+                          {
+                            "code": "await grid1.Reload();",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.Critere",
+                  "name": "grid1",
+                  "pageSize": 20,
+                  "type": "datagrid"
+                }
+              ],
+              "name": "col1",
+              "style": {
+                "backgroundColor": "#e6efff"
+              },
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "DMdel.getElements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getElementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Element>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Element"
+}

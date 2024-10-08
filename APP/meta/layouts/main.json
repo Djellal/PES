@@ -1,0 +1,284 @@
+{
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "justify-content-start align-items-center",
+              "components": [
+                {
+                  "class": "col-6 d-flex align-items-center",
+                  "components": [
+                    {
+                      "items": [
+                        {
+                          "icon": "home",
+                          "path": "accueil",
+                          "text": "Accueil"
+                        },
+                        {
+                          "icon": "settings",
+                          "items": [
+                            {
+                              "icon": "map",
+                              "path": "regions",
+                              "text": "Regions"
+                            },
+                            {
+                              "icon": "business",
+                              "path": "etablissements",
+                              "text": "Etablissements"
+                            },
+                            {
+                              "icon": "date_range",
+                              "path": "sessions",
+                              "text": "Sessions"
+                            },
+                            {
+                              "text": "________________________________"
+                            },
+                            {
+                              "icon": "category",
+                              "path": "rubriques",
+                              "text": "Rubriques"
+                            },
+                            {
+                              "icon": "mediation",
+                              "path": "element",
+                              "text": "Indicateurs & Critères"
+                            },
+                            {
+                              "icon": "stairs",
+                              "path": "echelle",
+                              "text": "Echelles"
+                            },
+                            {
+                              "text": "________________________________"
+                            },
+                            {
+                              "icon": "group",
+                              "path": "application-users",
+                              "text": "Utilisateurs"
+                            }
+                          ],
+                          "text": "Admin",
+                          "visible": "${Security.IsInRole(Constants.admin)}"
+                        },
+                        {
+                          "icon": "spellcheck",
+                          "path": "stagiaires-evaluations",
+                          "text": "Evaluation"
+                        },
+                        {
+                          "icon": "emoji_events",
+                          "path": "rang-etabs",
+                          "text": "Classement des établissements",
+                          "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
+                        },
+                        {
+                          "icon": "settings",
+                          "items": [
+                            {
+                              "icon": "school",
+                              "path": "stagiairelist",
+                              "text": "Stagiaires",
+                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
+                            },
+                            {
+                              "icon": "home_work",
+                              "path": "facultes",
+                              "text": "Facultés & Départements",
+                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
+                            },
+                            {
+                              "icon": "supervisor_account",
+                              "path": "application-users",
+                              "text": "Membres de jury",
+                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
+                            }
+                          ],
+                          "text": "Configuration",
+                          "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
+                        }
+                      ],
+                      "name": "menu0",
+                      "style": {
+                        "marginTop": "5px"
+                      },
+                      "type": "menu"
+                    }
+                  ],
+                  "name": "leftCol",
+                  "type": "col"
+                },
+                {
+                  "class": "col-6 text-right",
+                  "components": [
+                    {
+                      "items": [
+                        {
+                          "icon": "settings",
+                          "path": "profile",
+                          "text": "Profile",
+                          "value": "Profile"
+                        },
+                        {
+                          "icon": "power_settings_new",
+                          "text": "Se déconnecter",
+                          "value": "Logout"
+                        }
+                      ],
+                      "name": "profilemenu0",
+                      "template": [
+                        {
+                          "email": "${Security.User?.Name}",
+                          "type": "gravatar"
+                        }
+                      ],
+                      "type": "profilemenu",
+                      "visible": "${Security.IsAuthenticated()}"
+                    }
+                  ],
+                  "name": "rightCol",
+                  "type": "col"
+                }
+              ],
+              "name": "headerRow",
+              "type": "row"
+            }
+          ],
+          "name": "header0",
+          "type": "header"
+        },
+        {
+          "components": [
+            {
+              "name": "main",
+              "type": "content-container"
+            }
+          ],
+          "name": "body0",
+          "style": {
+            "border": "5px solid #0078d4"
+          },
+          "type": "body"
+        },
+        {
+          "components": [
+            {
+              "class": "justify-content-center",
+              "components": [
+                {
+                  "class": "justify-content-between d-flex",
+                  "components": [],
+                  "name": "col0",
+                  "type": "col"
+                },
+                {
+                  "class": "justify-content-between d-flex col-sm-12",
+                  "components": [
+                    {
+                      "name": "label0",
+                      "style": {
+                        "color": "#e6ecef",
+                        "fontSize": "16px",
+                        "fontWeight": "bolder",
+                        "textAlign": "center"
+                      },
+                      "text": "${Security.User?.Name+\" - \"+ Globals.Etab?.NomEtablissement}",
+                      "type": "label"
+                    },
+                    {
+                      "name": "label2",
+                      "style": {
+                        "color": "#e6ecef",
+                        "fontSize": "16px",
+                        "fontWeight": "bolder",
+                        "textAlign": "center"
+                      },
+                      "text": "${\"Session : \"+ Globals.ActiveSession?.NomSession}",
+                      "type": "label"
+                    },
+                    {
+                      "name": "label1",
+                      "style": {
+                        "color": "#e6ecef",
+                        "fontSize": "16px",
+                        "fontWeight": "bolder",
+                        "textAlign": "center"
+                      },
+                      "text": "DigiWeek, Copyright@2024",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col1",
+                  "type": "col"
+                }
+              ],
+              "name": "row0",
+              "type": "row"
+            }
+          ],
+          "name": "footer0",
+          "style": {
+            "backgroundColor": "rgb(0, 120, 212)"
+          },
+          "type": "footer"
+        }
+      ],
+      "type": "layout"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "EnsureRolesExists",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      },
+      {
+        "name": "GetActiveSession",
+        "schema": {
+          "$ref": "#/definitions/Session",
+          "async": true,
+          "dotnetType": "System.Threading.Tasks.Task<Pes.Models.DMdel.Session>"
+        },
+        "then": [
+          {
+            "global": true,
+            "name": "ActiveSession",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "Pes.Models.DMdel.Session"
+          }
+        ],
+        "type": "invoke-method"
+      },
+      {
+        "condition": "Security.User != null",
+        "name": "DMdel.getEtablissementById",
+        "parameters": [
+          {
+            "name": "Id",
+            "value": "${Security.User?.Etabid}"
+          }
+        ],
+        "then": [
+          {
+            "global": true,
+            "name": "Etab",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "Pes.Models.DMdel.Etablissement"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "name": "Main"
+}

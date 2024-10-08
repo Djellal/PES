@@ -1,0 +1,30 @@
+﻿@page "/unauthorized"
+@layout MainLayout
+@inherits Pes.Pages.UnauthorizedComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+<PageTitle>Unauthorized</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" style="background-color: #dd0606; border-radius: 10px; color: #ffffff; margin-top: 40px; text-align: center" Text="Non autorisé">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12 justify-content-center d-flex">
+        <RadzenHtml>
+          <p>L'utilisateur actuel n'est pas autorisé à voir cette page.</p>
+        </RadzenHtml>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12 justify-content-center d-flex">
+        <RadzenImage Path="assets/images/access-denied.png" style="width: 500px">
+        </RadzenImage>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

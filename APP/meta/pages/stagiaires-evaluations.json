@@ -1,0 +1,592 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur",
+    "expert",
+    "membre_jury",
+    "president_jury"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12  d-flex justify-content-between align-items-center",
+                          "components": [
+                            {
+                              "disabled": "${SelectedStagiairesIsNullOrEmpty}",
+                              "events": {
+                                "click": [
+                                  {
+                                    "condition": "",
+                                    "name": "ExecuteAction",
+                                    "parameters": [
+                                      {
+                                        "name": "act",
+                                        "type": "int",
+                                        "value": "${event.Value}"
+                                      }
+                                    ],
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "flash_on",
+                              "items": [
+                                {
+                                  "icon": "card_membership",
+                                  "text": "Imprimer Attestations",
+                                  "value": "0"
+                                },
+                                {
+                                  "icon": "get_app",
+                                  "text": "Exporter à Excel",
+                                  "value": "1"
+                                },
+                                {
+                                  "icon": "attach_email",
+                                  "text": "Envoyer attestation par email",
+                                  "value": "2"
+                                }
+                              ],
+                              "name": "splitbutton0",
+                              "size": "ButtonSize.Small",
+                              "text": "Actions",
+                              "type": "splitbutton"
+                            },
+                            {
+                              "allowClear": true,
+                              "allowFiltering": true,
+                              "data": "${getEtablissementsResult}",
+                              "disabled": false,
+                              "events": {
+                                "change": [
+                                  {
+                                    "name": "LoadStagiaires",
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "filterCaseSensitivity": "caseInsensitive",
+                              "name": "dropdown0",
+                              "placeholder": "Filtrer par établissement",
+                              "style": {
+                                "width": "400px"
+                              },
+                              "textProperty": "NomEtablissement",
+                              "type": "dropdown",
+                              "value": "${SelectedEtab}",
+                              "valueProperty": "Id",
+                              "valueTemplate": "",
+                              "valueType": "int?",
+                              "visible": true
+                            }
+                          ],
+                          "name": "col4",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row3",
+                      "style": {
+                        "backgroundColor": "#e6ecef",
+                        "border": "3px solid #0078d4",
+                        "borderRadius": "5px",
+                        "marginLeft": "3px",
+                        "marginRight": "3px",
+                        "paddingBottom": "10px",
+                        "paddingTop": "10px"
+                      },
+                      "type": "row"
+                    }
+                  ],
+                  "name": "card0",
+                  "type": "card",
+                  "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowRowSelectOnRowClick": false,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "filterable": false,
+                      "headerTemplate": [
+                        {
+                          "events": {
+                            "change": [
+                              {
+                                "name": "ChangeSelectionStatus",
+                                "parameters": [
+                                  {
+                                    "name": "args",
+                                    "type": "bool?",
+                                    "value": "${event}"
+                                  }
+                                ],
+                                "schema": {
+                                  "$ref": "#/definitions/Task",
+                                  "dotnetType": "System.Threading.Tasks.Task"
+                                },
+                                "type": "invoke-method"
+                              }
+                            ]
+                          },
+                          "name": "switch1",
+                          "type": "switch",
+                          "value": "${SelectedStagiares != null && SelectedStagiares.Any()}"
+                        }
+                      ],
+                      "template": [
+                        {
+                          "events": {
+                            "change": [
+                              {
+                                "code": "grid0.SelectRow(data)",
+                                "type": "execute"
+                              }
+                            ]
+                          },
+                          "name": "switch0",
+                          "type": "switch",
+                          "value": "${SelectedStagiares != null && SelectedStagiares.Contains(data)}"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "title": "Selection",
+                      "width": "70px"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "template": [
+                        {
+                          "icon": "spellcheck",
+                          "name": "icon0",
+                          "type": "icon"
+                        }
+                      ],
+                      "width": "40px"
+                    },
+                    {
+                      "property": "Nom",
+                      "title": "Nom",
+                      "width": "120px"
+                    },
+                    {
+                      "property": "Prenom",
+                      "title": "Prénom",
+                      "width": "120px"
+                    },
+                    {
+                      "format": "",
+                      "property": "email",
+                      "textAlign": "center",
+                      "title": "Email",
+                      "type": "string",
+                      "width": "150px"
+                    },
+                    {
+                      "filterProperty": "Etablissement.NomEtablissement",
+                      "filterTemplate": "",
+                      "groupProperty": "Etablissement.NomEtablissement",
+                      "property": "Etabid",
+                      "sortProperty": "Etablissement.NomEtablissement",
+                      "template": "${data.Etablissement?.NomEtablissement}",
+                      "title": "Etablissement",
+                      "width": "250px"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "format": "double",
+                      "formatString": "{0:P2}",
+                      "property": "NoteCC",
+                      "title": "Eval.continue",
+                      "type": "number",
+                      "width": "120px"
+                    },
+                    {
+                      "format": "double",
+                      "formatString": "{0:P2}",
+                      "property": "Note",
+                      "template": "",
+                      "title": "Note de cours",
+                      "type": "number",
+                      "width": "120px"
+                    },
+                    {
+                      "format": "double",
+                      "formatString": "{0:P2}",
+                      "property": "NoteFinale",
+                      "template": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-12",
+                              "components": [
+                                {
+                                  "badgeStyle": "BadgeStyle.Secondary",
+                                  "isPill": true,
+                                  "name": "badge2",
+                                  "style": {
+                                    "backgroundColor": "rgb(16, 124, 16)",
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Excellent\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale>0.9}"
+                                },
+                                {
+                                  "badgeStyle": "BadgeStyle.Secondary",
+                                  "isPill": true,
+                                  "name": "badge7",
+                                  "style": {
+                                    "backgroundColor": "rgb(16, 124, 16)",
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Très Bien\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale<=0.9 && data.NoteFinale>0.8}"
+                                },
+                                {
+                                  "badgeStyle": "BadgeStyle.Secondary",
+                                  "isPill": true,
+                                  "name": "badge3",
+                                  "style": {
+                                    "backgroundColor": "rgba(16, 124, 16, 0.65)",
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Bien\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale<=0.8 && data.NoteFinale>0.7}"
+                                },
+                                {
+                                  "badgeStyle": "BadgeStyle.Secondary",
+                                  "isPill": true,
+                                  "name": "badge4",
+                                  "style": {
+                                    "backgroundColor": "rgba(16, 124, 16, 0.31)",
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Assez Bien\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale<=0.7 && data.NoteFinale>0.6}"
+                                },
+                                {
+                                  "badgeStyle": "BadgeStyle.Secondary",
+                                  "isPill": true,
+                                  "name": "badge5",
+                                  "style": {
+                                    "backgroundColor": "#6d787d",
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Passable\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale<=0.6 && data.NoteFinale>=0.5}"
+                                },
+                                {
+                                  "badgeStyle": "BadgeStyle.Danger",
+                                  "isPill": true,
+                                  "name": "badge6",
+                                  "style": {
+                                    "fontSize": "15px",
+                                    "paddingBottom": "7px",
+                                    "paddingTop": "7px",
+                                    "width": "100%"
+                                  },
+                                  "text": "${data.NoteFinale.ToString(\"P2\")+\" - Insuffisant\"}",
+                                  "type": "badge",
+                                  "visible": "${data.NoteFinale < 0.5}"
+                                }
+                              ],
+                              "name": "col1",
+                              "style": {
+                                "height": "100%"
+                              },
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {},
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-12",
+                              "components": [
+                                {
+                                  "alertStyle": "AlertStyle.Success",
+                                  "allowClose": false,
+                                  "icon": "verified_user",
+                                  "name": "alert0",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "style": {
+                                    "borderRadius": "30px",
+                                    "fontSize": "15px",
+                                    "fontWeight": "bold",
+                                    "marginTop": "0px"
+                                  },
+                                  "text": "Compétences visées validées",
+                                  "title": "",
+                                  "type": "alert",
+                                  "visible": "${data.NoteFinale>=0.5}"
+                                },
+                                {
+                                  "alertStyle": "AlertStyle.Danger",
+                                  "allowClose": false,
+                                  "icon": "cancel",
+                                  "name": "alert1",
+                                  "size": "AlertSize.ExtraSmall",
+                                  "style": {
+                                    "borderRadius": "30px",
+                                    "fontSize": "15px",
+                                    "fontWeight": "bold"
+                                  },
+                                  "text": "Compétences visées non validées",
+                                  "title": "",
+                                  "type": "alert",
+                                  "visible": "${data.NoteFinale<0.5}"
+                                }
+                              ],
+                              "name": "col0",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-12 justify-content-center d-flex align-items-center",
+                              "components": [
+                                {
+                                  "buttonStyle": "ButtonStyle.Warning",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "name": "AttestatioAction",
+                                        "parameters": [
+                                          {
+                                            "name": "act",
+                                            "type": "string",
+                                            "value": "${event.value}"
+                                          },
+                                          {
+                                            "name": "data",
+                                            "type": "Pes.Models.DMdel.Stagiaire",
+                                            "value": "${data}"
+                                          }
+                                        ],
+                                        "schema": {
+                                          "$ref": "#/definitions/Task",
+                                          "dotnetType": "System.Threading.Tasks.Task"
+                                        },
+                                        "type": "invoke-method"
+                                      }
+                                    ]
+                                  },
+                                  "icon": "card_membership",
+                                  "items": [
+                                    {
+                                      "icon": "print",
+                                      "text": "Imprimer",
+                                      "value": "0"
+                                    },
+                                    {
+                                      "icon": "attach_email",
+                                      "text": "Envoyer par email",
+                                      "value": "1"
+                                    }
+                                  ],
+                                  "name": "splitbutton1",
+                                  "style": {
+                                    "borderRadius": "5px"
+                                  },
+                                  "text": "Attestation",
+                                  "type": "splitbutton",
+                                  "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && data.NoteFinale>=0.5}"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "type": "row"
+                        }
+                      ],
+                      "title": "Note Finale",
+                      "type": "number",
+                      "width": "200px"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "filterable": false,
+                      "groupable": false,
+                      "reorderable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-12",
+                              "components": [
+                                {
+                                  "disabled": "${data.NoteCC<=0}",
+                                  "events": {
+                                    "click": [
+                                      {
+                                        "code": "            try\n            {\n                await DMdel.CreateEvals(data.Id);\n            }\n            catch (System.Exception exception)\n            {\n                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $\"Erreur\", Detail = exception.Message });\n            }",
+                                        "error": [],
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "closeDialogOnOverlayClick": true,
+                                        "draggable": true,
+                                        "height": "",
+                                        "parameters": [
+                                          {
+                                            "name": "Id",
+                                            "value": "${data.Id}"
+                                          }
+                                        ],
+                                        "path": "edit-stagiaire",
+                                        "resizable": true,
+                                        "then": [
+                                          {
+                                            "code": "await grid0.Reload();",
+                                            "type": "execute"
+                                          },
+                                          {
+                                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                                            "type": "execute"
+                                          }
+                                        ],
+                                        "title": "Evaluation Stagiaire",
+                                        "type": "popup",
+                                        "width": 1300
+                                      }
+                                    ]
+                                  },
+                                  "icon": "edit",
+                                  "name": "editButton",
+                                  "size": "ButtonSize.Medium",
+                                  "style": {
+                                    "marginRight": "5px",
+                                    "width": "100%"
+                                  },
+                                  "text": "Evaluer",
+                                  "type": "button"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row2",
+                          "type": "row"
+                        }
+                      ],
+                      "textAlign": "left",
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury,Constants.coordinateur})}",
+                      "width": "100px"
+                    }
+                  ],
+                  "data": "${getStagiairesResult}",
+                  "editMode": "single",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": []
+                  },
+                  "filterCaseSensitivity": "caseInsensitive",
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.Stagiaire",
+                  "name": "grid0",
+                  "pageSize": 30,
+                  "selectionMode": "DataGridSelectionMode.Multiple",
+                  "title": "",
+                  "type": "datagrid",
+                  "value": "${SelectedStagiares}"
+                },
+                {
+                  "buttonStyle": "success",
+                  "icon": "countertops",
+                  "name": "button1",
+                  "style": {
+                    "width": "100%"
+                  },
+                  "text": "${\"Nbr de stagiaires \"+getStagiairesResult?.Count().ToString()}",
+                  "type": "button"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getEtablissementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "getStagiairesResult",
+        "type": "set",
+        "value": "null",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Stagiaire>"
+      },
+      {
+        "name": "LoadStagiaires",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "StagiairesEvaluations"
+}

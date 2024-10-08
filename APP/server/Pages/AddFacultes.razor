@@ -1,0 +1,58 @@
+﻿@page "/add-facultes"
+@layout MainLayout
+@inherits Pes.Pages.AddFacultesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur")]
+<PageTitle>Add Facultes</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenCard>
+      <ChildContent>
+        <div class="row">
+          <div class="col-md-12">
+            <RadzenTemplateForm Data="@faculte" TItem="Pes.Models.DMdel.Faculte" Visible="@(faculte != null)" Submit="@Form0Submit">
+              <ChildContent>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="Etabid" style="width: 100%" Text="Etablissement">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenDropDownDataGrid Data="@getEtablissementsForEtabidResult" Placeholder="Choisir Etablissement" ShowSearch="false" style="width: 100%" TextProperty="NomEtablissement" @bind-Value="@(faculte.Etabid)" ValueProperty="Id" Name="Etabid">
+                    </RadzenDropDownDataGrid>
+                  </div>
+                </div>
+                <div style="margin-bottom: 1rem" class="row">
+                  <div class="col-md-3">
+                    <RadzenLabel Component="NomFaculte" style="width: 100%" Text="Nom Faculté">
+                    </RadzenLabel>
+                  </div>
+                  <div class="col-md-9">
+                    <RadzenTextBox MaxLength="300" style="display: block; width: 100%" @bind-Value="@(faculte.NomFaculte)" Name="NomFaculte">
+                    </RadzenTextBox>
+                    <RadzenRequiredValidator Component="NomFaculte" style="position: absolute" Text="Nom de Faculté est requis">
+                    </RadzenRequiredValidator>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col offset-sm-3  d-flex justify-content-around">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 50px; width: 50px">
+                    </RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="clear" style="height: 50px; margin-left: 1rem; width: 50px" Click="@Button1Click">
+                    </RadzenButton>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenTemplateForm>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenCard>
+  </ChildContent>
+</RadzenContent>

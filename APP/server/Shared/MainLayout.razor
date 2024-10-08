@@ -1,0 +1,104 @@
+﻿@inherits Pes.Layouts.MainLayoutComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Pes.Pages
+<RadzenDialog />
+<RadzenNotification />
+<RadzenTooltip />
+<RadzenContextMenu />
+
+<RadzenLayout>
+  <ChildContent>
+    <RadzenHeader>
+      <ChildContent>
+        <div class="row justify-content-start align-items-center">
+          <div class="col-6 d-flex align-items-center">
+            <RadzenMenu style="margin-top: 5px">
+              <ChildContent>
+                <RadzenMenuItem Icon="home" Path="accueil" Text="Accueil" Visible="@Security.IsInRole(new string[]{"Everybody"})">
+                </RadzenMenuItem>
+                <RadzenMenuItem Icon="settings" Text="Admin" Visible="@(Security.IsInRole(Constants.admin))">
+                  <ChildContent>
+                    <RadzenMenuItem Icon="map" Path="regions" Text="Regions">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="business" Path="etablissements" Text="Etablissements">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="date_range" Path="sessions" Text="Sessions">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Text="________________________________">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="category" Path="rubriques" Text="Rubriques">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="mediation" Path="element" Text="Indicateurs & Critères">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="stairs" Path="echelle" Text="Echelles">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Text="________________________________">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="group" Path="application-users" Text="Utilisateurs">
+                    </RadzenMenuItem>
+                  </ChildContent>
+                </RadzenMenuItem>
+                <RadzenMenuItem Icon="spellcheck" Path="stagiaires-evaluations" Text="Evaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                </RadzenMenuItem>
+                <RadzenMenuItem Icon="emoji_events" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                </RadzenMenuItem>
+                <RadzenMenuItem Icon="settings" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                  <ChildContent>
+                    <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="home_work" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                    </RadzenMenuItem>
+                    <RadzenMenuItem Icon="supervisor_account" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                    </RadzenMenuItem>
+                  </ChildContent>
+                </RadzenMenuItem>
+              </ChildContent>
+            </RadzenMenu>
+          </div>
+          <div class="col-6 text-right">
+            <RadzenProfileMenu Visible="@(Security.IsAuthenticated())" Click="@Profilemenu0Click">
+              <ChildContent>
+                <RadzenProfileMenuItem Icon="settings" Path="profile" Text="Profile" Value="Profile" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
+                </RadzenProfileMenuItem>
+                <RadzenProfileMenuItem Icon="power_settings_new" Text="Se déconnecter" Value="Logout">
+                </RadzenProfileMenuItem>
+              </ChildContent>
+              <Template>
+                <RadzenGravatar Email="@(Security.User?.Name)">
+                </RadzenGravatar>
+              </Template>
+            </RadzenProfileMenu>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenHeader>
+    <RadzenBody @ref="body0" style="border: 5px solid #0078d4">
+      <ChildContent>
+        <RadzenContentContainer Name="main">
+        @Body
+        </RadzenContentContainer>
+      </ChildContent>
+    </RadzenBody>
+    <RadzenFooter style="background-color: rgb(0, 120, 212)">
+      <ChildContent>
+        <div class="row justify-content-center">
+          <div class="justify-content-between d-flex">
+          </div>
+          <div class="justify-content-between d-flex col-sm-12">
+            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="@($"{(Security.User?.Name+" - "+ Globals.Etab?.NomEtablissement)}")">
+            </RadzenLabel>
+            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="@($"{("Session : "+ Globals.ActiveSession?.NomSession)}")">
+            </RadzenLabel>
+            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="DigiWeek, Copyright@2024">
+            </RadzenLabel>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenFooter>
+  </ChildContent>
+</RadzenLayout>

@@ -1,0 +1,153 @@
+﻿@page "/stagiairelist"
+@layout MainLayout
+@inherits Pes.Pages.StagiairelistComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert")]
+<PageTitle>Stagiairelist</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))">
+      <ChildContent>
+        <div style="margin-left: 3px; margin-right: 3px" class="row">
+          <div class="col-md-12  d-flex justify-content-between align-items-center" >
+            <RadzenSplitButton Icon="flash_on" Size="ButtonSize.Small" Text="Actions" Click="@Splitbutton0Click">
+              <ChildContent>
+                <RadzenSplitButtonItem Icon="person_add" Text="Ajouter un Stagiaire" Value="0">
+                </RadzenSplitButtonItem>
+                <RadzenSplitButtonItem Icon="save_alt" Text="Expoter à excel" Value="1">
+                </RadzenSplitButtonItem>
+                <RadzenSplitButtonItem Icon="delete_forever" Text="Supprimer les stagiaires selectionnées" Value="2" Visible="@(Security.IsInRole(Constants.admin))">
+                </RadzenSplitButtonItem>
+              </ChildContent>
+            </RadzenSplitButton>
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
+            </RadzenUpload>
+            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.coordinateur,Constants.admin}))">
+            </RadzenLink>
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 350px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+            </RadzenDropDown>
+          </div>
+        </div>
+      </ChildContent>
+    </RadzenCard>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowRowSelectOnRowClick="false" AllowSorting="true" Data="@getStagiairesResult" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Stagiaire" PageSize="20" SelectionMode="DataGridSelectionMode.Multiple" @bind-Value="@SelectedStagiares" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
+          <Columns>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Title="Selection" Width="70px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenSwitch Value="@(SelectedStagiares != null && SelectedStagiares.Contains(pesModelsDMdelStagiaire))" Name="Switch0" Change="@((args) =>Switch0Change(args, pesModelsDMdelStagiaire))">
+                </RadzenSwitch>
+              </Template>
+              <HeaderTemplate>
+                <RadzenSwitch Value="@(SelectedStagiares != null && SelectedStagiares.Any())" Name="Switch1" Change="@Switch1Change">
+                </RadzenSwitch>
+              </HeaderTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Pickable="false" Reorderable="false" Resizable="false" Sortable="false" Width="50px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenIcon Icon="perm_identity">
+                </RadzenIcon>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="Nom" Title="Nom" Width="150px">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelStagiaire.Nom)" Name="Nom">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Nom" Popup="true" Text="Le nom  est requis">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="Prenom" Title="Prénom" Width="150px">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(pesModelsDMdelStagiaire.Prenom)" Name="Prenom">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Prenom" Popup="true" Text="Le Prénom  est requis">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="email" Title="Email" Width="220px">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenTextBox Placeholder="email" style="width: 100%" @bind-Value="@(pesModelsDMdelStagiaire.email)" Name="Emailtextbox">
+                </RadzenTextBox>
+                <RadzenEmailValidator Component="Emailtextbox" Popup="true" Text="Veuiller saisir un une adresse email valide">
+                </RadzenEmailValidator>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FilterProperty="Etablissement.NomEtablissement" GroupProperty="Etablissement.NomEtablissement" Property="Etabid" SortProperty="Etablissement.NomEtablissement" Title="Etablissement" Width="300px">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" style="display: block; width: 100%" TextProperty="NomEtablissement" @bind-Value="@(pesModelsDMdelStagiaire.Etabid)" ValueProperty="Id" Name="Etabid">
+                </RadzenDropDown>
+                <RadzenRequiredValidator Component="Etabid" Text="Létablissement est requise">
+                </RadzenRequiredValidator>
+              </EditTemplate>
+              <Template Context="data">
+              @(data.Etablissement?.NomEtablissement)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FilterProperty="Faculte.NomFaculte" GroupProperty="Faculte.NomFaculte" Property="Facid" Title="Faculté" Width="250px">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenDropDown AllowFiltering="true" Data="@getFacultesResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Multiple="false" Placeholder="Choisir la faculté" style="width: 100%" TextProperty="NomFaculte" @bind-Value="@(pesModelsDMdelStagiaire.Facid)" ValueProperty="Id" Name="Facultedropdown" Change="@((args) =>FacultedropdownChange(args, pesModelsDMdelStagiaire))">
+                </RadzenDropDown>
+              </EditTemplate>
+              <Template Context="data">
+              @(data.Faculte?.NomFaculte)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FilterProperty="Faculte.NomFaculte" GroupProperty="Faculte.NomFaculte" Property="Departid" Title="Département">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenDropDown AllowFiltering="true" Data="@getDepartementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Multiple="false" Placeholder="Choisir le département" style="width: 100%" TextProperty="NomDepartement" @bind-Value="@(pesModelsDMdelStagiaire.Departid)" ValueProperty="Id" Name="Departementdropdown">
+                </RadzenDropDown>
+              </EditTemplate>
+              <Template Context="data">
+              @(data.Departement?.NomDepartement)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Property="URLcour" Title="URL cours">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenLink Icon="link" Path="@($"{pesModelsDMdelStagiaire.URLcour}")" style="text-align: center" Target="_blank" Text="URL Cours">
+                </RadzenLink>
+              </Template>
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenTextBox style="width: 100%" @bind-Value="@(pesModelsDMdelStagiaire.URLcour)" Name="Urlcourtextbox">
+                </RadzenTextBox>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="NoteCC" TextAlign="TextAlign.Center" Title="Note évaluation continue">
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenNumeric Format="P0" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin}))" Step="0.1" style="font-size: 18px; font-weight: bolder; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelStagiaire.NoteCC)" Name="NoteCCnumeric">
+                </RadzenNumeric>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Width="70px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, pesModelsDMdelStagiaire))">
+                </RadzenButton>
+              </Template>
+              <EditTemplate Context="pesModelsDMdelStagiaire">
+                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) =>SaveButtonClick(args, pesModelsDMdelStagiaire))">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="cancel" Size="ButtonSize.Small" Click="@((args) =>CancelButtonClick(args, pesModelsDMdelStagiaire))">
+                </RadzenButton>
+              </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Width="70px">
+              <Template Context="pesModelsDMdelStagiaire">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelStagiaire))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="countertops" style="width: 100%" Text="@("Nbr de stagiaires "+getStagiairesResult?.Count().ToString())">
+        </RadzenButton>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

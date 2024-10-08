@@ -1,0 +1,707 @@
+{
+  "access": [
+    "Authenticated"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Email",
+                              "style": {
+                                "textAlign": "right",
+                                "width": "100%"
+                              },
+                              "text": "Email",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Email",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${user.Email}"
+                            },
+                            {
+                              "component": "Email",
+                              "name": "EmailRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Email est requis",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Email",
+                              "name": "label5",
+                              "style": {
+                                "textAlign": "right",
+                                "width": "100%"
+                              },
+                              "text": "Tél",
+                              "type": "label"
+                            }
+                          ],
+                          "name": "col10",
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "textbox0",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "textbox",
+                              "value": "${user.PhoneNumber}"
+                            }
+                          ],
+                          "name": "col11",
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row5",
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "RoleNames",
+                              "style": {
+                                "textAlign": "right",
+                                "width": "100%"
+                              },
+                              "text": "Roles",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${roles}",
+                              "multiple": true,
+                              "name": "RoleNames",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${user.RoleNames}",
+                              "valueProperty": "Name"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "RoleNames",
+                                  "name": "label1",
+                                  "style": {
+                                    "textAlign": "right",
+                                    "width": "100%"
+                                  },
+                                  "text": "Region",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col2",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "data": "${getRegionsResult}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "DMdel.getEtablissements",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "value": "et=>et.Regid == ${event}"
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getEtablissementsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "multiple": false,
+                                  "name": "regiondropdown",
+                                  "placeholder": "Choisir la région",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "NomRegion",
+                                  "type": "dropdown",
+                                  "value": "${user.Regid}",
+                                  "valueProperty": "Id",
+                                  "valueTemplate": "",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col3",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row1",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "RoleNames",
+                                  "name": "label0",
+                                  "style": {
+                                    "textAlign": "right",
+                                    "width": "100%"
+                                  },
+                                  "text": "Etablissement",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col0",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getEtablissementsResult}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "DMdel.getFacultes",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "value": "et=>et.Etabid == ${event}"
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getFacultesResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<Pes.Models.DMdel.Faculte>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "multiple": false,
+                                  "name": "etabdropdown",
+                                  "placeholder": "Choisir l'établissement",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "textProperty": "NomEtablissement",
+                                  "type": "dropdown",
+                                  "value": "${user.Etabid}",
+                                  "valueProperty": "Id",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col1",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row0",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        }
+                      ],
+                      "name": "card0",
+                      "style": {
+                        "backgroundColor": "#e6ecef"
+                      },
+                      "type": "card",
+                      "visible": "${RegionEtabVisible}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "RoleNames",
+                                  "name": "label2",
+                                  "style": {
+                                    "textAlign": "right",
+                                    "width": "100%"
+                                  },
+                                  "text": "Faculté",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col4",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getFacultesResult}",
+                                  "events": {
+                                    "change": [
+                                      {
+                                        "name": "DMdel.getDepartements",
+                                        "parameters": [
+                                          {
+                                            "name": "$filter",
+                                            "value": "d=>d.Facid == ${event}"
+                                          }
+                                        ],
+                                        "then": [
+                                          {
+                                            "name": "getDepartementsResult",
+                                            "type": "set",
+                                            "value": "${result}",
+                                            "valueType": "IEnumerable<Pes.Models.DMdel.Departement>"
+                                          }
+                                        ],
+                                        "type": "invoke"
+                                      }
+                                    ]
+                                  },
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "multiple": false,
+                                  "name": "facultedropdown",
+                                  "placeholder": "Choisir la faculté",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "NomFaculte",
+                                  "type": "dropdown",
+                                  "value": "${user.Facultid}",
+                                  "valueProperty": "Id",
+                                  "valueTemplate": "",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col5",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row2",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        },
+                        {
+                          "components": [
+                            {
+                              "class": "col-md-3",
+                              "components": [
+                                {
+                                  "component": "RoleNames",
+                                  "name": "label3",
+                                  "style": {
+                                    "textAlign": "right",
+                                    "width": "100%"
+                                  },
+                                  "text": "Département",
+                                  "type": "label"
+                                }
+                              ],
+                              "name": "col6",
+                              "type": "col"
+                            },
+                            {
+                              "class": "col-md-9",
+                              "components": [
+                                {
+                                  "allowFiltering": true,
+                                  "data": "${getDepartementsResult}",
+                                  "filterCaseSensitivity": "caseInsensitive",
+                                  "multiple": false,
+                                  "name": "departementdropdown",
+                                  "placeholder": "Choisir le département",
+                                  "style": {
+                                    "width": "100%"
+                                  },
+                                  "template": "",
+                                  "textProperty": "NomDepartement",
+                                  "type": "dropdown",
+                                  "value": "${user.Departid}",
+                                  "valueProperty": "Id",
+                                  "valueTemplate": "",
+                                  "valueType": "int?"
+                                }
+                              ],
+                              "name": "col7",
+                              "type": "col"
+                            }
+                          ],
+                          "name": "row3",
+                          "style": {
+                            "marginBottom": "1rem"
+                          },
+                          "type": "row"
+                        }
+                      ],
+                      "name": "card1",
+                      "style": {
+                        "backgroundColor": "#e6ecef"
+                      },
+                      "type": "card",
+                      "visible": "${FacDepVisible}"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Password",
+                              "style": {
+                                "textAlign": "right",
+                                "width": "100%"
+                              },
+                              "text": "mot de passe",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Password",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "password",
+                              "value": "${user.Password}"
+                            },
+                            {
+                              "component": "Password",
+                              "name": "PasswordRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Mot de passe est requis",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem",
+                        "marginTop": "3px"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "ConfirmPassword",
+                              "style": {
+                                "textAlign": "right",
+                                "width": "100%"
+                              },
+                              "template": "",
+                              "text": "Confirmer mot de passe",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "ConfirmPassword",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "password",
+                              "value": "${user.ConfirmPassword}"
+                            },
+                            {
+                              "component": "ConfirmPassword",
+                              "name": "ConfirmPasswordRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Confirmation du mot de passe est requis",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col  justify-content-around d-flex",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "style": {
+                                "height": "100%"
+                              },
+                              "text": "Valider",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "icon": "cancel",
+                              "text": "Annuler",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "backgroundColor": "#88989b",
+                        "marginLeft": "5px",
+                        "marginRight": "5px",
+                        "marginTop": "25px",
+                        "paddingBottom": "10px",
+                        "paddingTop": "10px"
+                      },
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${user}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "${result.Message}",
+                            "severity": "error",
+                            "summary": "Cannot add user",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "Security.createUser",
+                        "parameters": [
+                          {
+                            "name": "User",
+                            "value": "${event}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "ApplicationUser",
+                  "name": "form0",
+                  "style": {
+                    "backgroundColor": "#e6ecef",
+                    "border": "1px solid #000000",
+                    "borderRadius": "10px",
+                    "paddingBottom": "20px",
+                    "paddingLeft": "10px",
+                    "paddingRight": "10px",
+                    "paddingTop": "20px"
+                  },
+                  "type": "template-form",
+                  "visible": "${user != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "user",
+        "type": "set",
+        "value": "new ApplicationUser()",
+        "valueType": "ApplicationUser"
+      },
+      {
+        "name": "Security.getRoles",
+        "then": [
+          {
+            "name": "roles",
+            "type": "set",
+            "value": "${result.value}",
+            "valueType": "IEnumerable<IdentityRole>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getRegions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getRegionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Region>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getEtablissements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getEtablissementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getFacultes",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getFacultesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Faculte>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "DMdel.getDepartements",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getDepartementsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Departement>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "ApplyRestrictions",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Application User"
+}

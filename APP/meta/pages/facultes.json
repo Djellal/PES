@@ -1,0 +1,441 @@
+{
+  "access": [
+    "Authenticated",
+    "admin",
+    "coordinateur"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "name": "heading0",
+                  "size": "H2",
+                  "style": {
+                    "backgroundColor": "rgb(0, 120, 212)",
+                    "borderRadius": "5px",
+                    "color": "#e6ecef",
+                    "fontFamily": "times new roman,times,serif",
+                    "paddingBottom": "4px",
+                    "paddingTop": "2px",
+                    "textAlign": "center"
+                  },
+                  "text": "Facultés & Départements",
+                  "type": "heading"
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "col-md-12 align-items-center d-flex justify-content-between",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-facultes",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "title": "Ajouter Faculté/Institut",
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {},
+                  "text": "Ajouter",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "data": "${getEtablissementsResult}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "LoadFacultes",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "filterCaseSensitivity": "caseInsensitive",
+                  "name": "dropdown0",
+                  "placeholder": "Filtrer par établissement",
+                  "style": {
+                    "width": "404px"
+                  },
+                  "textProperty": "NomEtablissement",
+                  "type": "dropdown",
+                  "value": "${SelectedEtab}",
+                  "valueProperty": "Id",
+                  "valueTemplate": "",
+                  "valueType": "int?",
+                  "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                }
+              ],
+              "name": "col1",
+              "type": "col"
+            }
+          ],
+          "name": "row0",
+          "type": "row"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "NomFaculte",
+                      "title": "Nom Faculté"
+                    },
+                    {
+                      "filterProperty": "Etablissement.NomEtablissement",
+                      "filterTemplate": "",
+                      "groupProperty": "Etablissement.NomEtablissement",
+                      "property": "Etabid",
+                      "sortProperty": "Etablissement.NomEtablissement",
+                      "template": "${data.Etablissement?.NomEtablissement}",
+                      "title": "Etablissement",
+                      "width": "300px"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Voulez-vous vraiment supprimer cette ligne ?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Faculte",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "DMdel.deleteFaculte",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getFacultesResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowExpand": [
+                      {
+                        "name": "master",
+                        "type": "set",
+                        "value": "${event}"
+                      },
+                      {
+                        "name": "DMdel.getDepartements",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "value": "i => i.Facid == ${event.Id}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "code": "${event}.Departements = ${result}.ToList()",
+                            "condition": "${result} != null",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          }
+                        ],
+                        "path": "edit-facultes",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "title": "Modifier Faulté/Institut",
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "expandMode": "single",
+                  "filterMode": "simple",
+                  "itemType": "Pes.Models.DMdel.Faculte",
+                  "name": "grid0",
+                  "pageSize": 20,
+                  "template": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-12",
+                          "components": [
+                            {
+                              "buttonStyle": "success",
+                              "events": {
+                                "click": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "Facid",
+                                        "type": "integer",
+                                        "value": "${data.Id}"
+                                      }
+                                    ],
+                                    "path": "add-departement",
+                                    "then": [
+                                      {
+                                        "code": "await Grid0RowExpand(master);",
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "code": "await grid1.Reload();",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "title": "Ajouter Département",
+                                    "type": "popup"
+                                  }
+                                ]
+                              },
+                              "icon": "add_circle_outline",
+                              "name": "DepartementAddButton",
+                              "style": {},
+                              "text": "Ajouter",
+                              "type": "button"
+                            },
+                            {
+                              "allowFiltering": false,
+                              "allowPaging": true,
+                              "allowSorting": true,
+                              "columns": [
+                                {
+                                  "property": "NomDepartement",
+                                  "title": "Nom de Département"
+                                },
+                                {
+                                  "filterable": false,
+                                  "sortable": false,
+                                  "template": [
+                                    {
+                                      "attributes": [
+                                        {
+                                          "name": "@onclick:stopPropagation",
+                                          "value": true
+                                        }
+                                      ],
+                                      "buttonStyle": "danger",
+                                      "events": {
+                                        "click": [
+                                          {
+                                            "condition": "await DialogService.Confirm(\"Voulez-vous vraiment supprimer cette ligne ?\") == true",
+                                            "error": [
+                                              {
+                                                "detail": "Unable to delete Faculte",
+                                                "severity": "error",
+                                                "summary": "Error",
+                                                "type": "notify"
+                                              }
+                                            ],
+                                            "name": "DMdel.deleteDepartement",
+                                            "parameters": [
+                                              {
+                                                "name": "Id",
+                                                "value": "${data.Id}"
+                                              }
+                                            ],
+                                            "then": [
+                                              {
+                                                "code": "await Grid0RowExpand(master);",
+                                                "type": "execute"
+                                              },
+                                              {
+                                                "code": "await grid1.Reload();",
+                                                "condition": "result != null",
+                                                "type": "execute"
+                                              }
+                                            ],
+                                            "type": "invoke"
+                                          }
+                                        ]
+                                      },
+                                      "icon": "close",
+                                      "name": "DepartementDeleteButton",
+                                      "size": "sm",
+                                      "text": "",
+                                      "type": "button"
+                                    }
+                                  ],
+                                  "textAlign": "center",
+                                  "width": "70px"
+                                }
+                              ],
+                              "data": "${data.Departements}",
+                              "events": {
+                                "rowSelect": [
+                                  {
+                                    "parameters": [
+                                      {
+                                        "name": "Id",
+                                        "value": "${event.Id}"
+                                      }
+                                    ],
+                                    "path": "edit-departement",
+                                    "then": [
+                                      {
+                                        "code": "await Grid0RowExpand(master);",
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "code": "await grid1.Reload();",
+                                        "type": "execute"
+                                      }
+                                    ],
+                                    "title": "Modifier Département",
+                                    "type": "popup"
+                                  }
+                                ]
+                              },
+                              "filterMode": "simple",
+                              "itemType": "Pes.Models.DMdel.Departement",
+                              "name": "grid1",
+                              "pageSize": 20,
+                              "type": "datagrid"
+                            }
+                          ],
+                          "name": "col2",
+                          "style": {
+                            "backgroundColor": "#e6ecef"
+                          },
+                          "type": "col"
+                        }
+                      ],
+                      "name": "row1",
+                      "type": "row"
+                    }
+                  ],
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "DMdel.getFacultes",
+        "parameters": [
+          {
+            "name": "$expand",
+            "value": "Etablissement"
+          }
+        ],
+        "then": [
+          {
+            "name": "getFacultesResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Faculte>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "SelectedEtab",
+        "type": "set",
+        "value": "null",
+        "valueType": "int?"
+      },
+      {
+        "name": "getEtablissementsResult",
+        "type": "set",
+        "value": "new List<Pes.Models.DMdel.Etablissement>()",
+        "valueType": "IEnumerable<Pes.Models.DMdel.Etablissement>"
+      },
+      {
+        "name": "LoadFacultes",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Facultes"
+}
