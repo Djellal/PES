@@ -60,12 +60,13 @@
                   "columns": [
                     {
                       "filterProperty": "Region.NomRegion",
+                      "filterTemplate": "",
                       "groupProperty": "Region.NomRegion",
                       "property": "Regid",
                       "sortProperty": "Region.NomRegion",
                       "template": "${data.Region?.NomRegion}",
                       "title": "Region",
-                      "width": "250px"
+                      "width": "350px"
                     },
                     {
                       "property": "NomEtablissement",

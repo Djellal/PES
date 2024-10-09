@@ -20,7 +20,7 @@
         </RadzenButton>
         <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getEtablissementsResult" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Etablissement" PageSize="30" RowSelect="@Grid0RowSelect">
           <Columns>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Etablissement" FilterProperty="Region.NomRegion" GroupProperty="Region.NomRegion" Property="Regid" SortProperty="Region.NomRegion" Title="Region" Width="250px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Etablissement" FilterProperty="Region.NomRegion" GroupProperty="Region.NomRegion" Property="Regid" SortProperty="Region.NomRegion" Title="Region" Width="350px">
               <Template Context="data">
               @(data.Region?.NomRegion)
               </Template>

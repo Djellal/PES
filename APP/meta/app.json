@@ -29,7 +29,8 @@
     "Stagiairelist",
     "SelectEtablissement",
     "Facultes",
-    "RangEtabs"
+    "RangEtabs",
+    "EtablissementListe"
   ],
   "pages": [
     "Accueil",
@@ -66,7 +67,8 @@
     "Add Facultes",
     "Edit Facultes",
     "Edit Departement",
-    "RangEtabs"
+    "RangEtabs",
+    "EtablissementListe"
   ],
   "port": 8000,
   "security": {

@@ -50,6 +50,7 @@ namespace Pes.Pages
 
                 if (Security.IsInRole(Constants.coordinateur, Constants.president_jury, Constants.membre_jury, Constants.expert))
                 {
+                    SelectedEtab = Security.User.Etabid;
                     var res = await DMdel.GetStagiaires(new Query() { Filter = $@"s=>s.Etabid == {Security.User.Etabid} && s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement" });
                     getStagiairesResult = res.OrderBy(s => s.Nom); ;
                 }
@@ -209,6 +210,8 @@ namespace Pes.Pages
         {
             try
             {
+
+
                 Query query;
 
 
@@ -216,11 +219,11 @@ namespace Pes.Pages
                 {
                     if (SelectedEtab != null)
                     {
-                        query = new Query() { Filter = $@"s=>s.Etabid == {SelectedEtab} && s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement,Faculte,Departement", Select = "Nom,Prenom,Etablissement.NomEtablissement,Faculte.NomFaculte,Departement.NomDepartement,URLcour,NoteCC,Note ,NoteFinale" };
+                        query = new Query() { Filter = $@"s=>s.Etabid == {SelectedEtab} && s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement,Faculte,Departement", Select = "Nom,Prenom as Prénom,Etablissement.NomEtablissement as Établissement,Faculte.NomFaculte as Faculté,Departement.NomDepartement as Département,URLcour as URL_Cours,NoteCC as Note_Évaluation_Continue,Note as Note_Cours ,NoteFinale as Note_Finale" };
                     }
                     else
                     {
-                        query = new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement,Faculte,Departement", Select = "Nom,Prenom,Etablissement.NomEtablissement,Faculte.NomFaculte,Departement.NomDepartement,URLcour,NoteCC,Note as Note_evalution,NoteFinale" };
+                        query = new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement,Faculte,Departement", Select = "Nom,Prenom as Prénom,Etablissement.NomEtablissement as Établissement,Faculte.NomFaculte as Faculté,Departement.NomDepartement as Département,URLcour as URL_Cours,NoteCC as Note_Évaluation_Continue,Note as Note_Cours ,NoteFinale as Note_Finale" };
 
                     }
 

@@ -96,7 +96,7 @@
                               "valueProperty": "Id",
                               "valueTemplate": "",
                               "valueType": "int?",
-                              "visible": true
+                              "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
                             }
                           ],
                           "name": "col4",
@@ -118,7 +118,7 @@
                   ],
                   "name": "card0",
                   "type": "card",
-                  "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                  "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}"
                 },
                 {
                   "allowFiltering": true,
@@ -338,7 +338,9 @@
                             }
                           ],
                           "name": "row1",
-                          "style": {},
+                          "style": {
+                            "paddingBottom": "0px"
+                          },
                           "type": "row"
                         },
                         {
@@ -356,6 +358,7 @@
                                     "borderRadius": "30px",
                                     "fontSize": "15px",
                                     "fontWeight": "bold",
+                                    "marginBottom": "0px",
                                     "marginTop": "0px"
                                   },
                                   "text": "Compétences visées validées",
@@ -372,7 +375,9 @@
                                   "style": {
                                     "borderRadius": "30px",
                                     "fontSize": "15px",
-                                    "fontWeight": "bold"
+                                    "fontWeight": "bold",
+                                    "marginBottom": "0px",
+                                    "marginTop": "0px"
                                   },
                                   "text": "Compétences visées non validées",
                                   "title": "",
@@ -435,10 +440,16 @@
                                 }
                               ],
                               "name": "col2",
+                              "style": {
+                                "marginTop": "5px"
+                              },
                               "type": "col"
                             }
                           ],
                           "name": "row0",
+                          "style": {
+                            "paddingTop": "0px"
+                          },
                           "type": "row"
                         }
                       ],

@@ -27,7 +27,7 @@
                             },
                             {
                               "icon": "business",
-                              "path": "etablissements",
+                              "path": "etablissement-liste",
                               "text": "Etablissements"
                             },
                             {
