@@ -287,7 +287,7 @@ namespace Pes.Pages
 
                 var res = await EmailSender.SendEmailWithAttachment(stagid);
 
-                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Info, Summary = $"Erreur", Detail = res });
+                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Success, Summary = res, Detail = "" });
             }
             catch (Exception)
             {

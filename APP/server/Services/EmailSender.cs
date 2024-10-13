@@ -73,7 +73,7 @@ namespace Pes
             string res = "";
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("MESRS - Formation TIC et pratiques pédagogiques", "digiweek@dual-mesrs.dz"));
-            message.To.Add(new MailboxAddress(stagiaire.Nom + " " + stagiaire.Prenom, stagiaire.email));
+            message.To.Add(new MailboxAddress(stagiaire.Nom + " " + stagiaire.Prenom, stagiaire.email.Trim()));
             message.Subject = "Attestation de formation";
 
             var bodyBuilder = new BodyBuilder
