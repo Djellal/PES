@@ -278,7 +278,7 @@ namespace Pes.Pages
             {
                 var stg = await DMdel.GetStagiaireById(stagid);
                 if (stg == null) return;
-                if (!IsValidEmail(stg.email))
+                if (!IsValidEmail(stg.email.Trim()))
                 {
                     NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "Addresse e-mail invalide: " + stg.email });
 
