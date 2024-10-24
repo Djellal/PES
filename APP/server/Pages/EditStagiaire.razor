@@ -69,7 +69,7 @@
                       @(data.Critere?.NomCritere)
                       </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Echelle.Id" GroupProperty="Echelle.Id" Property="Echellid" SortProperty="Echelle.Id" Title="Echelle" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury}))" Width="150px">
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Echelle.Id" GroupProperty="Echelle.Id" Property="Echellid" SortProperty="Echelle.Id" Title="Echelle" Visible="@(Security.IsInRole(new string[]{Constants.expert,Constants.membre_jury,Constants.president_jury}))" Width="150px">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
                         <RadzenDropDown Data="@getEchellesResult" style="display: block; width: 100%" TextProperty="Id" @bind-Value="@(pesModelsDMdelEvaluation.Echellid)" ValueProperty="Id" Name="Echellid">
                         </RadzenDropDown>
@@ -78,13 +78,13 @@
                       @(data.Echelle?.Id)
                       </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur,Constants.expert}))">
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
                         <RadzenNumeric Format="N0" Max="5" Min="0" ShowUpDown="true" Step="0" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
                         </RadzenNumeric>
                       </EditTemplate>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury}))" Width="180px">
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury,Constants.expert}))" Width="180px">
                       <Template Context="pesModelsDMdelEvaluation">
                         <RadzenButton Size="ButtonSize.Small" Text="Evaluer" Click="@((args) =>EditButtonClick(args, pesModelsDMdelEvaluation))">
                         </RadzenButton>

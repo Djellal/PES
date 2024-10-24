@@ -25,11 +25,11 @@ namespace Pes.Pages
             {
                 Membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury, Constants.expert }, stagiaire.Etabid);
 
-                if (Security.IsInRole(new String[] { Constants.membre_jury, Constants.president_jury }))
+                if (Security.IsInRole(new String[] { Constants.expert,Constants.membre_jury, Constants.president_jury }))
                 {
                     Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && !ev.EstSynthese && ev.MembreId == Security.User.Id).OrderBy(ev => ev.NomRubrique).ToList();
                 }
-                else if (Security.IsInRole(new String[] { Constants.expert, Constants.coordinateur,Constants.admin }))
+                else if (Security.IsInRole(new String[] {  Constants.coordinateur,Constants.admin }))
                 {
                     Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).OrderBy(ev => ev.NomRubrique).ToList();
                 }

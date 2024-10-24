@@ -26,9 +26,9 @@
                 </RadzenSplitButtonItem>
               </ChildContent>
             </RadzenSplitButton>
-            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
             </RadzenUpload>
-            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.coordinateur,Constants.admin}))">
+            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin}))">
             </RadzenLink>
             <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 350px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
             </RadzenDropDown>

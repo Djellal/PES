@@ -45,7 +45,7 @@ namespace Pes
 
             var criteres = Context.Criteres.Include(ev => ev.Element).ThenInclude(e => e.Rubrique).ToList(); //(await DMdel. GetCriteres()).ToList();
 
-            var membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid);
+            var membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.expert, Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid);
 
 
             string NomElem, NomRubrique;

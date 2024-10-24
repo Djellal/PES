@@ -292,7 +292,7 @@
                               "sortProperty": "Echelle.Id",
                               "template": "${data.Echelle?.Id}",
                               "title": "Echelle",
-                              "visible": "${Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury})}",
+                              "visible": "${Security.IsInRole(new string[]{Constants.expert,Constants.membre_jury,Constants.president_jury})}",
                               "width": "150px"
                             },
                             {
@@ -317,7 +317,7 @@
                               "property": "NoteSynthese",
                               "title": "Note Synthese",
                               "type": "number",
-                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur,Constants.expert})}"
+                              "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur})}"
                             },
                             {
                               "editTemplate": [
@@ -384,7 +384,7 @@
                                 }
                               ],
                               "textAlign": "center",
-                              "visible": "${Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury})}",
+                              "visible": "${Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury,Constants.expert})}",
                               "width": "180px"
                             }
                           ],

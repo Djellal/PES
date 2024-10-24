@@ -96,7 +96,7 @@
                       "name": "uploadList",
                       "type": "upload",
                       "url": "${uploadUrl}",
-                      "visible": true
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
                     },
                     {
                       "icon": "link",
@@ -109,7 +109,7 @@
                       "target": "_blank",
                       "text": "Télécharger le modèle en Excel",
                       "type": "link",
-                      "visible": "${Security.IsInRole(new String[]{Constants.coordinateur,Constants.admin})}"
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
                     },
                     {
                       "allowClear": true,
