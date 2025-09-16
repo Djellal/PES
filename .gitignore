@@ -1,3 +1,6 @@
 APP/server/bin
 APP/server/obj
 APP/.vs
+Database/DataModel/DataModel/bin
+Database/DataModel/DataModel/obj
+Database/DataModel/.vs

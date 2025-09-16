@@ -15,5 +15,10 @@ namespace DataModel.Models
         public ICollection<Element> Elements { get; set; }
 
         public double Coeff { get; set; } = 1;
+
+
+        [ForeignKey("Session")]
+        public int? Sessionid { get; set; }
+        public Session? Session { get; set; }
     }
 }

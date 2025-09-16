@@ -17,5 +17,10 @@ namespace DataModel.Models
         public Rubrique? Rubrique { get; set; }
 
         public ICollection<Critere> Criteres { get; set; }
+
+
+        [ForeignKey("Session")]
+        public int? Sessionid { get; set; }
+        public Session? Session { get; set; }
     }
 }

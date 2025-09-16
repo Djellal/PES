@@ -15,5 +15,10 @@ namespace DataModel.Models
         [ForeignKey("Element")]
         public int? Elementid { get; set; }
         public Element? Element { get; set; }
+
+
+        [ForeignKey("Session")]
+        public int? Sessionid { get; set; }
+        public Session? Session { get; set; }
     }
 }
