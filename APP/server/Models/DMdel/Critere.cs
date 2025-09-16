@@ -8,6 +8,12 @@ namespace Pes.Models.DMdel
   [Table("Criteres", Schema = "public")]
   public partial class Critere
   {
+    public int? Sessionid
+    {
+      get;
+      set;
+    }
+    public Session Session { get; set; }
     public int? Elementid
     {
       get;

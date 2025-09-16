@@ -23,6 +23,12 @@ namespace Pes.Models.DMdel
     }
 
     public ICollection<Critere> Criteres { get; set; }
+    public int? Sessionid
+    {
+      get;
+      set;
+    }
+    public Session Session { get; set; }
     public string NomElement
     {
       get;

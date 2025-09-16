@@ -8,15 +8,6 @@ namespace Pes.Models.DMdel
   [Table("Stagiaires", Schema = "public")]
   public partial class Stagiaire
   {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id
-    {
-      get;
-      set;
-    }
-
-    public ICollection<Evaluation> Evaluations { get; set; }
     public DateTime DateNaissance
     {
       get;
@@ -66,7 +57,16 @@ namespace Pes.Models.DMdel
       get;
       set;
     }
-    public string RefAttestation
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id
+    {
+      get;
+      set;
+    }
+
+    public ICollection<Evaluation> Evaluations { get; set; }
+    public string Prenom
     {
       get;
       set;
@@ -86,12 +86,12 @@ namespace Pes.Models.DMdel
       get;
       set;
     }
-    public string Nom
+    public string RefAttestation
     {
       get;
       set;
     }
-    public string Prenom
+    public string Nom
     {
       get;
       set;

@@ -28,6 +28,8 @@
                 </RadzenRequiredValidator>
               </EditTemplate>
             </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Rubrique" Property="Session.NomSession" Title="Session">
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Rubrique" Property="Coeff" TextAlign="TextAlign.Center" Title="Coefficient" Width="200px">
               <EditTemplate Context="pesModelsDMdelRubrique">
                 <RadzenNumeric style="font-size: 16px; font-style: oblique; font-weight: 600; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelRubrique.Coeff)" Name="Numeric0">

@@ -52,6 +52,8 @@ namespace Pes
         {
             var items = Context.Criteres.AsQueryable();
 
+            items = items.Include(i => i.Session);
+
             items = items.Include(i => i.Element);
 
             if (query != null)
@@ -122,6 +124,7 @@ namespace Pes
             catch
             {
                 Context.Entry(critere).State = EntityState.Detached;
+                critere.Session = null;
                 critere.Element = null;
                 throw;
             }
@@ -333,6 +336,8 @@ namespace Pes
 
             items = items.Include(i => i.Rubrique);
 
+            items = items.Include(i => i.Session);
+
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.Expand))
@@ -402,6 +407,7 @@ namespace Pes
             {
                 Context.Entry(element).State = EntityState.Detached;
                 element.Rubrique = null;
+                element.Session = null;
                 throw;
             }
 
@@ -901,6 +907,8 @@ namespace Pes
         {
             var items = Context.Rubriques.AsQueryable();
 
+            items = items.Include(i => i.Session);
+
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.Expand))
@@ -969,6 +977,7 @@ namespace Pes
             catch
             {
                 Context.Entry(rubrique).State = EntityState.Detached;
+                rubrique.Session = null;
                 throw;
             }
 
@@ -1212,6 +1221,8 @@ namespace Pes
             var items = Context.Criteres
                               .AsNoTracking()
                               .Where(i => i.Id == id);
+
+            items = items.Include(i => i.Session);
 
             items = items.Include(i => i.Element);
 
@@ -1476,6 +1487,8 @@ namespace Pes
                               .Where(i => i.Id == id);
 
             items = items.Include(i => i.Rubrique);
+
+            items = items.Include(i => i.Session);
 
             var itemToReturn = items.FirstOrDefault();
 
@@ -2008,6 +2021,8 @@ namespace Pes
                               .AsNoTracking()
                               .Where(i => i.Id == id);
 
+            items = items.Include(i => i.Session);
+
             var itemToReturn = items.FirstOrDefault();
 
             OnRubriqueGet(itemToReturn);
@@ -2060,7 +2075,10 @@ namespace Pes
             var itemToDelete = Context.Sessions
                               .Where(i => i.Id == id)
                               .Include(i => i.RangsEtabs)
+                              .Include(i => i.Elements)
+                              .Include(i => i.Criteres)
                               .Include(i => i.Stagiaires)
+                              .Include(i => i.Rubriques)
                               .FirstOrDefault();
 
             if (itemToDelete == null)

@@ -120,10 +120,10 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
-            var dMdelGetRubriquesResult = await DMdel.GetRubriques();
+            var dMdelGetRubriquesResult = await DMdel.GetRubriques(new Query() { Filter = $@"r=>r.Sessionid = {Globals.ActiveSession?.Id}" });
             getRubriquesResult = dMdelGetRubriquesResult;
 
-            element = new Pes.Models.DMdel.Element(){};
+            element = new Pes.Models.DMdel.Element(){Sessionid = Globals.ActiveSession?.Id};
         }
 
         protected async System.Threading.Tasks.Task Form0Submit(Pes.Models.DMdel.Element args)

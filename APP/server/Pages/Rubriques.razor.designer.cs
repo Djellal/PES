@@ -140,15 +140,28 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
+            if(Globals.ActiveSession == null)
+  {
+      NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+      return;
+  };
+
             rubrique = new Pes.Models.DMdel.Rubrique(){};
 
-            var dMdelGetRubriquesResult = await DMdel.GetRubriques();
+            var dMdelGetRubriquesResult = await DMdel.GetRubriques(new Query() { Filter = $@"r=>r.Sessionid == {Globals.ActiveSession?.Id}" });
             getRubriquesResult = dMdelGetRubriquesResult;
         }
 
         protected async System.Threading.Tasks.Task Button0Click(MouseEventArgs args)
         {
-            await this.grid0.InsertRow(new Pes.Models.DMdel.Rubrique{ NomRubrique="Nouvelle rubrique", Coeff=1});
+            if (Globals.ActiveSession != null)
+{
+    await this.grid0.InsertRow(new Pes.Models.DMdel.Rubrique { NomRubrique = "Nouvelle rubrique", Coeff = 1, Sessionid = Globals.ActiveSession?.Id });
+}
+else
+{
+    NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Warning, Summary = $"Attention", Detail = $"Aucune session active. Veuillez activer une session avant de créer une rubrique." });
+};
         }
 
         protected async System.Threading.Tasks.Task Grid0RowCreate(dynamic args)

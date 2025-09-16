@@ -22,6 +22,12 @@ namespace Pes.Models.DMdel
     }
 
     public ICollection<Element> Elements { get; set; }
+    public int? Sessionid
+    {
+      get;
+      set;
+    }
+    public Session Session { get; set; }
     public string NomRubrique
     {
       get;

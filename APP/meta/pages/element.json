@@ -30,6 +30,10 @@
                   "events": {
                     "click": [
                       {
+                        "code": "          if(Globals.ActiveSession == null)\n{\n    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $\"Attention\",Detail = $\"Aucune session active. Veuillez activer une cession avant de gérer les rubriques.\" });\n    return;\n};",
+                        "type": "execute"
+                      },
+                      {
                         "path": "add-element",
                         "then": [
                           {
@@ -233,6 +237,10 @@
                   "events": {
                     "click": [
                       {
+                        "code": "          if(Globals.ActiveSession == null)\n{\n    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $\"Attention\",Detail = $\"Aucune session active. Veuillez activer une cession avant de gérer les rubriques.\" });\n    return;\n};",
+                        "type": "execute"
+                      },
+                      {
                         "parameters": [
                           {
                             "name": "Elementid",
@@ -378,6 +386,10 @@
   ],
   "events": {
     "load": [
+      {
+        "code": "          if(Globals.ActiveSession == null)\n{\n    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $\"Attention\",Detail = $\"Aucune session active. Veuillez activer une cession avant de gérer les rubriques.\" });\n    return;\n};",
+        "type": "execute"
+      },
       {
         "name": "DMdel.getElements",
         "parameters": [],

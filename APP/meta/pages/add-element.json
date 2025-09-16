@@ -1,145 +1,144 @@
 {
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
   "components": [
     {
-      "type": "content",
-      "container": "main",
       "components": [
         {
-          "type": "row",
           "components": [
             {
-              "type": "col",
               "class": "col-md-12",
               "components": [
                 {
-                  "type": "template-form",
-                  "name": "form0",
                   "components": [
                     {
-                      "type": "row",
-                      "style": {
-                        "marginBottom": "1rem"
-                      },
                       "components": [
                         {
-                          "type": "col",
                           "class": "col-md-3",
                           "components": [
                             {
-                              "type": "label",
-                              "text": "Rubrique",
                               "component": "Rubid",
                               "name": "RubidLabel",
                               "style": {
                                 "width": "100%"
-                              }
+                              },
+                              "text": "Rubrique",
+                              "type": "label"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         },
                         {
-                          "type": "col",
                           "class": "col-md-9",
                           "components": [
                             {
                               "data": "${getRubriquesResult}",
-                              "textProperty": "NomRubrique",
-                              "valueProperty": "Id",
-                              "placeholder": "Choose Rubrique",
-                              "valueType": "int?",
-                              "type": "dropdown",
                               "name": "Rubid",
+                              "placeholder": "Choose Rubrique",
                               "style": {
                                 "width": "100%"
                               },
-                              "value": "${element.Rubid}"
+                              "textProperty": "NomRubrique",
+                              "type": "dropdown",
+                              "value": "${element.Rubid}",
+                              "valueProperty": "Id",
+                              "valueType": "int?"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         }
-                      ]
-                    },
-                    {
-                      "type": "row",
+                      ],
                       "style": {
                         "marginBottom": "1rem"
                       },
+                      "type": "row"
+                    },
+                    {
                       "components": [
                         {
-                          "type": "col",
                           "class": "col-md-3",
                           "components": [
                             {
-                              "type": "label",
-                              "text": "Nom Element",
                               "component": "NomElement",
                               "name": "NomElementLabel",
                               "style": {
                                 "width": "100%"
-                              }
+                              },
+                              "text": "Nom Element",
+                              "type": "label"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         },
                         {
-                          "type": "col",
                           "class": "col-md-9",
                           "components": [
                             {
-                              "valueType": "string",
                               "maxLength": 300,
-                              "type": "textbox",
                               "name": "NomElement",
                               "style": {
                                 "display": "block",
                                 "width": "100%"
                               },
-                              "value": "${element.NomElement}"
+                              "type": "textbox",
+                              "value": "${element.NomElement}",
+                              "valueType": "string"
                             },
                             {
-                              "type": "required-validator",
-                              "name": "NomElementRequiredValidator",
                               "component": "NomElement",
-                              "text": "NomElement is required",
+                              "name": "NomElementRequiredValidator",
                               "style": {
                                 "position": "absolute"
-                              }
+                              },
+                              "text": "NomElement is required",
+                              "type": "required-validator"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         }
-                      ]
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
                     },
                     {
-                      "type": "row",
                       "components": [
                         {
-                          "type": "col",
                           "class": "col offset-sm-3",
                           "components": [
                             {
-                              "type": "button",
+                              "buttonStyle": "primary",
                               "buttonType": "submit",
                               "icon": "save",
                               "text": "Save",
-                              "buttonStyle": "primary"
+                              "type": "button"
                             },
                             {
-                              "type": "button",
                               "buttonStyle": "light",
-                              "style": {
-                                "marginLeft": "1rem"
-                              },
-                              "text": "Cancel",
                               "events": {
                                 "click": [
                                   {
                                     "type": "close-popup"
                                   }
                                 ]
-                              }
+                              },
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         }
-                      ]
+                      ],
+                      "type": "row"
                     }
                   ],
+                  "data": "${element}",
                   "events": {
                     "submit": [
                       {
@@ -160,30 +159,40 @@
                         ],
                         "then": [
                           {
-                            "type": "close-popup",
-                            "result": "${element}"
+                            "result": "${element}",
+                            "type": "close-popup"
                           }
                         ],
                         "type": "invoke"
                       }
                     ]
                   },
-                  "data": "${element}",
-                  "visible": "${element != null}",
-                  "itemType": "Pes.Models.DMdel.Element"
+                  "itemType": "Pes.Models.DMdel.Element",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${element != null}"
                 }
-              ]
+              ],
+              "type": "col"
             }
-          ]
+          ],
+          "type": "row"
         }
-      ]
+      ],
+      "container": "main",
+      "type": "content"
     }
   ],
   "events": {
     "load": [
       {
         "name": "DMdel.getRubriques",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "$filter",
+            "value": "r=>r.Sessionid = {Globals.ActiveSession?.Id}"
+          }
+        ],
         "then": [
           {
             "name": "getRubriquesResult",
@@ -197,15 +206,11 @@
       {
         "name": "element",
         "type": "set",
-        "value": "new Pes.Models.DMdel.Element(){}",
+        "value": "new Pes.Models.DMdel.Element(){Sessionid = Globals.ActiveSession?.Id}",
         "valueType": "Pes.Models.DMdel.Element"
       }
     ]
   },
-  "name": "Add Element",
-  "access": [
-    "Authenticated",
-    "admin"
-  ],
-  "layout": "Main"
+  "layout": "Main",
+  "name": "Add Element"
 }

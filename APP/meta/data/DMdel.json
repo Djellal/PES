@@ -13,6 +13,22 @@
         "NomCritere"
       ],
       "properties": {
+        "Session": {
+          "type": "object",
+          "$ref": "#/definitions/Session"
+        },
+        "Sessionid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Sessions",
+            "parentEntityType": "Session",
+            "type": "Session",
+            "principalKey": "Id",
+            "name": "Session",
+            "textProperty": "NomSession",
+            "navigationProperty": "Criteres"
+          }
+        },
         "Element": {
           "type": "object",
           "$ref": "#/definitions/Element"
@@ -175,6 +191,22 @@
             }
           ]
         },
+        "Session": {
+          "type": "object",
+          "$ref": "#/definitions/Session"
+        },
+        "Sessionid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Sessions",
+            "parentEntityType": "Session",
+            "type": "Session",
+            "principalKey": "Id",
+            "name": "Session",
+            "textProperty": "NomSession",
+            "navigationProperty": "Elements"
+          }
+        },
         "NomElement": {
           "x-nullable": false,
           "type": "string",
@@ -292,7 +324,7 @@
             "type": "Stagiaire",
             "principalKey": "Id",
             "name": "Stagiaire",
-            "textProperty": "RefAttestation",
+            "textProperty": "Prenom",
             "navigationProperty": "Evaluations"
           }
         },
@@ -538,6 +570,22 @@
             }
           ]
         },
+        "Session": {
+          "type": "object",
+          "$ref": "#/definitions/Session"
+        },
+        "Sessionid": {
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Sessions",
+            "parentEntityType": "Session",
+            "type": "Session",
+            "principalKey": "Id",
+            "name": "Session",
+            "textProperty": "NomSession",
+            "navigationProperty": "Rubriques"
+          }
+        },
         "NomRubrique": {
           "x-nullable": false,
           "type": "string",
@@ -588,8 +636,23 @@
             },
             {
               "inversePropertyName": "Session",
+              "name": "Elements",
+              "type": "Element"
+            },
+            {
+              "inversePropertyName": "Session",
+              "name": "Criteres",
+              "type": "Critere"
+            },
+            {
+              "inversePropertyName": "Session",
               "name": "Stagiaires",
               "type": "Stagiaire"
+            },
+            {
+              "inversePropertyName": "Session",
+              "name": "Rubriques",
+              "type": "Rubrique"
             }
           ]
         },
@@ -610,10 +673,28 @@
             "$ref": "#/definitions/RangsEtab"
           }
         },
+        "Elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Element"
+          }
+        },
+        "Criteres": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Critere"
+          }
+        },
         "Stagiaires": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/Stagiaire"
+          }
+        },
+        "Rubriques": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Rubrique"
           }
         }
       }
@@ -622,31 +703,18 @@
       "x-table": "public.Stagiaires",
       "resource": "Stagiaires",
       "required": [
-        "Id",
         "DateNaissance",
         "NoteCC",
         "Note",
         "NoteFinale",
+        "Id",
+        "Prenom",
         "email",
         "portefolio",
         "URLcour",
-        "Nom",
-        "Prenom"
+        "Nom"
       ],
       "properties": {
-        "Id": {
-          "x-key": true,
-          "x-identity": true,
-          "x-nullable": false,
-          "type": "integer",
-          "x-navigation": [
-            {
-              "inversePropertyName": "Stagiaire",
-              "name": "Evaluations",
-              "type": "Evaluation"
-            }
-          ]
-        },
         "DateNaissance": {
           "x-nullable": false,
           "type": "string",
@@ -734,8 +802,20 @@
         "CourEnligne": {
           "type": "boolean"
         },
-        "RefAttestation": {
-          "x-default-sql": "''::text",
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Stagiaire",
+              "name": "Evaluations",
+              "type": "Evaluation"
+            }
+          ]
+        },
+        "Prenom": {
           "x-nullable": false,
           "type": "string"
         },
@@ -751,14 +831,15 @@
           "x-nullable": false,
           "type": "string"
         },
+        "RefAttestation": {
+          "x-default-sql": "''::text",
+          "x-nullable": false,
+          "type": "string"
+        },
         "Nom": {
           "x-nullable": false,
           "type": "string",
           "length": 300
-        },
-        "Prenom": {
-          "x-nullable": false,
-          "type": "string"
         },
         "Evaluations": {
           "type": "array",

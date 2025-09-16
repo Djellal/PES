@@ -104,7 +104,7 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
-            critere = new Pes.Models.DMdel.Critere(){};
+            critere = new Pes.Models.DMdel.Critere(){Sessionid = Globals.ActiveSession?.Id};
         }
 
         protected async System.Threading.Tasks.Task Form0Submit(Pes.Models.DMdel.Critere args)

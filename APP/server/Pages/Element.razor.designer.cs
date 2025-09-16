@@ -160,12 +160,24 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
+            if(Globals.ActiveSession == null)
+{
+    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+    return;
+};
+
             var dMdelGetElementsResult = await DMdel.GetElements();
             getElementsResult = dMdelGetElementsResult;
         }
 
         protected async System.Threading.Tasks.Task Button0Click(MouseEventArgs args)
         {
+            if(Globals.ActiveSession == null)
+{
+    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+    return;
+};
+
             var dialogResult = await DialogService.OpenAsync<AddElement>("Add Element", null);
             await grid0.Reload();
 
@@ -227,6 +239,12 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task CritereAddButtonClick(MouseEventArgs args)
         {
+            if(Globals.ActiveSession == null)
+{
+    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+    return;
+};
+
             var dialogResult = await DialogService.OpenAsync<AddCritere>("Add Critere", new Dictionary<string, object>() { {"Elementid", master.Id} });
             await grid1.Reload();
         }

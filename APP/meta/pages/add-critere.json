@@ -1,108 +1,107 @@
 {
+  "access": [
+    "Authenticated",
+    "admin"
+  ],
   "components": [
     {
-      "type": "content",
-      "container": "main",
       "components": [
         {
-          "type": "row",
           "components": [
             {
-              "type": "col",
               "class": "col-md-12",
               "components": [
                 {
-                  "type": "template-form",
-                  "name": "form0",
                   "components": [
                     {
-                      "type": "row",
-                      "style": {
-                        "marginBottom": "1rem"
-                      },
                       "components": [
                         {
-                          "type": "col",
                           "class": "col-md-3",
                           "components": [
                             {
-                              "type": "label",
-                              "text": "Nom Critere",
                               "component": "NomCritere",
                               "name": "NomCritereLabel",
                               "style": {
                                 "width": "100%"
-                              }
+                              },
+                              "text": "Nom Critere",
+                              "type": "label"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         },
                         {
-                          "type": "col",
                           "class": "col-md-9",
                           "components": [
                             {
-                              "valueType": "string",
                               "maxLength": 300,
-                              "type": "textbox",
                               "name": "NomCritere",
                               "style": {
                                 "display": "block",
                                 "width": "100%"
                               },
-                              "value": "${critere.NomCritere}"
+                              "type": "textbox",
+                              "value": "${critere.NomCritere}",
+                              "valueType": "string"
                             },
                             {
-                              "type": "required-validator",
-                              "name": "NomCritereRequiredValidator",
                               "component": "NomCritere",
-                              "text": "NomCritere is required",
+                              "name": "NomCritereRequiredValidator",
                               "style": {
                                 "position": "absolute"
-                              }
+                              },
+                              "text": "NomCritere is required",
+                              "type": "required-validator"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         }
-                      ]
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
                     },
                     {
-                      "type": "row",
                       "components": [
                         {
-                          "type": "col",
                           "class": "col offset-sm-3",
                           "components": [
                             {
-                              "type": "button",
+                              "buttonStyle": "primary",
                               "buttonType": "submit",
                               "icon": "save",
                               "text": "Save",
-                              "buttonStyle": "primary"
+                              "type": "button"
                             },
                             {
-                              "type": "button",
                               "buttonStyle": "light",
-                              "style": {
-                                "marginLeft": "1rem"
-                              },
-                              "text": "Cancel",
                               "events": {
                                 "click": [
                                   {
                                     "type": "close-popup"
                                   }
                                 ]
-                              }
+                              },
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
                             }
-                          ]
+                          ],
+                          "type": "col"
                         }
-                      ]
+                      ],
+                      "type": "row"
                     }
                   ],
+                  "data": "${critere}",
                   "events": {
                     "submit": [
                       {
-                        "type": "execute",
-                        "code": "critere.Elementid = int.Parse($\"{Elementid}\");"
+                        "code": "critere.Elementid = int.Parse($\"{Elementid}\");",
+                        "type": "execute"
                       },
                       {
                         "error": [
@@ -122,23 +121,28 @@
                         ],
                         "then": [
                           {
-                            "type": "close-popup",
-                            "result": "${critere}"
+                            "result": "${critere}",
+                            "type": "close-popup"
                           }
                         ],
                         "type": "invoke"
                       }
                     ]
                   },
-                  "data": "${critere}",
-                  "visible": "${critere != null}",
-                  "itemType": "Pes.Models.DMdel.Critere"
+                  "itemType": "Pes.Models.DMdel.Critere",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${critere != null}"
                 }
-              ]
+              ],
+              "type": "col"
             }
-          ]
+          ],
+          "type": "row"
         }
-      ]
+      ],
+      "container": "main",
+      "type": "content"
     }
   ],
   "events": {
@@ -146,15 +150,11 @@
       {
         "name": "critere",
         "type": "set",
-        "value": "new Pes.Models.DMdel.Critere(){}",
+        "value": "new Pes.Models.DMdel.Critere(){Sessionid = Globals.ActiveSession?.Id}",
         "valueType": "Pes.Models.DMdel.Critere"
       }
     ]
   },
-  "name": "Add Critere",
-  "access": [
-    "Authenticated",
-    "admin"
-  ],
-  "layout": "Main"
+  "layout": "Main",
+  "name": "Add Critere"
 }

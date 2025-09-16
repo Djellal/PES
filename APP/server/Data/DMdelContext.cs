@@ -27,6 +27,11 @@ namespace Pes.Data
         base.OnModelCreating(builder);
 
         builder.Entity<Pes.Models.DMdel.Critere>()
+              .HasOne(i => i.Session)
+              .WithMany(i => i.Criteres)
+              .HasForeignKey(i => i.Sessionid)
+              .HasPrincipalKey(i => i.Id);
+        builder.Entity<Pes.Models.DMdel.Critere>()
               .HasOne(i => i.Element)
               .WithMany(i => i.Criteres)
               .HasForeignKey(i => i.Elementid)
@@ -40,6 +45,11 @@ namespace Pes.Data
               .HasOne(i => i.Rubrique)
               .WithMany(i => i.Elements)
               .HasForeignKey(i => i.Rubid)
+              .HasPrincipalKey(i => i.Id);
+        builder.Entity<Pes.Models.DMdel.Element>()
+              .HasOne(i => i.Session)
+              .WithMany(i => i.Elements)
+              .HasForeignKey(i => i.Sessionid)
               .HasPrincipalKey(i => i.Id);
         builder.Entity<Pes.Models.DMdel.Etablissement>()
               .HasOne(i => i.Region)
@@ -74,6 +84,11 @@ namespace Pes.Data
         builder.Entity<Pes.Models.DMdel.RangsEtab>()
               .HasOne(i => i.Session)
               .WithMany(i => i.RangsEtabs)
+              .HasForeignKey(i => i.Sessionid)
+              .HasPrincipalKey(i => i.Id);
+        builder.Entity<Pes.Models.DMdel.Rubrique>()
+              .HasOne(i => i.Session)
+              .WithMany(i => i.Rubriques)
               .HasForeignKey(i => i.Sessionid)
               .HasPrincipalKey(i => i.Id);
         builder.Entity<Pes.Models.DMdel.Stagiaire>()

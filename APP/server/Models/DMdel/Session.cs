@@ -32,7 +32,10 @@ namespace Pes.Models.DMdel
     }
 
     public ICollection<RangsEtab> RangsEtabs { get; set; }
+    public ICollection<Element> Elements { get; set; }
+    public ICollection<Critere> Criteres { get; set; }
     public ICollection<Stagiaire> Stagiaires { get; set; }
+    public ICollection<Rubrique> Rubriques { get; set; }
     public string NomSession
     {
       get;
