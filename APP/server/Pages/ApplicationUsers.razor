@@ -14,11 +14,15 @@
   <ChildContent>
     <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Utilisateurs">
     </RadzenHeading>
-    <div style="border: 3px solid #0078d4; border-radius: 5px; padding-bottom: 10px; padding-top: 10px" class="row">
-      <div class="col-md-12 justify-content-between d-flex">
+    <div class="row justify-content-between" style="border: 3px solid #0078d4; border-radius: 5px; padding-bottom: 10px; padding-top: 10px">
+      <div class="justify-content-between d-flex col-md-6">
         <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
         </RadzenDropDown>
-        <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
+      </div>
+      <div class="justify-content-end d-flex col-md-4">
+        <RadzenButton Icon="add_circle_outline" style="margin-right: 10px" Text="Ajouter" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenButton Icon="get_app"  Text="Exporter à Excel" Click="@Button1Click">
         </RadzenButton>
       </div>
     </div>

@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Drawing;
+using DocumentFormat.OpenXml.Office2010.Drawing;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;

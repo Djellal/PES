@@ -23,9 +23,10 @@
           "type": "heading"
         },
         {
+          "class": "justify-content-between",
           "components": [
             {
-              "class": "col-md-12 justify-content-between d-flex",
+              "class": "justify-content-between d-flex col-md-6",
               "components": [
                 {
                   "allowFiltering": true,
@@ -55,7 +56,14 @@
                   "valueTemplate": "",
                   "valueType": "int?",
                   "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
-                },
+                }
+              ],
+              "name": "col0",
+              "type": "col"
+            },
+            {
+              "class": "justify-content-end d-flex col-md-4",
+              "components": [
                 {
                   "events": {
                     "click": [
@@ -82,12 +90,34 @@
                   },
                   "icon": "add_circle_outline",
                   "name": "button0",
-                  "style": {},
+                  "style": {
+                    "marginRight": "10px"
+                  },
                   "text": "Ajouter",
+                  "type": "button"
+                },
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "name": "ExportUsersToExcel",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "icon": "get_app",
+                  "name": "button1",
+                  "style": {},
+                  "template": "",
+                  "text": "Exporter à Excel",
                   "type": "button"
                 }
               ],
-              "name": "col0",
+              "name": "col1",
               "type": "col"
             }
           ],

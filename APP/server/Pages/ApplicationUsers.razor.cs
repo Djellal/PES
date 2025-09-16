@@ -63,5 +63,11 @@ namespace Pes.Pages
         {
             return getEtablissementsResult.FirstOrDefault(e=>e.Id == etabId)?.NomEtablissement;
         }
+
+        protected async System.Threading.Tasks.Task ExportUsersToExcel()
+        {
+            // Navigate to the export URL
+            UriHelper.NavigateTo("/export/applicationusers/excel(fileName='Utilisateurs')", forceLoad: true);
+        }
     }
 }

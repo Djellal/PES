@@ -163,6 +163,11 @@ namespace Pes.Pages
             await grid0.Reload();
         }
 
+        protected async System.Threading.Tasks.Task Button1Click(MouseEventArgs args)
+        {
+            await ExportUsersToExcel();
+        }
+
         protected async System.Threading.Tasks.Task Grid0RowSelect(ApplicationUser args)
         {
             var dialogResult = await DialogService.OpenAsync<EditApplicationUser>($"Modifier utilisateur", new Dictionary<string, object>() { {"Id", args.Id} }, new DialogOptions(){ Width = $"{800}px",CloseDialogOnOverlayClick = true,Resizable = true,Draggable = true });
