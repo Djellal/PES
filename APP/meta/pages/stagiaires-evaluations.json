@@ -213,6 +213,7 @@
                       "width": "250px"
                     },
                     {
+                      "editTemplate": "",
                       "filterTemplate": "",
                       "format": "double",
                       "formatString": "{0:P2}",
@@ -474,7 +475,11 @@
                                   "events": {
                                     "click": [
                                       {
-                                        "code": "            try\n            {\n                await DMdel.CreateEvals(data.Id);\n            }\n            catch (System.Exception exception)\n            {\n                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $\"Erreur\", Detail = exception.Message });\n            }",
+                                        "code": " if(Globals.ActiveSession == null)\n  {\n      NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $\"Attention\",Detail = $\"Aucune session active. Veuillez activer une cession avant de gérer les rubriques.\" });\n      return;\n  };",
+                                        "type": "execute"
+                                      },
+                                      {
+                                        "code": "            try\n            {\n                await DMdel.CreateEvals(data.Id,Globals.ActiveSession.Id);\n            }\n            catch (System.Exception exception)\n            {\n                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $\"Erreur\", Detail = exception.Message });\n            }",
                                         "error": [],
                                         "type": "execute"
                                       },

@@ -156,9 +156,15 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task EditButtonClick(MouseEventArgs args, dynamic data)
         {
+            if(Globals.ActiveSession == null)
+  {
+      NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+      return;
+  };
+
             try
             {
-                await DMdel.CreateEvals(data.Id);
+                await DMdel.CreateEvals(data.Id,Globals.ActiveSession.Id);
             }
             catch (System.Exception exception)
             {

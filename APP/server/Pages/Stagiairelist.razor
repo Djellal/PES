@@ -26,9 +26,9 @@
                 </RadzenSplitButtonItem>
               </ChildContent>
             </RadzenSplitButton>
-            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
             </RadzenUpload>
-            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin}))">
+            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))">
             </RadzenLink>
             <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 350px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
             </RadzenDropDown>
@@ -121,7 +121,7 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="NoteCC" TextAlign="TextAlign.Center" Title="Note évaluation continue">
               <EditTemplate Context="pesModelsDMdelStagiaire">
-                <RadzenNumeric Format="P0" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin}))" Step="0.1" style="font-size: 18px; font-weight: bolder; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelStagiaire.NoteCC)" Name="NoteCCnumeric">
+                <RadzenNumeric Format="P0" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Step="0.1" style="font-size: 18px; font-weight: bolder; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelStagiaire.NoteCC)" Name="NoteCCnumeric">
                 </RadzenNumeric>
               </EditTemplate>
             </RadzenDataGridColumn>

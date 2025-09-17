@@ -162,6 +162,12 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
+            if(Globals.ActiveSession == null)
+{
+    NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Error,Summary = $"Attention",Detail = $"Aucune session active. Veuillez activer une cession avant de gérer les rubriques." });
+    return;
+};
+
             var dMdelGetStagiaireByIdResult = await DMdel.GetStagiaireById(Id);
             stagiaire = dMdelGetStagiaireByIdResult;
 
@@ -171,7 +177,7 @@ namespace Pes.Pages
             var dMdelGetEchellesResult = await DMdel.GetEchelles(new Query() { OrderBy = $"c=>c.Val" });
             getEchellesResult = dMdelGetEchellesResult;
 
-            var dMdelGetCriteresResult = await DMdel.GetCriteres();
+            var dMdelGetCriteresResult = await DMdel.GetCriteres(new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}" });
             getCriteresResult = dMdelGetCriteresResult;
 
             await LoadEvalutions();

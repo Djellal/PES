@@ -96,7 +96,7 @@
                       "name": "uploadList",
                       "type": "upload",
                       "url": "${uploadUrl}",
-                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}"
                     },
                     {
                       "icon": "link",
@@ -109,7 +109,7 @@
                       "target": "_blank",
                       "text": "Télécharger le modèle en Excel",
                       "type": "link",
-                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}"
                     },
                     {
                       "allowClear": true,
@@ -451,7 +451,7 @@
                           "max": 1,
                           "min": 0,
                           "name": "NoteCCnumeric",
-                          "readOnly": "${!Security.IsInRole(new String[]{Constants.admin})}",
+                          "readOnly": "${!Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}",
                           "step": "0.1",
                           "style": {
                             "fontSize": "18px",

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Pes.Data;
 using Pes.Models;
 using Pes.Models.DMdel;
+using Pes.Pages;
 using Radzen;
 using System;
 using System.Collections.Generic;
@@ -37,13 +38,13 @@ namespace Pes
             return context.Sessions.FirstOrDefault(s => s.EnCours);
         }
 
-        public async System.Threading.Tasks.Task CreateEvals(int StagId)
+        public async System.Threading.Tasks.Task CreateEvals(int StagId,int SessionId)
         {
 
             var stagiaire = await GetStagiaireById(StagId);
 
 
-            var criteres = Context.Criteres.Include(ev => ev.Element).ThenInclude(e => e.Rubrique).ToList(); //(await DMdel. GetCriteres()).ToList();
+            var criteres = Context.Criteres.Where(c=>c.Sessionid == SessionId).Include(ev => ev.Element).ThenInclude(e => e.Rubrique).ToList(); //(await DMdel. GetCriteres()).ToList();
 
             var membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.expert, Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid);
 
@@ -113,15 +114,15 @@ namespace Pes
 
         }
 
-        public async System.Threading.Tasks.Task CalculerNote(int StagId)
+        public async System.Threading.Tasks.Task CalculerNote(int StagId, int SessionId)
         {
            
                 var stagiaire = Context.Stagiaires.FirstOrDefault(s=>s.Id == StagId);
                 if (stagiaire == null) return;
 
-                var criteres = Context.Criteres.ToList();
+                var criteres = Context.Criteres.Where(r=>r.Sessionid == SessionId).ToList();
 
-               var rubriques = Context.Rubriques.ToList();
+               var rubriques = Context.Rubriques.Where(r => r.Sessionid == SessionId).ToList();
 
 
 

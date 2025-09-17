@@ -87,7 +87,7 @@ namespace Pes.Pages
             
             try
             {
-               var rubriques  = DMdel.DMContext.Rubriques.ToList();
+               var rubriques  = DMdel.DMContext.Rubriques.Where(r=>r.Sessionid == Globals.ActiveSession.Id).ToList();
                 var AllSyntheseEvals = DMdel.DMContext.Evaluations.Include(ev=>ev.Echelle).Include(ev => ev.Critere).ThenInclude(c=>c.Element).ThenInclude(ec => ec.Rubrique).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).ToList();
 
                 

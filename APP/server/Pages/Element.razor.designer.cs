@@ -166,7 +166,7 @@ namespace Pes.Pages
     return;
 };
 
-            var dMdelGetElementsResult = await DMdel.GetElements();
+            var dMdelGetElementsResult = await DMdel.GetElements(new Query() { Filter = $@"el=>el.Sessionid == {Globals.ActiveSession?.Id}" });
             getElementsResult = dMdelGetElementsResult;
         }
 

@@ -392,7 +392,12 @@
       },
       {
         "name": "DMdel.getElements",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "$filter",
+            "value": "el=>el.Sessionid == {Globals.ActiveSession?.Id}"
+          }
+        ],
         "then": [
           {
             "name": "getElementsResult",
