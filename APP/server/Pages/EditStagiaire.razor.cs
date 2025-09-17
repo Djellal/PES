@@ -115,7 +115,7 @@ namespace Pes.Pages
 
                 stagiaire.NoteFinale = ((stagiaire.Note + stagiaire.NoteCC) / 2);
 
-                await DMdel.UpdateStagiaire(stagiaire.Id, stagiaire);
+                //await DMdel.UpdateStagiaire(stagiaire.Id, stagiaire);
             }
             catch (Exception ex)
             {
@@ -143,6 +143,21 @@ namespace Pes.Pages
             {
                  //throw ex;
                 NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "CalculerNote : \r\n" + ex.Message });
+            }
+        }
+
+        protected async System.Threading.Tasks.Task Reinit()
+        {
+            try
+            {
+
+                await DMdel.ReintEvals(stagiaire.Id, Globals.ActiveSession.Id);
+                await Load();
+                await Calculer();
+            }
+            catch (System.Exception calculerNoteException)
+            {
+                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = $"{calculerNoteException.Message}" });
             }
         }
 

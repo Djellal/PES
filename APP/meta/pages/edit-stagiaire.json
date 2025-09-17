@@ -423,20 +423,6 @@
                             ],
                             "rowUpdate": [
                               {
-                                "name": "DMdel.updateEvaluation",
-                                "parameters": [
-                                  {
-                                    "name": "Id",
-                                    "value": "${event.Id}"
-                                  },
-                                  {
-                                    "name": "Evaluation",
-                                    "value": "${event}"
-                                  }
-                                ],
-                                "type": "invoke"
-                              },
-                              {
                                 "name": "Calculer",
                                 "schema": {
                                   "$ref": "#/definitions/Task",
@@ -494,6 +480,28 @@
                               "type": "button"
                             },
                             {
+                              "buttonStyle": "danger",
+                              "events": {
+                                "click": [
+                                  {
+                                    "name": "Reinit",
+                                    "schema": {
+                                      "$ref": "#/definitions/Task",
+                                      "dotnetType": "System.Threading.Tasks.Task"
+                                    },
+                                    "type": "invoke-method"
+                                  }
+                                ]
+                              },
+                              "icon": "undo",
+                              "name": "innitbutton",
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Réinitiliser",
+                              "type": "button"
+                            },
+                            {
                               "buttonStyle": "light",
                               "events": {
                                 "click": [
@@ -503,7 +511,7 @@
                                 ]
                               },
                               "icon": "cancel",
-                              "name": "button1",
+                              "name": "button2",
                               "style": {
                                 "marginLeft": "1rem"
                               },

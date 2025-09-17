@@ -37,6 +37,19 @@ namespace Pes
         {
             return context.Sessions.FirstOrDefault(s => s.EnCours);
         }
+        public async System.Threading.Tasks.Task ReintEvals(int StagId, int SessionId)
+        {
+            var stagiaire = await GetStagiaireById(StagId);
+
+
+            var Evals = Context.Evaluations.Where(ev => ev.Stagid == StagId);
+
+            Context.Evaluations.RemoveRange(Evals);
+
+            await  Context.SaveChangesAsync();
+
+            await CreateEvals(StagId, SessionId);
+        }
 
         public async System.Threading.Tasks.Task CreateEvals(int StagId,int SessionId)
         {

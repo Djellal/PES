@@ -232,8 +232,6 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task Grid0RowUpdate(dynamic args)
         {
-            var dMdelUpdateEvaluationResult = await DMdel.UpdateEvaluation(args.Id, args);
-
             await Calculer();
         }
 
@@ -254,7 +252,12 @@ namespace Pes.Pages
             var dMdelCancelEvaluationChangesResult = await DMdel.CancelEvaluationChanges(data);
         }
 
-        protected async System.Threading.Tasks.Task Button1Click(MouseEventArgs args)
+        protected async System.Threading.Tasks.Task InnitbuttonClick(MouseEventArgs args)
+        {
+            await Reinit();
+        }
+
+        protected async System.Threading.Tasks.Task Button2Click(MouseEventArgs args)
         {
             DialogService.Close(null);
         }
