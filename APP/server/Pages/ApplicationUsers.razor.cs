@@ -16,19 +16,14 @@ namespace Pes.Pages
             {
                 if (Security.IsInRole(new string[] { Constants.admin }))
                 {
-                    if (SelectedEtab != null)
-                    {
-                        users = (await Security.GetUsersOfEtab(SelectedEtab)).ToList();
+                   
+                        users = (await Security.GetUsersOfEtab(SelectedEtab,SelectedRole)).ToList();
 
-                    }
-                    else
-                    {
-                        users = (await Security.GetUsers()).ToList();
-                    }
+                    
                 }
                 else if (Security.IsInRole(new string[] { Constants.coordinateur }))
                 {
-                    users = (await Security.GetUsersOfEtab(Security.User.Etabid)).ToList();
+                    users = (await Security.GetUsersOfEtab(Security.User.Etabid, SelectedRole)).ToList();
                 }
 
                 await AttribuerRoles(users);
@@ -37,7 +32,7 @@ namespace Pes.Pages
             catch (Exception ex)
             {
 
-                throw ex;
+                    NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "LoadUsers : \r\n" + ex.Message });
             }
 
 
@@ -53,8 +48,9 @@ namespace Pes.Pages
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "LoadUsers : \r\n" + ex.Message });
 
 
             }
@@ -67,7 +63,7 @@ namespace Pes.Pages
         protected async System.Threading.Tasks.Task ExportUsersToExcel()
         {
             // Navigate to the export URL
-            UriHelper.NavigateTo("/export/applicationusers/excel(fileName='Utilisateurs')", forceLoad: true);
+            UriHelper.NavigateTo($"/export/applicationusers/excel?roles={SelectedRole}&etabid={SelectedEtab}", forceLoad: true);
         }
     }
 }

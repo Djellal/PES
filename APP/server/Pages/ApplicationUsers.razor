@@ -15,8 +15,10 @@
     <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Utilisateurs">
     </RadzenHeading>
     <div class="row justify-content-between" style="border: 3px solid #0078d4; border-radius: 5px; padding-bottom: 10px; padding-top: 10px">
-      <div class="justify-content-between d-flex col-md-6">
-        <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+      <div class="col-md-8 justify-content-start d-flex">
+        <RadzenDropDown AllowClear="true" AllowFiltering="true" AllowSelectAll="false" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="margin-right: 10px; width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+        </RadzenDropDown>
+        <RadzenDropDown AllowClear="true" AllowSelectAll="false" Data="@getRolesResult" Placeholder="Filtrer par Role" TextProperty="Name" @bind-Value="@SelectedRole" ValueProperty="Name" Name="Rolesdropdown" Change="@RolesdropdownChange">
         </RadzenDropDown>
       </div>
       <div class="justify-content-end d-flex col-md-4">

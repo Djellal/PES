@@ -26,10 +26,12 @@
           "class": "justify-content-between",
           "components": [
             {
-              "class": "justify-content-between d-flex col-md-6",
+              "class": "col-md-8 justify-content-start d-flex",
               "components": [
                 {
+                  "allowClear": true,
                   "allowFiltering": true,
+                  "allowSelectAll": false,
                   "data": "${getEtablissementsResult}",
                   "events": {
                     "change": [
@@ -47,6 +49,7 @@
                   "name": "dropdown0",
                   "placeholder": "Filtrer par établissement",
                   "style": {
+                    "marginRight": "10px",
                     "width": "400px"
                   },
                   "textProperty": "NomEtablissement",
@@ -56,6 +59,30 @@
                   "valueTemplate": "",
                   "valueType": "int?",
                   "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
+                },
+                {
+                  "allowClear": true,
+                  "allowSelectAll": false,
+                  "data": "${getRolesResult}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "LoadUsers",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "rolesdropdown",
+                  "placeholder": "Filtrer par Role",
+                  "textProperty": "Name",
+                  "type": "dropdown",
+                  "value": "${SelectedRole}",
+                  "valueProperty": "Name",
+                  "valueType": "string"
                 }
               ],
               "name": "col0",
@@ -315,6 +342,25 @@
           "dotnetType": "System.Threading.Tasks.Task"
         },
         "type": "invoke-method"
+      },
+      {
+        "name": "Security.getRoles",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getRolesResult",
+            "type": "set",
+            "value": "${result.value}",
+            "valueType": "IEnumerable<IdentityRole>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "SelectedRole",
+        "type": "set",
+        "value": "string.Empty",
+        "valueType": "string"
       }
     ]
   },

@@ -125,6 +125,44 @@ namespace Pes.Pages
             }
         }
 
+        IEnumerable<IdentityRole> _getRolesResult;
+        protected IEnumerable<IdentityRole> getRolesResult
+        {
+            get
+            {
+                return _getRolesResult;
+            }
+            set
+            {
+                if (!object.Equals(_getRolesResult, value))
+                {
+                    var args = new PropertyChangedEventArgs(){ Name = "getRolesResult", NewValue = value, OldValue = _getRolesResult };
+                    _getRolesResult = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
+        string _SelectedRole;
+        protected string SelectedRole
+        {
+            get
+            {
+                return _SelectedRole;
+            }
+            set
+            {
+                if (!object.Equals(_SelectedRole, value))
+                {
+                    var args = new PropertyChangedEventArgs(){ Name = "SelectedRole", NewValue = value, OldValue = _SelectedRole };
+                    _SelectedRole = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
             Globals.PropertyChanged += OnPropertyChanged;
@@ -148,9 +186,19 @@ namespace Pes.Pages
             getEtablissementsResult = dMdelGetEtablissementsResult;
 
             await LoadUsers();
+
+            var securityGetRolesResult = await Security.GetRoles();
+            getRolesResult = securityGetRolesResult;
+
+            SelectedRole = string.Empty;
         }
 
         protected async System.Threading.Tasks.Task Dropdown0Change(dynamic args)
+        {
+            await LoadUsers();
+        }
+
+        protected async System.Threading.Tasks.Task RolesdropdownChange(dynamic args)
         {
             await LoadUsers();
         }

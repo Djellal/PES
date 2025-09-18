@@ -24,34 +24,49 @@ namespace Pes
 
         [HttpGet("/export/applicationusers/excel")]
         [HttpGet("/export/applicationusers/excel(fileName='{fileName}')")]
-        public async Task<FileStreamResult> ExportApplicationUsersToExcel(string fileName = null)
+        public async Task<FileStreamResult> ExportApplicationUsersToExcel(
+            string fileName = null,
+            [FromQuery] string[] roles = null,
+            [FromQuery] int? etabid = null)
         {
-            // Get all users with their roles
-            var users = await _securityService.GetUsers();
+            IEnumerable<ApplicationUser> users;
+
+            // Apply filtering based on provided roles and Etabid
+            if ((roles != null && roles.Length > 0) && etabid != null)
+            {
+                users = await _securityService.GetUsersInRoleAndEtab(roles, etabid);
+            }
+            else if (etabid != null)
+            {
+                users = await _securityService.GetUsersOfEtab(etabid, null);
+            }
+            else if (roles != null && roles.Length > 0)
+            {
+                // If multiple roles, aggregate users from all roles
+                var usersList = new List<ApplicationUser>();
+                foreach (var role in roles)
+                {
+                    var roleUsers = await _securityService.GetUsersInRole(role);
+                    usersList.AddRange(roleUsers);
+                }
+                users = usersList.Distinct();
+            }
+            else
+            {
+                users = await _securityService.GetUsers();
+            }
 
             List<UserExportDTO> exportData = new List<UserExportDTO>();
-            IEnumerable<string> Roles;
             foreach (var u in users)
             {
-                Roles = await _securityService.GetRolesOfUser(u);
+                var userRoles = await _securityService.GetRolesOfUser(u);
                 exportData.Add(new UserExportDTO
                 {
                     UserName = u.UserName,
                     Etablissement = GetEtablissementName(u.Etabid),
-                    RoleNames = Roles != null ? string.Join(", ", Roles) : string.Empty
-
+                    RoleNames = userRoles != null ? string.Join(", ", userRoles) : string.Empty
                 });
             }
-            
-            // Transform to DTO with username, etablissement, and role names
-            //var exportData = users.Select(u => new UserExportDTO
-            //{
-            //    UserName = u.UserName,
-            //    Etablissement = GetEtablissementName(u.Etabid),
-            //    RoleNames = u.RoleNames != null ? string.Join(", ", u.RoleNames) : string.Empty
-            //}).AsQueryable();
-
-
 
             return ToExcel(exportData.AsQueryable(), fileName);
         }

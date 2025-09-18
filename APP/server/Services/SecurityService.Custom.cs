@@ -31,11 +31,20 @@ namespace Pes
         }
 
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersOfEtab(int? etabid)
+        public async Task<IEnumerable<ApplicationUser>> GetUsersOfEtab(int? etabid,string role)
         {
-           
+            List<ApplicationUser> users;
+            if (string.IsNullOrEmpty(role))
+            {
+                users = ((await GetUsers()).ToList());
+            }
+            
+            else
 
-            List<ApplicationUser> users =((await GetUsers()).Where(u => u.Etabid == etabid).ToList());
+                users =((await GetUsersInRole(role)).ToList());
+
+            if(etabid.HasValue)
+                users = users.Where(u => u.Etabid == etabid).ToList();
 
 
 
