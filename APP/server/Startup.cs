@@ -126,7 +126,7 @@ namespace Pes
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            identityDbContext.Database.Migrate();
+            //identityDbContext.Database.Migrate();
 
             OnConfigure(app, env);
         }
