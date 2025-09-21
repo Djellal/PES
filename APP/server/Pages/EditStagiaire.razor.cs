@@ -27,11 +27,11 @@ namespace Pes.Pages
 
                 if (Security.IsInRole(new String[] { Constants.expert,Constants.membre_jury, Constants.president_jury }))
                 {
-                    Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && !ev.EstSynthese && ev.MembreId == Security.User.Id).OrderBy(ev => ev.NomRubrique).ToList();
+                    Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && !ev.EstSynthese && ev.MembreId == Security.User.Id).OrderBy(ev => ev.NomRubrique).ThenBy(c => c.Critere.NomCritere).ToList();
                 }
                 else if (Security.IsInRole(new String[] {  Constants.coordinateur,Constants.admin }))
                 {
-                    Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).OrderBy(ev => ev.NomRubrique).ToList();
+                    Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).OrderBy(ev => ev.NomRubrique).ThenBy(c=>c.Critere.NomCritere).ToList();
                 }
 
               
@@ -47,7 +47,7 @@ namespace Pes.Pages
         {
             try 
             {
-                var AllEvals = DMdel.DMContext.Evaluations.Include(ev => ev.Echelle).Where(ev => ev.Stagid == stagiaire.Id && ev.Criterid == criterid).ToList();
+                var AllEvals = DMdel.DMContext.Evaluations.Include(ev => ev.Echelle).Where(ev => ev.Stagid == stagiaire.Id && ev.Criterid == criterid).OrderBy(ev => ev.NomRubrique).ThenBy(c => c.Critere.NomCritere).ToList();
                 if (!AllEvals.Any()) return;
 
 
@@ -88,7 +88,7 @@ namespace Pes.Pages
             try
             {
                var rubriques  = DMdel.DMContext.Rubriques.Where(r=>r.Sessionid == Globals.ActiveSession.Id).ToList();
-                var AllSyntheseEvals = DMdel.DMContext.Evaluations.Include(ev=>ev.Echelle).Include(ev => ev.Critere).ThenInclude(c=>c.Element).ThenInclude(ec => ec.Rubrique).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).ToList();
+                var AllSyntheseEvals = DMdel.DMContext.Evaluations.Include(ev=>ev.Echelle).Include(ev => ev.Critere).ThenInclude(c=>c.Element).ThenInclude(ec => ec.Rubrique).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).OrderBy(ev => ev.NomRubrique).ThenBy(c => c.Critere.NomCritere).ToList();
 
                 
 

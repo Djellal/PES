@@ -650,6 +650,10 @@
           {
             "name": "$filter",
             "value": "s=>s.Sessionid == {Globals.ActiveSession?.Id}"
+          },
+          {
+            "name": "$orderby",
+            "value": "c=>c.NomCritere"
           }
         ],
         "then": [

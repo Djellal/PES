@@ -177,7 +177,7 @@ namespace Pes.Pages
             var dMdelGetEchellesResult = await DMdel.GetEchelles(new Query() { OrderBy = $"c=>c.Val" });
             getEchellesResult = dMdelGetEchellesResult;
 
-            var dMdelGetCriteresResult = await DMdel.GetCriteres(new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}" });
+            var dMdelGetCriteresResult = await DMdel.GetCriteres(new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}", OrderBy = $"c=>c.NomCritere" });
             getCriteresResult = dMdelGetCriteresResult;
 
             await LoadEvalutions();

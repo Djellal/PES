@@ -57,7 +57,7 @@ namespace Pes
             var stagiaire = await GetStagiaireById(StagId);
 
 
-            var criteres = Context.Criteres.Where(c=>c.Sessionid == SessionId).Include(ev => ev.Element).ThenInclude(e => e.Rubrique).ToList(); //(await DMdel. GetCriteres()).ToList();
+            var criteres = Context.Criteres.Where(c=>c.Sessionid == SessionId).Include(ev => ev.Element).ThenInclude(e => e.Rubrique).OrderBy(c=>c.NomCritere).ToList(); //(await DMdel. GetCriteres()).ToList();
 
             var membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.expert, Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid);
 
