@@ -11,6 +11,34 @@
               "class": "col-md-12",
               "components": [
                 {
+                  "allowClear": true,
+                  "data": "${getRegionsResult}",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "SelectedRegionChanged",
+                        "schema": {
+                          "$ref": "#/definitions/Task",
+                          "dotnetType": "System.Threading.Tasks.Task"
+                        },
+                        "type": "invoke-method"
+                      }
+                    ]
+                  },
+                  "name": "dropdown0",
+                  "placeholder": "Région",
+                  "style": {
+                    "marginRight": "5px",
+                    "width": "273px"
+                  },
+                  "textProperty": "NomRegion",
+                  "type": "dropdown",
+                  "value": "${SelectedRegion}",
+                  "valueProperty": "Id",
+                  "valueTemplate": "",
+                  "valueType": "int"
+                },
+                {
                   "events": {
                     "click": [
                       {
@@ -72,6 +100,9 @@
                   },
                   "icon": "save_alt",
                   "name": "button1",
+                  "style": {
+                    "marginRight": "8px"
+                  },
                   "text": "Exporter",
                   "type": "button"
                 }
@@ -281,6 +312,25 @@
           "dotnetType": "System.Threading.Tasks.Task"
         },
         "type": "invoke-method"
+      },
+      {
+        "name": "DMdel.getRegions",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getRegionsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<Pes.Models.DMdel.Region>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "SelectedRegion",
+        "type": "set",
+        "value": "null",
+        "valueType": "int?"
       }
     ]
   },

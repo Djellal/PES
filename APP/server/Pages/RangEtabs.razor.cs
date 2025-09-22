@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Radzen;
 using Radzen.Blazor;
 using Pes.Models.DMdel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Pes.Pages
 {
@@ -20,7 +21,9 @@ namespace Pes.Pages
             try
             {
                 RangsEtab retab;
-                var RangsEtabList = DMdel.DMContext.RangsEtabs.Where(r => r.Sessionid == sessionid).ToList();
+                var RangsEtabList = DMdel.DMContext.RangsEtabs.Include(e=>e.Etablissement).Where(r => r.Sessionid == sessionid).ToList();
+
+                
 
                 foreach (var et in getEtablissementsResult.ToList())
                 {
@@ -45,6 +48,13 @@ namespace Pes.Pages
                 int rang = 1;
                 int counter = 1;
                 double prevMov = 0;
+
+                if (SelectedRegion.HasValue)
+                {
+                    RangsEtabList = RangsEtabList.Where(e => e.Etablissement.Regid == SelectedRegion).ToList();
+                }
+               
+
                 foreach (var item in RangsEtabList)
                 {
                     if (item.Moyenne != prevMov) rang = counter;
@@ -56,6 +66,8 @@ namespace Pes.Pages
                     counter++;
 
                 }
+
+
                 
                 getRangsEtabsResult = RangsEtabList;
             }
@@ -78,5 +90,15 @@ namespace Pes.Pages
             if (Double.IsNaN( rangsetab.Moyenne )) rangsetab.Moyenne =0;
                 
         }
+
+        private async Task SelectedRegionChanged()
+        {
+            if (Globals.ActiveSession != null)
+            {
+                await GenerateRangs(Globals.ActiveSession.Id);
+            }
+
+        }
+
     }
 }

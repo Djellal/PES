@@ -144,6 +144,44 @@ namespace Pes.Pages
             }
         }
 
+        IEnumerable<Pes.Models.DMdel.Region> _getRegionsResult;
+        protected IEnumerable<Pes.Models.DMdel.Region> getRegionsResult
+        {
+            get
+            {
+                return _getRegionsResult;
+            }
+            set
+            {
+                if (!object.Equals(_getRegionsResult, value))
+                {
+                    var args = new PropertyChangedEventArgs(){ Name = "getRegionsResult", NewValue = value, OldValue = _getRegionsResult };
+                    _getRegionsResult = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
+        int? _SelectedRegion;
+        protected int? SelectedRegion
+        {
+            get
+            {
+                return _SelectedRegion;
+            }
+            set
+            {
+                if (!object.Equals(_SelectedRegion, value))
+                {
+                    var args = new PropertyChangedEventArgs(){ Name = "SelectedRegion", NewValue = value, OldValue = _SelectedRegion };
+                    _SelectedRegion = value;
+                    OnPropertyChanged(args);
+                    Reload();
+                }
+            }
+        }
+
         protected override async System.Threading.Tasks.Task OnInitializedAsync()
         {
             Globals.PropertyChanged += OnPropertyChanged;
@@ -173,6 +211,16 @@ namespace Pes.Pages
             {
                 await GenerateRangs(Globals.ActiveSession.Id);
             }
+
+            var dMdelGetRegionsResult = await DMdel.GetRegions();
+            getRegionsResult = dMdelGetRegionsResult;
+
+            SelectedRegion = null;
+        }
+
+        protected async System.Threading.Tasks.Task Dropdown0Change(dynamic args)
+        {
+            await SelectedRegionChanged();
         }
 
         protected async System.Threading.Tasks.Task Button0Click(MouseEventArgs args)

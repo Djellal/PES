@@ -499,7 +499,8 @@
                                 "marginLeft": "1rem"
                               },
                               "text": "Réinitiliser",
-                              "type": "button"
+                              "type": "button",
+                              "visible": "${Security.IsInRole(Constants.admin)}"
                             },
                             {
                               "buttonStyle": "light",
