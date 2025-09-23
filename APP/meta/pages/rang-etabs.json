@@ -28,8 +28,10 @@
                   "name": "dropdown0",
                   "placeholder": "Région",
                   "style": {
+                    "border": "2px solid #479cc8",
+                    "borderLeft": "1px solid #000000",
                     "marginRight": "5px",
-                    "width": "273px"
+                    "width": "400px"
                   },
                   "textProperty": "NomRegion",
                   "type": "dropdown",

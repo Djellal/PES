@@ -14,7 +14,7 @@
   <ChildContent>
     <div class="row">
       <div class="col-md-12">
-        <RadzenDropDown AllowClear="true" Data="@getRegionsResult" Placeholder="Région" style="margin-right: 5px; width: 273px" TextProperty="NomRegion" @bind-Value="@SelectedRegion" ValueProperty="Id" Name="Dropdown0" Change="@Dropdown0Change">
+        <RadzenDropDown AllowClear="true" Data="@getRegionsResult" Placeholder="Région" style="border: 2px solid #479cc8; border-left: 1px solid #000000; margin-right: 5px; width: 400px" TextProperty="NomRegion" @bind-Value="@SelectedRegion" ValueProperty="Id" Name="Dropdown0" Change="@Dropdown0Change">
         </RadzenDropDown>
         <RadzenButton Icon="calculate" style="margin-right: 5px" Text="Calculer Rangs" Click="@Button0Click">
         </RadzenButton>
