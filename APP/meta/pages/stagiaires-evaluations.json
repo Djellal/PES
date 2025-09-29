@@ -437,7 +437,7 @@
                                   },
                                   "text": "Attestation",
                                   "type": "splitbutton",
-                                  "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && data.NoteFinale>=0.5}"
+                                  "visible": "${Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && data.Note>0 && data.NoteFinale>=0.5}"
                                 }
                               ],
                               "name": "col2",

@@ -96,7 +96,7 @@
                       "name": "uploadList",
                       "type": "upload",
                       "url": "${uploadUrl}",
-                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur})}"
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
                     },
                     {
                       "icon": "link",

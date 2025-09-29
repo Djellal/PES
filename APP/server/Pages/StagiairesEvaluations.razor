@@ -93,7 +93,7 @@
                     </RadzenAlert>
                   </div>
                   <div class="col-md-12 justify-content-center d-flex align-items-center" style="margin-top: 5px">
-                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
+                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && pesModelsDMdelStagiaire.Note>0 && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
                       <ChildContent>
                         <RadzenSplitButtonItem Icon="print" Text="Imprimer" Value="0">
                         </RadzenSplitButtonItem>

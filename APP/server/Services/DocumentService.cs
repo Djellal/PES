@@ -73,7 +73,7 @@ namespace Pes
             PdfFont NormalFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 13);
 
             format.Alignment = PdfTextAlignment.Left;
-            g.DrawString("Réf: " + stagiaire.RefAttestation, NormalFont, PdfBrushes.Black, new RectangleF(40, 150, page.Graphics.ClientSize.Width, 100), format);
+            g.DrawString("N°: " + stagiaire.RefAttestation, NormalFont, PdfBrushes.Black, new RectangleF(50, 170, page.Graphics.ClientSize.Width, 100), format);
 
 
             format.Alignment = PdfTextAlignment.Center;
