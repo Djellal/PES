@@ -18,7 +18,7 @@
           <div class="col-md-12  d-flex justify-content-between align-items-center" >
             <RadzenSplitButton Icon="flash_on" Size="ButtonSize.Small" Text="Actions" Click="@Splitbutton0Click">
               <ChildContent>
-                <RadzenSplitButtonItem Icon="person_add" Text="Ajouter un Stagiaire" Value="0">
+                <RadzenSplitButtonItem Icon="person_add" Text="Ajouter un Stagiaire" Value="0" Visible="@(Security.IsInRole(new String[]{Constants.admin}))">
                 </RadzenSplitButtonItem>
                 <RadzenSplitButtonItem Icon="save_alt" Text="Expoter à excel" Value="1">
                 </RadzenSplitButtonItem>

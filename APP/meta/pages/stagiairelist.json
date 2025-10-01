@@ -42,7 +42,8 @@
                         {
                           "icon": "person_add",
                           "text": "Ajouter un Stagiaire",
-                          "value": "0"
+                          "value": "0",
+                          "visible": "${Security.IsInRole(new String[]{Constants.admin})}"
                         },
                         {
                           "icon": "save_alt",
