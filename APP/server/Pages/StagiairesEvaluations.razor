@@ -105,7 +105,7 @@
                 </div>
               </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Reorderable="false" Sortable="false" TextAlign="TextAlign.Left" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury,Constants.coordinateur}))" Width="100px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Reorderable="false" Sortable="false" TextAlign="TextAlign.Left" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury}))" Width="100px">
               <Template Context="pesModelsDMdelStagiaire">
                 <div class="row">
                   <div class="col-md-12">

@@ -531,7 +531,7 @@
                         }
                       ],
                       "textAlign": "left",
-                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury,Constants.coordinateur})}",
+                      "visible": "${Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury})}",
                       "width": "100px"
                     }
                   ],
