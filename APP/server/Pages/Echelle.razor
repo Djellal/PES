@@ -5,6 +5,7 @@
 @using Radzen
 @using Radzen.Blazor
 @using Pes.Models.DMdel
+@using System.Linq
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
@@ -18,14 +19,16 @@
       <div class="col-md-12">
         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Ajouter" Click="@Button0Click">
         </RadzenButton>
-        <RadzenDataGrid @ref="grid0" AllowFiltering="false" AllowPaging="false" AllowSorting="false" Data="@getEchellesResult" FilterMode="Radzen.FilterMode.Advanced" TItem="Pes.Models.DMdel.Echelle" RowSelect="@Grid0RowSelect">
+        <RadzenDataGrid @ref="grid0" AllowFiltering="false" AllowPaging="false" AllowSorting="false" Data="@getEchellesResult?.OrderBy(e => e.Val)" FilterMode="Radzen.FilterMode.Advanced" TItem="Pes.Models.DMdel.Echelle" RowSelect="@Grid0RowSelect">
           <Columns>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Property="Id" Title="Echelle">
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Property="Val" Title="Valeur">
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Echelle" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
               <Template Context="pesModelsDMdelEchelle">
+                <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="edit" Size="ButtonSize.Small" Click="@((args) => Grid0RowSelect(pesModelsDMdelEchelle))" @onclick:stopPropagation="true">
+                </RadzenButton>
                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelEchelle))" @onclick:stopPropagation="true">
                 </RadzenButton>
               </Template>
