@@ -19,5 +19,7 @@ namespace DataModel.Models
 
         public required DateTime DateFin { get; set; } = DateTime.Now.Date.AddMonths(3);
         public bool EnCours { get; set; } = false;
+
+        public double MoyenneGlobale { get; set; }
     }
 }

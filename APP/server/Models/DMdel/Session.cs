@@ -18,6 +18,11 @@ namespace Pes.Models.DMdel
       get;
       set;
     }
+    public double MoyenneGlobale
+    {
+      get;
+      set;
+    }
     public DateTime DateFin
     {
       get;

@@ -37,6 +37,19 @@ namespace Pes
         {
             return context.Sessions.FirstOrDefault(s => s.EnCours);
         }
+        public async System.Threading.Tasks.Task CalculerMoyenneGlobale(int SessionId)
+        {
+            var stags = context.Stagiaires.Where(s => s.Sessionid == SessionId).ToList();
+
+            var session = context.Sessions.FirstOrDefault(s => s.Id == SessionId);
+            if (session == null) return;
+
+            double moyenne = stags.Any() ? stags.Average(s => s.NoteFinale) : 0;
+
+            session.MoyenneGlobale = moyenne;
+
+            await context.SaveChangesAsync();
+        }
         public async System.Threading.Tasks.Task ReintEvals(int StagId, int SessionId)
         {
             var stagiaire = await GetStagiaireById(StagId);

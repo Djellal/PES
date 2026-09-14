@@ -5,12 +5,20 @@ using System.Threading.Tasks;
 using Radzen;
 using Radzen.Blazor;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Components.Web;
 using Pes.Models.DMdel;
 
 namespace Pes.Pages
 {
     public partial class SessionsComponent
     {
+        protected async System.Threading.Tasks.Task CalculerMoyenneClick(MouseEventArgs args, Session sess)
+        {
+            await DMdel.CalculerMoyenneGlobale(sess.Id);
+            await grid0.Reload();
+            await InvokeAsync(() => { StateHasChanged(); });
+        }
+
         protected async System.Threading.Tasks.Task SetActiveSession(Session sesscour)
         {
             if(!sesscour.EnCours ) return;

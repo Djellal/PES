@@ -696,6 +696,9 @@
           "items": {
             "$ref": "#/definitions/Rubrique"
           }
+        },
+        "MoyenneGlobale": {
+          "type": "number"
         }
       }
     },

@@ -62,6 +62,13 @@
                 </RadzenSwitch>
               </EditTemplate>
             </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" FormatString="{0:0.00}" Property="MoyenneGlobale" Title="Moyenne Globale">
+              <Template Context="pesModelsDMdelSession">
+                <RadzenButton Icon="calculate" Size="ButtonSize.Small" Click="@((args) => CalculerMoyenneClick(args, pesModelsDMdelSession))" @onclick:stopPropagation="true">
+                </RadzenButton>
+                @pesModelsDMdelSession.MoyenneGlobale.ToString("0.00%")
+              </Template>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Session" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
               <Template Context="pesModelsDMdelSession">
                 <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, pesModelsDMdelSession))">
