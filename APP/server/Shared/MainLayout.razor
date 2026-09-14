@@ -1,4 +1,4 @@
-﻿@inherits Pes.Layouts.MainLayoutComponent
+@inherits Pes.Layouts.MainLayoutComponent
 
 @using Radzen
 @using Radzen.Blazor
@@ -6,99 +6,193 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Pes.Pages
+
 <RadzenDialog />
 <RadzenNotification />
 <RadzenTooltip />
 <RadzenContextMenu />
 
 <RadzenLayout>
-  <ChildContent>
-    <RadzenHeader>
-      <ChildContent>
-        <div class="row justify-content-start align-items-center">
-          <div class="col-6 d-flex align-items-center">
-            <RadzenMenu style="margin-top: 5px">
-              <ChildContent>
-                <RadzenMenuItem Icon="home" Path="accueil" Text="Accueil" Visible="@Security.IsInRole(new string[]{"Everybody"})">
-                </RadzenMenuItem>
-                <RadzenMenuItem Icon="settings" Text="Admin" Visible="@(Security.IsInRole(Constants.admin))">
-                  <ChildContent>
-                    <RadzenMenuItem Icon="map" Path="regions" Text="Regions">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="business" Path="etablissement-liste" Text="Etablissements">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="date_range" Path="sessions" Text="Sessions">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Text="________________________________">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="category" Path="rubriques" Text="Rubriques">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="mediation" Path="element" Text="Indicateurs & Critères">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="stairs" Path="echelle" Text="Echelles">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Text="________________________________">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="group" Path="application-users" Text="Utilisateurs">
-                    </RadzenMenuItem>
-                  </ChildContent>
-                </RadzenMenuItem>
-                <RadzenMenuItem Icon="spellcheck" Path="stagiaires-evaluations" Text="Evaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"})">
-                </RadzenMenuItem>
-                <RadzenMenuItem Icon="emoji_events" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
-                </RadzenMenuItem>
-                <RadzenMenuItem Icon="settings" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
-                  <ChildContent>
-                    <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="home_work" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
-                    </RadzenMenuItem>
-                    <RadzenMenuItem Icon="supervisor_account" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
-                    </RadzenMenuItem>
-                  </ChildContent>
-                </RadzenMenuItem>
-              </ChildContent>
-            </RadzenMenu>
-          </div>
-          <div class="col-6 text-right">
-            <RadzenProfileMenu Visible="@(Security.IsAuthenticated())" Click="@Profilemenu0Click">
-              <ChildContent>
-                <RadzenProfileMenuItem Icon="settings" Path="profile" Text="Profile" Value="Profile" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
-                </RadzenProfileMenuItem>
-                <RadzenProfileMenuItem Icon="power_settings_new" Text="Se déconnecter" Value="Logout">
-                </RadzenProfileMenuItem>
-              </ChildContent>
-              <Template>
-                <RadzenGravatar Email="@(Security.User?.Name)">
-                </RadzenGravatar>
-              </Template>
-            </RadzenProfileMenu>
-          </div>
-        </div>
-      </ChildContent>
-    </RadzenHeader>
-    <RadzenBody @ref="body0" style="border: 5px solid #0078d4">
-      <ChildContent>
-        <RadzenContentContainer Name="main">
-        @Body
-        </RadzenContentContainer>
-      </ChildContent>
-    </RadzenBody>
-    <RadzenFooter style="background-color: rgb(0, 120, 212)">
-      <ChildContent>
-        <div class="row justify-content-center">
-          <div class="justify-content-between d-flex">
-          </div>
-          <div class="justify-content-between d-flex col-sm-12">
-            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="@($"{(Security.User?.Name+" - "+ Globals.Etab?.NomEtablissement)}")">
-            </RadzenLabel>
-            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="@($"{("Session : "+ Globals.ActiveSession?.NomSession)}")">
-            </RadzenLabel>
-            <RadzenLabel style="color: #e6ecef; font-size: 16px; font-weight: bolder; text-align: center" Text="DigiWeek, Copyright@2024">
-            </RadzenLabel>
-          </div>
-        </div>
-      </ChildContent>
-    </RadzenFooter>
-  </ChildContent>
+    <ChildContent>
+        <RadzenHeader Class="pes-header">
+            <ChildContent>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%; width: 100%;">
+                    
+                    <!-- Left: Brand Logo & Title & Navigation Menu -->
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                        <NavLink href="accueil" class="pes-brand">
+                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.65rem">
+                                <RadzenImage Path="assets/images/mesrs-logo.png" AlternateText="MESRS Logo" Class="pes-brand-logo" Style="height: 26px; width: auto;" />
+                                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                                    <RadzenText TextStyle="TextStyle.H6" Class="pes-brand-title" Style="color: #ffffff !important;">PES</RadzenText>
+                                    <RadzenText TextStyle="TextStyle.Caption" Class="pes-brand-subtitle" Style="color: #ffffff !important;">DigiWeek &bull; MESRS</RadzenText>
+                                </RadzenStack>
+                            </RadzenStack>
+                        </NavLink>
+
+                        <!-- Navigation Menu -->
+                        <RadzenMenu Class="pes-menu">
+                            <ChildContent>
+                                <RadzenMenuItem Icon="login" Path="login" Text="Se connecter" Visible="@(!Security.IsAuthenticated())">
+                                </RadzenMenuItem>
+                                
+                                <RadzenMenuItem Icon="admin_panel_settings" Text="Admin" Visible="@(Security.IsInRole(Constants.admin))">
+                                    <ChildContent>
+                                        <RadzenMenuItem Icon="map" Path="regions" Text="Régions">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="apartment" Path="etablissement-liste" Text="Établissements">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="calendar_month" Path="sessions" Text="Sessions">
+                                        </RadzenMenuItem>
+                                        
+                                        <RadzenMenuItem Class="pes-menu-divider" Disabled="true" Text="">
+                                        </RadzenMenuItem>
+                                        
+                                        <RadzenMenuItem Icon="category" Path="rubriques" Text="Rubriques">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="fact_check" Path="element" Text="Indicateurs & Critères">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="linear_scale" Path="echelle" Text="Échelles">
+                                        </RadzenMenuItem>
+                                        
+                                        <RadzenMenuItem Class="pes-menu-divider" Disabled="true" Text="">
+                                        </RadzenMenuItem>
+                                        
+                                        <RadzenMenuItem Icon="manage_accounts" Path="application-users" Text="Utilisateurs">
+                                        </RadzenMenuItem>
+                                    </ChildContent>
+                                </RadzenMenuItem>
+
+                                <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                </RadzenMenuItem>
+
+                                <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                </RadzenMenuItem>
+
+                                <RadzenMenuItem Icon="tune" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                    <ChildContent>
+                                        <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        </RadzenMenuItem>
+                                        <RadzenMenuItem Icon="people" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        </RadzenMenuItem>
+                                    </ChildContent>
+                                </RadzenMenuItem>
+                            </ChildContent>
+                        </RadzenMenu>
+                    </RadzenStack>
+
+                    <!-- Right: Context Badges & Profile Menu -->
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                        @if (Security.IsAuthenticated())
+                        {
+                            @if (Globals.ActiveSession != null)
+                            {
+                                <RadzenBadge BadgeStyle="BadgeStyle.Light" Variant="Variant.Flat" IsPill="true" Class="d-none d-lg-inline-flex" Style="padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600;">
+                                    <RadzenIcon Icon="calendar_month" Style="font-size: 13px; margin-right: 4px; vertical-align: middle;" />
+                                    @Globals.ActiveSession.NomSession
+                                </RadzenBadge>
+                            }
+
+                            <RadzenProfileMenu Class="pes-profile-menu" Visible="@(Security.IsAuthenticated())" Click="@Profilemenu0Click">
+                                <ChildContent>
+                                    <RadzenProfileMenuItem Icon="account_circle" Path="profile" Text="Mon profil" Value="Profile" Visible="@Security.IsInRole(new string[]{"Authenticated"})">
+                                    </RadzenProfileMenuItem>
+                                    <RadzenProfileMenuItem Icon="logout" Text="Se déconnecter" Value="Logout">
+                                    </RadzenProfileMenuItem>
+                                </ChildContent>
+                                <Template>
+                                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                                        <RadzenGravatar Email="@(Security.User?.Name)" Class="pes-user-avatar">
+                                        </RadzenGravatar>
+                                        <RadzenStack Orientation="Orientation.Vertical" Gap="0" Class="d-none d-md-flex text-left" Style="text-align: left;">
+                                            <RadzenText TextStyle="TextStyle.Subtitle2" Style="margin: 0; font-size: 0.85rem; font-weight: 600; line-height: 1.2; color: #ffffff !important;">
+                                                @(Security.User?.Name)
+                                            </RadzenText>
+                                            <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-size: 0.72rem; color: rgba(255, 255, 255, 0.85) !important; line-height: 1.1;">
+                                                @(Globals.Etab?.NomEtablissement ?? "Connecté")
+                                            </RadzenText>
+                                        </RadzenStack>
+                                        <RadzenIcon Icon="expand_more" Style="font-size: 18px; color: rgba(255, 255, 255, 0.85); margin-left: 2px;" />
+                                    </RadzenStack>
+                                </Template>
+                            </RadzenProfileMenu>
+                        }
+                        else
+                        {
+                            <RadzenButton Text="Se connecter" Icon="login" ButtonStyle="ButtonStyle.Light" Size="ButtonSize.Small" Variant="Variant.Filled" Click="@(() => UriHelper.NavigateTo("login"))" Style="font-weight: 600; border-radius: 6px;" />
+                        }
+                    </RadzenStack>
+
+                </RadzenStack>
+            </ChildContent>
+        </RadzenHeader>
+
+        <!-- Main Body -->
+        <RadzenBody @ref="body0" Class="pes-body">
+            <ChildContent>
+                <RadzenContentContainer Name="main">
+                    @Body
+                </RadzenContentContainer>
+            </ChildContent>
+        </RadzenBody>
+
+        <!-- Modern Footer -->
+        <RadzenFooter Class="pes-footer">
+            <ChildContent>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Wrap="FlexWrap.Wrap" Gap="0.75rem" Style="width: 100%;">
+                    
+                    <!-- Left: App & Copyright Info & GitHub Link -->
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Wrap="FlexWrap.Wrap">
+                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                            <RadzenIcon Icon="school" Style="color: var(--rz-primary, #0078d4); font-size: 1.15rem;" />
+                            <RadzenText TextStyle="TextStyle.Body2" Class="pes-footer-text" Style="margin: 0; font-weight: 600; color: var(--rz-text-color, #334155);">
+                                DigiWeek &copy; @DateTime.Now.Year &bull; MESRS
+                            </RadzenText>
+                            <RadzenText TextStyle="TextStyle.Caption" Class="pes-footer-text d-none d-sm-inline" Style="margin: 0;">
+                                &mdash; Plateforme d'Évaluation des Stagiaires
+                            </RadzenText>
+                        </RadzenStack>
+
+                        <RadzenLink Path="https://github.com/Djellal/PES" Target="_blank" Class="pes-github-link">
+                            <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: text-bottom; margin-right: 4px;">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                            </svg>
+                            <span>GitHub</span>
+                        </RadzenLink>
+                    </RadzenStack>
+
+                    <!-- Right: User Context Badges -->
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+                        @if (Globals.ActiveSession != null)
+                        {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 500;">
+                                <RadzenIcon Icon="event" Style="font-size: 13px; margin-right: 3px; vertical-align: middle;" />
+                                Session : @Globals.ActiveSession.NomSession
+                            </RadzenBadge>
+                        }
+
+                        @if (Globals.Etab != null)
+                        {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Class="d-none d-md-inline-flex" Style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 500;">
+                                <RadzenIcon Icon="apartment" Style="font-size: 13px; margin-right: 3px; vertical-align: middle;" />
+                                @Globals.Etab.NomEtablissement
+                            </RadzenBadge>
+                        }
+
+                        @if (Security.User != null)
+                        {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Success" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.25rem 0.65rem; font-size: 0.75rem; font-weight: 500;">
+                                <RadzenIcon Icon="person" Style="font-size: 13px; margin-right: 3px; vertical-align: middle;" />
+                                @Security.User.Name
+                            </RadzenBadge>
+                        }
+                    </RadzenStack>
+
+                </RadzenStack>
+            </ChildContent>
+        </RadzenFooter>
+    </ChildContent>
 </RadzenLayout>
+

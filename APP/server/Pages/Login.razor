@@ -1,5 +1,5 @@
-﻿@page "/login"
-@layout LoginLayout
+@page "/login"
+@layout MainLayout
 @inherits Pes.Pages.LoginComponent
 
 @using Radzen
@@ -11,16 +11,18 @@
 <PageTitle>Login</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
-    <RadzenHeading Size="H1" Text="Se connecter">
-    </RadzenHeading>
-    <div class="row">
-      <div class="col-md-12">
-        <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
-          <ChildContent>
-            <RadzenLogin AllowRegister="false" AllowResetPassword="false" LoginText="Se connecter" PasswordRequired="Le mot de passe est requis" PasswordText="Mot de passe" RegisterText="S'enregistrer" RememberMeText="Se souvenir de moi" UserRequired="Le nom est requis" UserText="Nom" Register="@Login0Register">
-            </RadzenLogin>
-          </ChildContent>
-        </RadzenTemplateForm>
+    <div class="row justify-content-center" style="margin-top: 3rem; margin-bottom: 3rem;">
+      <div class="col-xl-4 col-lg-5 col-md-7 col-sm-10">
+        <RadzenCard style="padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+          <RadzenHeading Size="H2" Text="Se connecter" style="text-align: center; margin-bottom: 1.5rem; color: var(--rz-primary, #0078d4);">
+          </RadzenHeading>
+          <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
+            <ChildContent>
+              <RadzenLogin AllowRegister="false" AllowResetPassword="false" LoginText="Se connecter" PasswordRequired="Le mot de passe est requis" PasswordText="Mot de passe" RegisterText="S'enregistrer" RememberMeText="Se souvenir de moi" UserRequired="Le nom est requis" UserText="Nom" Register="@Login0Register">
+              </RadzenLogin>
+            </ChildContent>
+          </RadzenTemplateForm>
+        </RadzenCard>
       </div>
     </div>
   </ChildContent>

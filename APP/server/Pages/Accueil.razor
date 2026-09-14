@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @page "/accueil"
 @layout MainLayout
 @inherits Pes.Pages.AccueilComponent
@@ -9,67 +9,214 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-<PageTitle>Accueil</PageTitle>
+
+<PageTitle>Accueil - PES DigiWeek</PageTitle>
+
 <RadzenContent Container="main">
   <ChildContent>
-    <div class="row justify-content-between">
-      <div class="justify-content-center d-flex align-items-center col-md-1">
-        <RadzenImage Path="assets/images/Embleme-minister1024.png" style="height: 100px; width: 100px">
-        </RadzenImage>
-      </div>
-      <div class="col-md-8">
-        <RadzenHeading Size="H2" style="text-align: center" Text="وزارة التعليم العالي و البحث العلمي">
-        </RadzenHeading>
-        <RadzenHeading Size="H3" style="text-align: center" Text="ⴰⵖⵍⵉⴼ ⵏ ⵓ ⵙⴻⵍⵎⴻⴷ ⵓⵏⵏⵉⴳ ⴷ ⵓⵏⴰⴷⵉ ⵓⵙⵙⵏⴰⵏ">
-        </RadzenHeading>
-        <RadzenHeading Size="H3" style="text-align: center" Text="MINISTRY OF HIGHER EDUCATION  AND SCIENTIFIC RESEARCH">
-        </RadzenHeading>
-      </div>
-      <div class="justify-content-center d-flex align-items-center col-md-1">
-        <RadzenImage Path="assets/images/Embleme-minister1024.png" style="height: 100px; width: 100px">
-        </RadzenImage>
-      </div>
-    </div>
-    <div class="row justify-content-center align-items-center">
-      <div class="justify-content-center d-flex align-items-center col-md-4">
-        <RadzenImage Path="assets/images/channels4_profile.png" style="height: 200px; width: 300px">
-        </RadzenImage>
-      </div>
-    </div>
-    <div class="row justify-content-center align-items-center" style="background-color: rgb(0, 120, 212); margin-top: 20px; padding-bottom: 10px; padding-top: 10px">
-      <div class="justify-content-center d-flex align-items-center col-md-8">
-        <RadzenHeading Size="H3" style="color: #e6ecef; text-align: center" Text="Formation TIC et pratiques pédagogiques">
-        </RadzenHeading>
-      </div>
-      <div class="justify-content-center d-flex align-items-center col-md-8">
-        <RadzenHeading Size="H3" style="color: #e6ecef; text-align: center" Text="Plateforme d’évaluation des productions pédagogiques
-        ">
-        </RadzenHeading>
-      </div>
-    </div>
-    <div class="row justify-content-center" style="margin-top: 15px">
-      <div class="col-md-6">
-        <RadzenCard style="padding-bottom: 25px; padding-left: 20px; padding-right: 20px; padding-top: 25px" Visible="@(!Security.IsAuthenticated())">
-          <ChildContent>
-            <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
-              <ChildContent>
-                <RadzenLogin AllowRegister="false" AllowResetPassword="false" LoginText="Se connecter" PasswordRequired="Le mot de passe est requis" PasswordText="Mot de passe" RegisterText="S'enregistrer" RememberMeText="Se souvenir de moi" UserRequired="Le nom est requis" UserText="Nom" Register="@Login0Register">
-                </RadzenLogin>
-              </ChildContent>
-            </RadzenTemplateForm>
-          </ChildContent>
-        </RadzenCard>
-      </div>
-    </div>
-    <div class="row justify-content-center" style="margin-top: 15px">
-      <div class="col-md-6">
-        <RadzenCard style="background-color: rgba(104, 213, 200, 0.28); padding-bottom: 25px; padding-left: 20px; padding-right: 20px; padding-top: 25px" Visible="false">
-          <ChildContent>
-            <RadzenHeading Size="H2" style="color: #f00606; text-align: center" Text="@("Session : "+Globals.ActiveSession?.NomSession)">
-            </RadzenHeading>
-          </ChildContent>
-        </RadzenCard>
-      </div>
-    </div>
+    <RadzenStack Orientation="Orientation.Vertical" Gap="1.5rem" Style="max-width: 1200px; margin: 0 auto; padding-bottom: 2rem;">
+
+      <!-- Institutional Header Card -->
+      <RadzenCard Class="pes-institution-card">
+        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.35rem" Style="text-align: center;">
+          <RadzenImage Path="assets/images/Embleme-minister1024.png" AlternateText="Emblème National" Class="pes-emblem-img" Style="height: 48px; width: auto;" />
+          <RadzenText TextStyle="TextStyle.H5" Class="pes-heading-ar">الجمهورية الجزائرية الديمقراطية الشعبية</RadzenText>
+          <RadzenText TextStyle="TextStyle.H6" Class="pes-heading-ar-sub">وزارة التعليم العالي و البحث العلمي</RadzenText>
+          <RadzenText TextStyle="TextStyle.Subtitle2" Class="pes-heading-tifinagh">ⴰⵖⵍⵉⴼ ⵏ ⵓ ⵙⴻⵍⵎⴻⴷ ⵓⵏⵏⵉⴳ ⴷ ⵓⵏⴰⴷⵉ ⵓⵙⵙⵏⴰⵏ</RadzenText>
+          <RadzenText TextStyle="TextStyle.Caption" Class="pes-heading-en">MINISTRY OF HIGHER EDUCATION AND SCIENTIFIC RESEARCH</RadzenText>
+        </RadzenStack>
+      </RadzenCard>
+
+      <!-- Program Hero Banner -->
+      <RadzenCard Class="pes-hero-card">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1.5rem" Wrap="FlexWrap.Wrap">
+          
+          <RadzenStack Orientation="Orientation.Vertical" Gap="0.75rem" Style="flex: 1; min-width: 280px;">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+              <RadzenBadge BadgeStyle="BadgeStyle.Warning" Variant="Variant.Flat" IsPill="true" Style="font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.75rem;">
+                DigiWeek
+              </RadzenBadge>
+              @if (Globals.ActiveSession != null)
+              {
+                <RadzenBadge BadgeStyle="BadgeStyle.Light" Variant="Variant.Flat" IsPill="true" Style="font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem;">
+                  <RadzenIcon Icon="event" Style="font-size: 13px; margin-right: 4px; vertical-align: middle;" />
+                  Session : @Globals.ActiveSession.NomSession
+                </RadzenBadge>
+              }
+            </RadzenStack>
+
+            <RadzenText TextStyle="TextStyle.H4" Class="pes-hero-title">
+              Formation TIC et pratiques pédagogiques
+            </RadzenText>
+            <RadzenText TextStyle="TextStyle.Subtitle1" Class="pes-hero-subtitle">
+              Plateforme d’évaluation des productions pédagogiques des enseignants stagiaires (PES)
+            </RadzenText>
+          </RadzenStack>
+
+          <div class="pes-hero-logo-wrapper">
+            <RadzenImage Path="assets/images/channels4_profile.png" AlternateText="CNEAD Logo" Class="pes-hero-logo" Style="height: 110px; width: auto;" />
+          </div>
+
+        </RadzenStack>
+      </RadzenCard>
+
+      <!-- Visitor Section (Not Authenticated) -->
+      @if (!Security.IsAuthenticated())
+      {
+        <div class="row justify-content-center" style="margin-top: 0.5rem;">
+          <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
+            <RadzenCard Class="pes-login-card">
+              <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.5rem" Style="margin-bottom: 1.5rem; text-align: center;">
+                <div class="pes-login-icon-box">
+                  <RadzenIcon Icon="lock" Style="font-size: 24px; color: var(--rz-primary, #0078d4);" />
+                </div>
+                <RadzenText TextStyle="TextStyle.H5" Style="font-weight: 700; margin: 0; color: var(--rz-text-color, #1e293b);">
+                  Espace de connexion
+                </RadzenText>
+                <RadzenText TextStyle="TextStyle.Body2" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+                  Accédez à votre espace d'évaluation et de gestion
+                </RadzenText>
+              </RadzenStack>
+
+              <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
+                <ChildContent>
+                  <RadzenLogin AllowRegister="false" AllowResetPassword="false" LoginText="Se connecter" PasswordRequired="Le mot de passe est requis" PasswordText="Mot de passe" RegisterText="S'enregistrer" RememberMeText="Se souvenir de moi" UserRequired="Le nom est requis" UserText="Nom d'utilisateur" Register="@Login0Register">
+                  </RadzenLogin>
+                </ChildContent>
+              </RadzenTemplateForm>
+            </RadzenCard>
+          </div>
+        </div>
+      }
+      else
+      {
+        <!-- Authenticated Dashboard Section -->
+        <RadzenStack Orientation="Orientation.Vertical" Gap="1.25rem" Style="margin-top: 0.5rem;">
+          
+          <!-- Welcome Bar -->
+          <RadzenCard Class="pes-welcome-bar">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Wrap="FlexWrap.Wrap">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                <RadzenGravatar Email="@(Security.User?.Name)" Style="width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H6" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">
+                    Bienvenue, @Security.User?.Name
+                  </RadzenText>
+                  <RadzenText TextStyle="TextStyle.Body2" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+                    @(Globals.Etab?.NomEtablissement ?? "Établissement universitaire")
+                  </RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+
+              @if (Globals.ActiveSession != null)
+              {
+                <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600;">
+                  <RadzenIcon Icon="calendar_month" Style="font-size: 16px; margin-right: 5px; vertical-align: middle;" />
+                  Session active : @Globals.ActiveSession.NomSession
+                </RadzenBadge>
+              }
+            </RadzenStack>
+          </RadzenCard>
+
+          <!-- Quick Action Cards Grid -->
+          <div class="row g-3">
+            
+            <!-- Evaluations (Jury, Expert, Coordinateur, Admin) -->
+            @if (Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"}))
+            {
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("stagiaires-evaluations"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-primary-light">
+                        <RadzenIcon Icon="assignment_turned_in" Style="font-size: 24px; color: var(--rz-primary, #0078d4);" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Évaluations</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Stagiaires & Productions</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Évaluer les productions pédagogiques et consulter les fiches de notation.
+                    </RadzenText>
+                    <RadzenButton Text="Accéder" Icon="arrow_forward" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+            }
+
+            <!-- Classement (Admin, Coordinateur) -->
+            @if (Security.IsInRole(new string[]{Constants.admin, Constants.coordinateur}))
+            {
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("rang-etabs"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-warning-light">
+                        <RadzenIcon Icon="leaderboard" Style="font-size: 24px; color: #d97706;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Classement</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Établissements</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Consulter les moyennes et le classement général des établissements.
+                    </RadzenText>
+                    <RadzenButton Text="Consulter" Icon="arrow_forward" ButtonStyle="ButtonStyle.Warning" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Stagiaires Configuration -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("stagiairelist"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-info-light">
+                        <RadzenIcon Icon="school" Style="font-size: 24px; color: #0284c7;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Stagiaires</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Gestion des listes</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Administrer la liste des enseignants stagiaires et leurs affectations.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+            }
+
+            <!-- Mon Profil -->
+            <div class="col-xl-3 col-md-6">
+              <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("profile"))">
+                <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                  <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                    <div class="pes-action-icon-box bg-success-light">
+                      <RadzenIcon Icon="manage_accounts" Style="font-size: 24px; color: #16a34a;" />
+                    </div>
+                    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                      <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Mon Profil</RadzenText>
+                      <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Compte & Sécurité</RadzenText>
+                    </RadzenStack>
+                  </RadzenStack>
+                  <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                    Modifier votre mot de passe et vos informations personnelles.
+                  </RadzenText>
+                  <RadzenButton Text="Mon profil" Icon="arrow_forward" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                </RadzenStack>
+              </RadzenCard>
+            </div>
+
+          </div>
+
+        </RadzenStack>
+      }
+
+    </RadzenStack>
   </ChildContent>
 </RadzenContent>
+

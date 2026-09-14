@@ -6,3 +6,329 @@
 /* Import the Radzen CSS files */
 @import './styles-generated.css';
 
+/* ==========================================================================
+   PES Layout & Visual Polish (Radzen Blazor v4.30)
+   ========================================================================== */
+
+/* Modern Header & Navigation */
+.pes-header {
+    background-color: var(--rz-header-background-color, #0078d4) !important;
+    border-bottom: none !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px -1px rgba(0, 0, 0, 0.08) !important;
+    padding: 0.35rem 1.25rem !important;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.pes-brand {
+    text-decoration: none !important;
+    transition: opacity 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+}
+
+.pes-brand:hover {
+    opacity: 0.9;
+}
+
+.pes-brand-logo {
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+}
+
+.pes-brand-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.pes-brand-subtitle {
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1;
+    margin: 0;
+}
+
+/* Polished Radzen Menu */
+.pes-menu.rz-menu {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.pes-menu > .rz-menuitem > .rz-menuitem-link,
+.pes-menu > .rz-navigation-item > .rz-navigation-item-link {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    padding: 0.5rem 0.75rem !important;
+    color: #ffffff !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.pes-menu > .rz-menuitem > .rz-menuitem-link:hover,
+.pes-menu > .rz-menuitem > .rz-menuitem-link.rz-state-highlight,
+.pes-menu > .rz-navigation-item > .rz-navigation-item-link:hover {
+    background-color: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+}
+
+.pes-menu > .rz-menuitem > .rz-menuitem-link .rz-menuitem-icon,
+.pes-menu > .rz-navigation-item > .rz-navigation-item-link .rzi {
+    font-size: 1.15rem !important;
+    margin-right: 0.4rem !important;
+    color: #ffffff !important;
+}
+
+/* Menu Divider Item */
+.pes-menu-divider {
+    border-top: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    margin: 4px 8px !important;
+    padding: 0 !important;
+    height: 1px !important;
+    pointer-events: none !important;
+    opacity: 0.7;
+}
+
+/* Profile Menu Button */
+.pes-profile-menu.rz-profile-menu {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 9999px !important;
+    padding: 3px 8px 3px 4px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.pes-profile-menu.rz-profile-menu:hover {
+    background: var(--rz-base-background-color, #f8fafc) !important;
+    border-color: var(--rz-border-color, #e2e8f0) !important;
+}
+
+.pes-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.15);
+}
+
+/* Main Body Canvas */
+.pes-body {
+    background-color: var(--rz-base-background-color, #f8fafc) !important;
+    min-height: calc(100vh - 120px) !important;
+    padding: 1.5rem 1.5rem !important;
+}
+
+/* Modern Footer */
+.pes-footer {
+    background-color: #ffffff !important;
+    border-top: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.03) !important;
+    padding: 0.75rem 1.5rem !important;
+}
+
+.pes-footer-text {
+    font-size: 0.8125rem !important;
+    color: var(--rz-text-secondary-color, #64748b) !important;
+}
+
+.pes-github-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    color: var(--rz-text-secondary-color, #64748b) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    background-color: var(--rz-base-background-color, #f8fafc) !important;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.pes-github-link:hover {
+    color: var(--rz-primary, #0078d4) !important;
+    border-color: var(--rz-primary-light, #c7e0f4) !important;
+    background-color: var(--rz-primary-lighter, #f0f7ff) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .pes-brand-subtitle {
+        display: none !important;
+    }
+    .pes-body {
+        padding: 1rem 0.75rem !important;
+    }
+    .pes-footer {
+        padding: 0.75rem 1rem !important;
+    }
+}
+
+/* ==========================================================================
+   Accueil / Portal Landing Page Styles
+   ========================================================================== */
+
+.pes-institution-card {
+    background-color: #ffffff !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 12px !important;
+    padding: 1rem 1.5rem !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+.pes-emblem-img {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+}
+
+.pes-heading-ar {
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin: 0 !important;
+}
+
+.pes-heading-ar-sub {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
+    margin: 0 !important;
+}
+
+.pes-heading-tifinagh {
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    color: #475569 !important;
+    margin: 0 !important;
+}
+
+.pes-heading-en {
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    letter-spacing: 0.5px !important;
+    margin: 0 !important;
+}
+
+.pes-hero-card {
+    background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 120, 212, 0.2), 0 4px 6px -2px rgba(0, 120, 212, 0.1) !important;
+    border: none !important;
+}
+
+.pes-hero-title {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+    margin: 0 !important;
+    line-height: 1.25 !important;
+}
+
+.pes-hero-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+}
+
+.pes-hero-logo-wrapper {
+    background: #ffffff;
+    padding: 10px 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pes-hero-logo {
+    height: 110px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+}
+
+.pes-login-card {
+    border-radius: 12px !important;
+    padding: 2rem !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+}
+
+.pes-login-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--rz-primary-lighter, #f0f7ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pes-welcome-bar {
+    background-color: #ffffff !important;
+    border-radius: 10px !important;
+    padding: 1rem 1.5rem !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+.pes-action-card {
+    background-color: #ffffff !important;
+    border-radius: 10px !important;
+    padding: 1.25rem !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.pes-action-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04) !important;
+    border-color: var(--rz-primary-light, #c7e0f4) !important;
+}
+
+.pes-action-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bg-primary-light {
+    background-color: #f0f7ff;
+}
+
+.bg-warning-light {
+    background-color: #fffbeb;
+}
+
+.bg-info-light {
+    background-color: #f0f9ff;
+}
+
+.bg-success-light {
+    background-color: #f0fdf4;
+}
+
+
