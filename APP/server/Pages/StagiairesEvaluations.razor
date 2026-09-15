@@ -8,13 +8,13 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert, membre_jury, president_jury")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, expert, membre_jury, president_jury")]
 <PageTitle>StagiairesEvaluations</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
     <div class="row">
       <div class="col-md-12">
-        <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))">
+        <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
           <ChildContent>
             <div style="background-color: #e6ecef; border: 3px solid #0078d4; border-radius: 5px; margin-left: 3px; margin-right: 3px; padding-bottom: 10px; padding-top: 10px" class="row">
               <div class="col-md-12  d-flex justify-content-between align-items-center">
@@ -28,7 +28,7 @@
                     </RadzenSplitButtonItem>
                   </ChildContent>
                 </RadzenSplitButton>
-                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+                <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" Disabled="false" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 400px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Name="Dropdown0" Change="@Dropdown0Change">
                 </RadzenDropDown>
               </div>
             </div>
@@ -93,7 +93,7 @@
                     </RadzenAlert>
                   </div>
                   <div class="col-md-12 justify-content-center d-flex align-items-center" style="margin-top: 5px">
-                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}) && pesModelsDMdelStagiaire.Note>0 && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
+                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}) && pesModelsDMdelStagiaire.Note>0 && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
                       <ChildContent>
                         <RadzenSplitButtonItem Icon="print" Text="Imprimer" Value="0">
                         </RadzenSplitButtonItem>
@@ -105,7 +105,7 @@
                 </div>
               </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Reorderable="false" Sortable="false" TextAlign="TextAlign.Left" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.expert,Constants.membre_jury,Constants.president_jury}))" Width="100px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Groupable="false" Reorderable="false" Sortable="false" TextAlign="TextAlign.Left" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.expert,Constants.membre_jury,Constants.president_jury}))" Width="100px">
               <Template Context="pesModelsDMdelStagiaire">
                 <div class="row">
                   <div class="col-md-12">

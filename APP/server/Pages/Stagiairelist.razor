@@ -8,29 +8,29 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, expert")]
 <PageTitle>Stagiairelist</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
-    <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))">
+    <RadzenCard Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
       <ChildContent>
         <div style="margin-left: 3px; margin-right: 3px" class="row">
           <div class="col-md-12  d-flex justify-content-between align-items-center" >
             <RadzenSplitButton Icon="flash_on" Size="ButtonSize.Small" Text="Actions" Click="@Splitbutton0Click">
               <ChildContent>
-                <RadzenSplitButtonItem Icon="person_add" Text="Ajouter un Stagiaire" Value="0" Visible="@(Security.IsInRole(new String[]{Constants.admin}))">
+                <RadzenSplitButtonItem Icon="person_add" Text="Ajouter un Stagiaire" Value="0" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))">
                 </RadzenSplitButtonItem>
                 <RadzenSplitButtonItem Icon="save_alt" Text="Expoter à excel" Value="1">
                 </RadzenSplitButtonItem>
-                <RadzenSplitButtonItem Icon="delete_forever" Text="Supprimer les stagiaires selectionnées" Value="2" Visible="@(Security.IsInRole(Constants.admin))">
+                <RadzenSplitButtonItem Icon="delete_forever" Text="Supprimer les stagiaires selectionnées" Value="2" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))">
                 </RadzenSplitButtonItem>
               </ChildContent>
             </RadzenSplitButton>
-            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer une Liste (Excel)" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" MouseEnter="@UploadListMouseEnter" Complete="@UploadListComplete" Error="@UploadListError">
             </RadzenUpload>
-            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))">
+            <RadzenLink Icon="link" Path="docs/liste-stagiaires.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
             </RadzenLink>
-            <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 350px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+            <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 350px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Name="Dropdown0" Change="@Dropdown0Change">
             </RadzenDropDown>
           </div>
         </div>
@@ -121,11 +121,11 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" FormatString="{0:P2}" Property="NoteCC" TextAlign="TextAlign.Center" Title="Note évaluation continue">
               <EditTemplate Context="pesModelsDMdelStagiaire">
-                <RadzenNumeric Format="P0" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Step="0.1" style="font-size: 18px; font-weight: bolder; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelStagiaire.NoteCC)" Name="NoteCCnumeric">
+                <RadzenNumeric Format="P0" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))" Step="0.1" style="font-size: 18px; font-weight: bolder; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelStagiaire.NoteCC)" Name="NoteCCnumeric">
                 </RadzenNumeric>
               </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Width="70px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))" Width="70px">
               <Template Context="pesModelsDMdelStagiaire">
                 <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@((args) =>EditButtonClick(args, pesModelsDMdelStagiaire))">
                 </RadzenButton>
@@ -137,7 +137,7 @@
                 </RadzenButton>
               </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.coordinateur}))" Width="70px">
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Stagiaire" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))" Width="70px">
               <Template Context="pesModelsDMdelStagiaire">
                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelStagiaire))" @onclick:stopPropagation="true">
                 </RadzenButton>

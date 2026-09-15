@@ -29,7 +29,7 @@ namespace Pes.Pages
                 {
                     Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && !ev.EstSynthese && ev.MembreId == Security.User.Id).OrderBy(ev => ev.NomRubrique).ThenBy(c => c.Critere.NomCritere).ToList();
                 }
-                else if (Security.IsInRole(new String[] {  Constants.coordinateur,Constants.admin }))
+                else if (Security.IsInRole(new String[] {  Constants.coordinateur,Constants.admin,Constants.admin_regional }))
                 {
                     Evals = DMdel.DMContext.Evaluations.Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).OrderBy(ev => ev.NomRubrique).ThenBy(c=>c.Critere.NomCritere).ToList();
                 }

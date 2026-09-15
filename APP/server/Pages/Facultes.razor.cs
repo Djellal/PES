@@ -26,6 +26,24 @@ namespace Pes.Pages
                 getFacultesResult = await DMdel.GetFacultes(new Query() { Expand = "Etablissement"});
 
                 etabid = SelectedEtab;
+            }
+
+            if (Security.IsInRole(new String[] { Constants.admin_regional }))
+            {
+                var regionEtabs = await DMdel.GetEtablissements(new Query() { Filter = $@"e=>e.Regid == {Security.User.Regid}" });
+                getEtablissementsResult = regionEtabs;
+
+                if (regionEtabs != null && regionEtabs.Any())
+                {
+                    var regionFilter = string.Join(" || ", regionEtabs.Select(e => $"f.Etabid == {e.Id}"));
+                    getFacultesResult = await DMdel.GetFacultes(new Query() { Expand = "Etablissement", Filter = $@"f=>{regionFilter}" });
+                }
+                else
+                {
+                    getFacultesResult = new List<Faculte>();
+                }
+
+                etabid = SelectedEtab;
             }            
 
 

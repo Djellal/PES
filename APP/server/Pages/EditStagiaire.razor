@@ -8,7 +8,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, coordinateur, expert")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, expert")]
 <PageTitle>Edit Stagiaire</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
@@ -42,7 +42,7 @@
                   <div class="col-md-2">
                     <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Eval.continue">
                     </RadzenAlert>
-                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteCC)" Name="Numeric0">
+                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteCC)" Name="Numeric0">
                     </RadzenNumeric>
                   </div>
                   <div class="col-md-2">
@@ -78,7 +78,7 @@
                       @(data.Echelle?.Id)
                       </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
                         <RadzenNumeric Format="N0" Max="5" Min="0" ShowUpDown="true" Step="0" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
                         </RadzenNumeric>
@@ -106,7 +106,7 @@
                 </RadzenButton>
                 <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 40px" Text="Sauvegarder">
                 </RadzenButton>
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="undo" style="margin-left: 1rem" Text="Réinitiliser" Visible="@(Security.IsInRole(Constants.admin))" Click="@InnitbuttonClick">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="undo" style="margin-left: 1rem" Text="Réinitiliser" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Click="@InnitbuttonClick">
                 </RadzenButton>
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="margin-left: 1rem" Text="Fermer" Click="@Button2Click">
                 </RadzenButton>

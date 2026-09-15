@@ -22,7 +22,7 @@
                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
                         <NavLink href="accueil" class="pes-brand">
                             <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.65rem">
-                                <RadzenImage Path="assets/images/mesrs-logo.png" AlternateText="MESRS Logo" Class="pes-brand-logo" Style="height: 48px; width: auto;" />
+                                <RadzenImage Path="assets/images/mesrs-logo.png" AlternateText="MESRS Logo" Class="pes-brand-logo" Style="height: 64px; width: auto;" />
                                 <RadzenStack Orientation="Orientation.Vertical" Gap="0">
                                     <RadzenText TextStyle="TextStyle.H6" Class="pes-brand-title" Style="color: #ffffff !important; vertical-align: middle;">DigiWeek &bull; MESRS</RadzenText>
                                     </RadzenStack>
@@ -62,19 +62,19 @@
                                     </ChildContent>
                                 </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
                                 </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                                 </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="tune" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                <RadzenMenuItem Icon="tune" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                                     <ChildContent>
-                                        <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                                         </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                                         </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="people" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.coordinateur}))">
+                                        <RadzenMenuItem Icon="people" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
                                         </RadzenMenuItem>
                                     </ChildContent>
                                 </RadzenMenuItem>

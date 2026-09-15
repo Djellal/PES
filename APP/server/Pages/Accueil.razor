@@ -146,7 +146,7 @@
             }
 
             <!-- Classement (Admin, Coordinateur) -->
-            @if (Security.IsInRole(new string[]{Constants.admin, Constants.coordinateur}))
+            @if (Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))
             {
               <div class="col-xl-3 col-md-6">
                 <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("rang-etabs"))">

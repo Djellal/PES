@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using NPOI.Util;
 using Pes.Models;
 using System.Collections.Generic;
@@ -57,6 +57,36 @@ namespace Pes
 
 
             return await Task.FromResult(res);
+        }
+
+        /// <summary>
+        /// Retourne true si l'utilisateur courant est admin global OU admin_regional
+        /// </summary>
+        public bool IsAdminOrRegional()
+            => IsInRole(Constants.admin) || IsInRole(Constants.admin_regional);
+
+        /// <summary>
+        /// Retourne le Regid de l'admin_regional, ou null pour l'admin global (= pas de filtre région)
+        /// </summary>
+        public int? GetAdminRegionId()
+            => IsInRole(Constants.admin) ? null : User?.Regid;
+
+        /// <summary>
+        /// Retourne les utilisateurs dont la propre Regid correspond à la région donnée,
+        /// optionnellement filtrés par rôle.
+        /// </summary>
+        public async Task<IEnumerable<ApplicationUser>> GetUsersOfRegion(int? regid, string role)
+        {
+            List<ApplicationUser> users;
+            if (string.IsNullOrEmpty(role))
+                users = (await GetUsers()).ToList();
+            else
+                users = (await GetUsersInRole(role)).ToList();
+
+            if (regid.HasValue)
+                users = users.Where(u => u.Regid == regid).ToList();
+
+            return await Task.FromResult(users);
         }
     }
 }

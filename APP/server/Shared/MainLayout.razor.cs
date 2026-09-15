@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +18,7 @@ namespace Pes.Layouts
             var roles = await Security.GetRoles();
 
             if (!roles.Any(r => r.Name == Constants.admin)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.admin));
+            if (!roles.Any(r => r.Name == Constants.admin_regional)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.admin_regional));
             if (!roles.Any(r => r.Name == Constants.coordinateur)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.coordinateur));
             if (!roles.Any(r => r.Name == Constants.president_jury)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.president_jury));
             if (!roles.Any(r => r.Name == Constants.membre_jury)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.membre_jury));

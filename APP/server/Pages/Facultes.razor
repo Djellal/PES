@@ -8,7 +8,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, coordinateur")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur")]
 <PageTitle>Facultes</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
@@ -20,7 +20,7 @@
       <div class="col-md-12 align-items-center d-flex justify-content-between">
         <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
         </RadzenButton>
-        <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 404px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin}))" Name="Dropdown0" Change="@Dropdown0Change">
+        <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 404px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Name="Dropdown0" Change="@Dropdown0Change">
         </RadzenDropDown>
       </div>
     </div>

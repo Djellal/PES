@@ -16,10 +16,34 @@ namespace Pes.Pages
             {
                 if (Security.IsInRole(new string[] { Constants.admin }))
                 {
-                   
+                    
                         users = (await Security.GetUsersOfEtab(SelectedEtab,SelectedRole)).ToList();
 
                     
+                }
+                else if (Security.IsInRole(new string[] { Constants.admin_regional }))
+                {
+                    var regionEtabs = await DMdel.GetEtablissements(new Query() { Filter = $@"e=>e.Regid == {Security.User.Regid}" });
+                    getEtablissementsResult = regionEtabs;
+
+                    var etabIds = regionEtabs.Select(e => e.Id).ToList();
+                    users = (await Security.GetUsers()).Where(u => u.Etabid.HasValue && etabIds.Contains(u.Etabid.Value)).ToList();
+
+                    if (SelectedEtab.HasValue)
+                    {
+                        users = users.Where(u => u.Etabid == SelectedEtab).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(SelectedRole))
+                    {
+                        var filtered = new List<ApplicationUser>();
+                        foreach (var u in users.ToList())
+                        {
+                            var rolesOfUser = await Security.GetRolesOfUser(u);
+                            if (rolesOfUser.Contains(SelectedRole)) filtered.Add(u);
+                        }
+                        users = filtered;
+                    }
                 }
                 else if (Security.IsInRole(new string[] { Constants.coordinateur }))
                 {

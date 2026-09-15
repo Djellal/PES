@@ -26,6 +26,12 @@ namespace Pes.Pages
 
             }
 
+            if (Security.IsInRole(new String[] { Constants.admin_regional }))
+            {
+                getEtablissementsForEtabidResult = await DMdel.GetEtablissements(new Query() { Filter = $@"f=>f.Regid == {Security.User.Regid}" });
+
+            }
+
 
         }
     }

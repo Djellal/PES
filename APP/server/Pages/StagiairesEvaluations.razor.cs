@@ -54,6 +54,28 @@ namespace Pes.Pages
                     var res = await DMdel.GetStagiaires(new Query() { Filter = $@"s=>s.Etabid == {Security.User.Etabid} && s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement" });
                     getStagiairesResult = res.OrderBy(s => s.Nom); ;
                 }
+                else if (Security.IsInRole(Constants.admin_regional))
+                {
+                    var regionEtabs = await DMdel.GetEtablissements(new Query() { Filter = $@"e=>e.Regid == {Security.User.Regid}" });
+                    var etabIds = regionEtabs.Select(e => e.Id).ToList();
+                    getEtablissementsResult = regionEtabs;
+
+                    if (etabIds.Any())
+                    {
+                        var etabFilter = string.Join(" || ", etabIds.Select(id => $"s.Etabid == {id}"));
+                        var filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id} && ({etabFilter})";
+                        if (SelectedEtab != null)
+                        {
+                            filter += $" && s.Etabid == {SelectedEtab}";
+                        }
+                        var res = await DMdel.GetStagiaires(new Query() { Filter = filter, Expand = "Etablissement" });
+                        getStagiairesResult = res.OrderBy(s => s.Nom);
+                    }
+                    else
+                    {
+                        getStagiairesResult = new List<Stagiaire>();
+                    }
+                }
                 else //if (Security.IsInRole(Constants.admin))
                 {
                     if (SelectedEtab == null)

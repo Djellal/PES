@@ -48,6 +48,13 @@ namespace Pes.Pages
                     etabid = SelectedEtab;
                 }
 
+                if (Security.IsInRole(new String[] { Constants.admin_regional }))
+                {
+                    getEtablissementsResult = await DMdel.GetEtablissements(new Query() { Filter = $@"e=>e.Regid == {Security.User.Regid}" });
+
+                    etabid = SelectedEtab;
+                }
+
 
                 if (Globals.ActiveSession?.Id != null)
                 {

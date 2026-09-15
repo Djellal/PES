@@ -20,6 +20,11 @@ namespace Pes.Pages
 
             try
             {
+                if (Security.IsInRole(Constants.admin_regional) && Security.User?.Regid != null)
+                {
+                    getEtablissementsResult = getEtablissementsResult.Where(e => e.Regid == Security.User.Regid).ToList();
+                }
+
                 RangsEtab retab;
                 var RangsEtabList = DMdel.DMContext.RangsEtabs.Include(e=>e.Etablissement).Where(r => r.Sessionid == sessionid).ToList();
 
