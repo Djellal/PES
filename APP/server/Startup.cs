@@ -74,13 +74,17 @@ namespace Pes
             services.AddDbContext<Pes.Data.DMdelContext>(options =>
             {
               options.UseNpgsql(Configuration.GetConnectionString("DMdelConnection"));
-            });
+            }, ServiceLifetime.Transient);
 
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddServerSideBlazor().AddHubOptions(o =>
             {
                 o.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+            }).AddCircuitOptions(o =>
+            {
+                o.DisconnectedCircuitRetentionPeriod = TimeSpan.FromMinutes(5);
+                o.DisconnectedCircuitMaxRetained = 100;
             });
 
             services.AddScoped<DialogService>();
