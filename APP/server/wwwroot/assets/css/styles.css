@@ -90,14 +90,22 @@
     color: #ffffff !important;
 }
 
-/* Menu Divider Item */
-.pes-menu-divider {
-    border-top: 1px solid var(--rz-border-color, #e2e8f0) !important;
-    margin: 4px 8px !important;
-    padding: 0 !important;
-    height: 1px !important;
-    pointer-events: none !important;
-    opacity: 0.7;
+/* Menu Section Header (labeled groups inside dropdowns) */
+.pes-menu-section .rz-menuitem-link {
+    font-size: 0.68rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    color: var(--rz-text-secondary-color, #64748b) !important;
+    cursor: default !important;
+    user-select: none !important;
+    padding: 0.35rem 0.75rem !important;
+}
+
+.pes-menu-section .rz-menuitem-link:hover,
+.pes-menu-section .rz-menuitem-link.rz-state-highlight {
+    background: transparent !important;
+    color: var(--rz-text-secondary-color, #64748b) !important;
 }
 
 /* Profile Menu Button */
@@ -162,6 +170,13 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1400px) {
+    .pes-menu > .rz-menuitem > .rz-menuitem-link {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.8rem !important;
+    }
+}
+
 @media (max-width: 992px) {
     .pes-brand-subtitle {
         display: none !important;
@@ -266,20 +281,55 @@
 }
 
 .pes-login-card {
-    border-radius: 12px !important;
-    padding: 2rem !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px !important;
+    padding: 2.5rem 2rem 2.25rem !important;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
     border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+}
+
+.pes-login-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #0078d4 0%, #00b4d8 50%, #0078d4 100%);
 }
 
 .pes-login-icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: var(--rz-primary-lighter, #f0f7ff);
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%);
+    box-shadow: 0 8px 16px -4px rgba(0, 120, 212, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 0.25rem;
+}
+
+.pes-login-divider {
+    height: 1px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(90deg, transparent, var(--rz-border-color, #e2e8f0), transparent);
+}
+
+.pes-login-card .rz-button {
+    width: 100%;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding-top: 0.55rem !important;
+    padding-bottom: 0.55rem !important;
+    box-shadow: 0 4px 10px -2px rgba(0, 120, 212, 0.35) !important;
+}
+
+.pes-login-card .rz-textbox,
+.pes-login-card .rz-password {
+    border-radius: 8px !important;
 }
 
 .pes-welcome-bar {
@@ -329,6 +379,14 @@
 
 .bg-success-light {
     background-color: #f0fdf4;
+}
+
+.pes-stat-card {
+    background-color: #ffffff !important;
+    border-radius: 10px !important;
+    padding: 1rem 1.25rem !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
 }
 
 

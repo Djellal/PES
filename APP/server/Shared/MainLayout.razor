@@ -21,65 +21,67 @@
                     <!-- Left: Brand Logo & Title & Navigation Menu -->
                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
                         <NavLink href="accueil" class="pes-brand">
-                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.65rem">
-                                <RadzenImage Path="assets/images/mesrs-logo.png" AlternateText="MESRS Logo" Class="pes-brand-logo" Style="height: 64px; width: auto;" />
-                                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
-                                    <RadzenText TextStyle="TextStyle.H6" Class="pes-brand-title" Style="color: #ffffff !important; vertical-align: middle;">DigiWeek &bull; MESRS</RadzenText>
+                                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.65rem">
+                                    <RadzenImage Path="assets/images/mesrs-logo.png" AlternateText="MESRS Logo" Class="pes-brand-logo" Style="height: 64px; width: auto;" />
+                                    <RadzenStack Orientation="Orientation.Vertical" Gap="1px">
+                                        <RadzenText TextStyle="TextStyle.H6" Class="pes-brand-title" Style="color: #ffffff !important; vertical-align: middle; line-height: 1.15;">DigiWeek &bull; MESRS</RadzenText>
+                                        <RadzenText TextStyle="TextStyle.Caption" Class="pes-brand-subtitle">Évaluation des stagiaires</RadzenText>
                                     </RadzenStack>
-                            </RadzenStack>
-                        </NavLink>
+                                </RadzenStack>
+                            </NavLink>
 
-                        <!-- Navigation Menu -->
-                        <RadzenMenu Class="pes-menu">
-                            <ChildContent>
-                                <RadzenMenuItem Icon="login" Path="login" Text="Se connecter" Visible="@(!Security.IsAuthenticated())">
-                                </RadzenMenuItem>
-                                
-                                <RadzenMenuItem Icon="admin_panel_settings" Text="Admin" Visible="@(Security.IsInRole(Constants.admin))">
-                                    <ChildContent>
-                                        <RadzenMenuItem Icon="map" Path="regions" Text="Régions">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="apartment" Path="etablissement-liste" Text="Établissements">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="calendar_month" Path="sessions" Text="Sessions">
-                                        </RadzenMenuItem>
-                                        
-                                        <RadzenMenuItem Class="pes-menu-divider" Disabled="true" Text="">
-                                        </RadzenMenuItem>
-                                        
-                                        <RadzenMenuItem Icon="category" Path="rubriques" Text="Rubriques">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="fact_check" Path="element" Text="Indicateurs & Critères">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="linear_scale" Path="echelle" Text="Échelles">
-                                        </RadzenMenuItem>
-                                        
-                                        <RadzenMenuItem Class="pes-menu-divider" Disabled="true" Text="">
-                                        </RadzenMenuItem>
-                                        
-                                        <RadzenMenuItem Icon="manage_accounts" Path="application-users" Text="Utilisateurs">
-                                        </RadzenMenuItem>
-                                    </ChildContent>
-                                </RadzenMenuItem>
+                            <!-- Navigation Menu -->
+                            <RadzenMenu Class="pes-menu">
+                                <ChildContent>
+                                    <RadzenMenuItem Icon="login" Path="login" Text="Se connecter" Visible="@(!Security.IsAuthenticated())">
+                                    </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
-                                </RadzenMenuItem>
+                                    <RadzenMenuItem Icon="home" Path="accueil" Text="Accueil" Visible="@Security.IsAuthenticated()">
+                                    </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement des établissements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
-                                </RadzenMenuItem>
+                                    <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                    </RadzenMenuItem>
 
-                                <RadzenMenuItem Icon="tune" Text="Configuration" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
-                                    <ChildContent>
-                                        <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
-                                        </RadzenMenuItem>
-                                        <RadzenMenuItem Icon="people" Path="application-users" Text="Membres de jury" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
-                                        </RadzenMenuItem>
-                                    </ChildContent>
-                                </RadzenMenuItem>
-                            </ChildContent>
-                        </RadzenMenu>
+                                    <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                    </RadzenMenuItem>
+
+                                    <RadzenMenuItem Icon="insights" Path="statistiques" Text="Statistiques" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                    </RadzenMenuItem>
+
+                                    <RadzenMenuItem Icon="tune" Text="Paramétrage" Visible="@(Security.IsInRole(Constants.admin))">
+                                        <ChildContent>
+                                            <RadzenMenuItem Class="pes-menu-section" Disabled="true" Text="Territoire">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="map" Path="regions" Text="Régions" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="apartment" Path="etablissement-liste" Text="Établissements" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="calendar_month" Path="sessions" Text="Sessions" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+
+                                            <RadzenMenuItem Class="pes-menu-section" Disabled="true" Text="Grille d'évaluation">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="category" Path="rubriques" Text="Rubriques" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="fact_check" Path="element" Text="Indicateurs & Critères" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="linear_scale" Path="echelle" Text="Échelles" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
+                                        </ChildContent>
+                                    </RadzenMenuItem>
+
+                                    <RadzenMenuItem Icon="admin_panel_settings" Text="Gestion" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                        <ChildContent>
+                                            <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="manage_accounts" Path="application-users" Text="Utilisateurs" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            </RadzenMenuItem>
+                                        </ChildContent>
+                                    </RadzenMenuItem>
+                                </ChildContent>
+                            </RadzenMenu>
                     </RadzenStack>
 
                     <!-- Right: Context Badges & Profile Menu -->

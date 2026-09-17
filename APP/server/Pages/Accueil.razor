@@ -68,7 +68,7 @@
             <RadzenCard Class="pes-login-card">
               <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" Gap="0.5rem" Style="margin-bottom: 1.5rem; text-align: center;">
                 <div class="pes-login-icon-box">
-                  <RadzenIcon Icon="lock" Style="font-size: 24px; color: var(--rz-primary, #0078d4);" />
+                  <RadzenIcon Icon="lock" Style="font-size: 26px; color: #ffffff;" />
                 </div>
                 <RadzenText TextStyle="TextStyle.H5" Style="font-weight: 700; margin: 0; color: var(--rz-text-color, #1e293b);">
                   Espace de connexion
@@ -77,6 +77,8 @@
                   Accédez à votre espace d'évaluation et de gestion
                 </RadzenText>
               </RadzenStack>
+
+              <div class="pes-login-divider"></div>
 
               <RadzenTemplateForm Action="@($"account/login?redirectUrl={redirectUrl}")" Data="@("login")" Method="post">
                 <ChildContent>

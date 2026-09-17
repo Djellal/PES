@@ -1,0 +1,190 @@
+@page "/statistiques"
+@layout MainLayout
+@inherits Pes.Pages.StatistiquesComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<PageTitle>Statistiques</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenStack Orientation="Orientation.Vertical" Gap="1.25rem" Style="margin: 0 auto; max-width: 1400px;">
+      <!-- Header -->
+      <RadzenCard Class="pes-welcome-bar">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Wrap="FlexWrap.Wrap">
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+            <div class="pes-action-icon-box bg-primary-light">
+              <RadzenIcon Icon="insights" Style="font-size: 24px; color: var(--rz-primary, #0078d4);" />
+            </div>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+              <RadzenText TextStyle="TextStyle.H6" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">Statistiques</RadzenText>
+              <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Indicateurs de la session active selon votre périmètre</RadzenText>
+            </RadzenStack>
+          </RadzenStack>
+          @if (Globals.ActiveSession != null)
+          {
+            <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600;">
+              <RadzenIcon Icon="calendar_month" Style="font-size: 16px; margin-right: 5px; vertical-align: middle;" />
+              @Globals.ActiveSession.NomSession
+            </RadzenBadge>
+          }
+        </RadzenStack>
+      </RadzenCard>
+
+      @if (!HasData)
+      {
+        <RadzenCard>
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+            <RadzenIcon Icon="info" Style="color: var(--rz-primary, #0078d4); font-size: 22px;" />
+            <RadzenText TextStyle="TextStyle.Body1" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+              Aucun stagiaire trouvé pour la session active et votre périmètre.
+            </RadzenText>
+          </RadzenStack>
+        </RadzenCard>
+      }
+      else
+      {
+        <!-- KPI Cards -->
+        <div class="row g-3">
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-primary-light">
+                  <RadzenIcon Icon="group" Style="font-size: 24px; color: var(--rz-primary, #0078d4);" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@TotalStagiaires</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Stagiaires</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-success-light">
+                  <RadzenIcon Icon="fact_check" Style="font-size: 24px; color: #16a34a;" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@StagiairesEvalues</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Évalués par le jury</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-success-light">
+                  <RadzenIcon Icon="verified_user" Style="font-size: 24px; color: #16a34a;" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@TauxReussite.ToString("P1")</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Taux de réussite</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-warning-light">
+                  <RadzenIcon Icon="school" Style="font-size: 24px; color: #d97706;" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@MoyenneNoteFinale.ToString("P2")</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Note finale moyenne</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-info-light">
+                  <RadzenIcon Icon="spellcheck" Style="font-size: 24px; color: #0284c7;" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@MoyenneNoteCours.ToString("P2")</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Note de cours moyenne</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-2 col-md-4 col-sm-6">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
+                <div class="pes-action-icon-box bg-info-light">
+                  <RadzenIcon Icon="assignment_turned_in" Style="font-size: 24px; color: #0284c7;" />
+                </div>
+                <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                  <RadzenText TextStyle="TextStyle.H4" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">@MoyenneNoteCC.ToString("P2")</RadzenText>
+                  <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Éval. continue moyenne</RadzenText>
+                </RadzenStack>
+              </RadzenStack>
+            </RadzenCard>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row g-3">
+          <div class="col-xl-7 col-12">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Moyenne finale par établissement</RadzenText>
+              <RadzenChart Style="height: 340px;">
+                <RadzenColumnSeries Data="@EtabStats" CategoryProperty="@nameof(EtabStat.Nom)" ValueProperty="@nameof(EtabStat.Moyenne)" Title="Moyenne finale">
+                  <RadzenSeriesDataLabels Visible="true" Format="{0:P0}">
+                  </RadzenSeriesDataLabels>
+                </RadzenColumnSeries>
+                <RadzenLegend Position="LegendPosition.Bottom">
+                </RadzenLegend>
+              </RadzenChart>
+            </RadzenCard>
+          </div>
+          <div class="col-xl-5 col-12">
+            <RadzenCard Class="pes-stat-card h-100">
+              <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Répartition des mentions</RadzenText>
+              <RadzenChart Style="height: 340px;">
+                <RadzenPieSeries Data="@MentionStats" CategoryProperty="@nameof(MentionStat.Mention)" ValueProperty="@nameof(MentionStat.Count)" Title="Mentions">
+                  <RadzenSeriesDataLabels Visible="true" Format="{0:N0}">
+                  </RadzenSeriesDataLabels>
+                </RadzenPieSeries>
+                <RadzenLegend Position="LegendPosition.Right">
+                </RadzenLegend>
+              </RadzenChart>
+            </RadzenCard>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <RadzenCard Class="pes-stat-card">
+          <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Détail par établissement</RadzenText>
+          <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@EtabStats" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Pages.EtabStat" PageSize="15">
+            <Columns>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Rang" Width="80px">
+                <Template Context="data">
+                  <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" IsPill="true" Text="@data.Rang.ToString("N0")">
+                  </RadzenBadge>
+                </Template>
+              </RadzenDataGridColumn>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Nom" Title="Établissement" Width="300px">
+              </RadzenDataGridColumn>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Region" Title="Région" Width="200px" Visible="@(Security.IsInRole(Constants.admin))">
+              </RadzenDataGridColumn>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Count" Title="Stagiaires" TextAlign="TextAlign.Center">
+              </RadzenDataGridColumn>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Moyenne" Title="Note finale moyenne" FormatString="{0:P2}">
+              </RadzenDataGridColumn>
+              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="TauxReussite" Title="Taux de réussite" FormatString="{0:P1}">
+              </RadzenDataGridColumn>
+            </Columns>
+          </RadzenDataGrid>
+        </RadzenCard>
+      }
+    </RadzenStack>
+  </ChildContent>
+</RadzenContent>
