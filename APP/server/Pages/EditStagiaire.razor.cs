@@ -146,6 +146,14 @@ namespace Pes.Pages
             }
         }
 
+        protected async System.Threading.Tasks.Task DetailbuttonClick()
+        {
+            await DialogService.OpenAsync<StagiaireEvaluationsDetail>(
+                $"Détails évaluations",
+                new Dictionary<string, object>() { { "Id", stagiaire.Id } },
+                new DialogOptions() { Width = "1300px", CloseDialogOnOverlayClick = true, Resizable = true, Draggable = true });
+        }
+
         protected async System.Threading.Tasks.Task Reinit()
         {
             try

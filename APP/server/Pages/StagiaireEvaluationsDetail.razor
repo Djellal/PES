@@ -1,0 +1,117 @@
+@page "/stagiaire-evaluations/{Id}"
+@layout MainLayout
+@inherits Pes.Pages.StagiaireEvaluationsDetailComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+@using Microsoft.AspNetCore.Identity;
+@using Pes.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, expert, membre_jury, president_jury")]
+<PageTitle>Évaluations détaillées</PageTitle>
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@stagiaire" TItem="Pes.Models.DMdel.Stagiaire" Visible="@(stagiaire != null)">
+          <ChildContent>
+            <RadzenCard style="background-color: #e6ecef">
+              <ChildContent>
+                <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="perm_identity" Size="AlertSize.ExtraSmall" Text="@("Faculté : " + stagiaire.Faculte?.NomFaculte + " ; Département : " + stagiaire.Departement?.NomDepartement)" Title="@("Stagiaire : " + stagiaire.Nom + " " + stagiaire.Prenom)">
+                </RadzenAlert>
+                <div class="row justify-content-between" style="background-color: #e6ecef; margin-bottom: 1rem">
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="link" Size="AlertSize.ExtraSmall" Title="URL Cours">
+                    </RadzenAlert>
+                    <RadzenLink Icon="link" Path="@($"{stagiaire.URLcour}")" style="text-align: center" Target="_blank" Text="URL Cour">
+                    </RadzenLink>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="online_prediction" Size="AlertSize.ExtraSmall" Title="Cours en ligne">
+                    </RadzenAlert>
+                    <RadzenBadge BadgeStyle="@(stagiaire.CourEnligne == true ? BadgeStyle.Success : BadgeStyle.Warning)" IsPill="true" style="font-size: 14px; width: 100%" Text="@(stagiaire.CourEnligne == true ? "En ligne" : "Présentiel")">
+                    </RadzenBadge>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note du Cours">
+                    </RadzenAlert>
+                    <RadzenNumeric Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" Value="@(stagiaire.Note)">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Eval.continue">
+                    </RadzenAlert>
+                    <RadzenNumeric Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)">
+                    </RadzenNumeric>
+                  </div>
+                  <div class="col-md-2">
+                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note Finale">
+                    </RadzenAlert>
+                    <RadzenNumeric Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteFinale)">
+                    </RadzenNumeric>
+                  </div>
+                </div>
+              </ChildContent>
+            </RadzenCard>
+            <RadzenCard>
+              <ChildContent>
+                <RadzenDataGrid @ref="grid0" AllGroupsExpanded="true" AllowFiltering="false" AllowGrouping="true" AllowMultiColumnSorting="true" AllowPaging="true" AllowSorting="true" AllowVirtualization="true" Data="@Evals" Density="Density.Default" FilterMode="Radzen.FilterMode.Advanced" GroupFootersAlwaysVisible="false" GroupPanelText="Faites glisser un en-tête de colonne ici et déposez-le pour regrouper par cette colonne" HideGroupedColumn="true" TItem="Pes.Models.DMdel.Evaluation" KeyProperty="Id" PageSize="100" ShowExpandColumn="true" ShowPagingSummary="true" Render="@Grid0Render">
+                  <Columns>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Membre" Width="220px">
+                      <Template Context="data">
+                        @if (data.EstSynthese)
+                        {
+                          <RadzenBadge BadgeStyle="BadgeStyle.Primary" IsPill="true" Text="Moyenne du jury">
+                          </RadzenBadge>
+                        }
+                        else
+                        {
+                          @GetMembreName(data.MembreId)
+                        }
+                      </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Frozen="true" Property="NomRubrique" Title="Rubrique">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Frozen="true" Property="NomElement" Title="Elément" Width="200px">
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Critere.NomCritere" GroupProperty="Critere.NomCritere" Property="Criterid" SortProperty="Critere.NomCritere" Title="Critère">
+                      <Template Context="data">
+                        @(data.Critere?.NomCritere)
+                      </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Echelle.Id" GroupProperty="Echelle.Id" Property="Echellid" SortProperty="Echelle.Id" Title="Échelle" Width="150px">
+                      <Template Context="data">
+                        @(data.Echelle?.Id)
+                      </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" TextAlign="TextAlign.Center" Title="Note" Width="120px">
+                      <Template Context="data">
+                        @if (data.EstSynthese)
+                        {
+                          <RadzenBadge BadgeStyle="BadgeStyle.Info" IsPill="true" Text="@(data.NoteSynthese.ToString("F2") + " / 5")">
+                          </RadzenBadge>
+                        }
+                        else
+                        {
+                          <RadzenText Text="@FormatNote(data)">
+                          </RadzenText>
+                        }
+                      </Template>
+                    </RadzenDataGridColumn>
+                  </Columns>
+                </RadzenDataGrid>
+              </ChildContent>
+            </RadzenCard>
+            <div style="margin-top: 20px" class="row">
+              <div class="col d-flex justify-content-around">
+                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="height: 40px" Text="Fermer" Click="@BackToListClick">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

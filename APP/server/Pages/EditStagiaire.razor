@@ -42,7 +42,7 @@
                   <div class="col-md-2">
                     <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Eval.continue">
                     </RadzenAlert>
-                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteCC)" Name="Numeric0">
+                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)" Name="Numeric0">
                     </RadzenNumeric>
                   </div>
                   <div class="col-md-2">
@@ -103,6 +103,8 @@
             <div style="margin-top: 20px" class="row">
               <div class="col  d-flex justify-content-around">
                 <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" style="height: 40px" Text="Imprimer Attestation" Visible="@(stagiaire.NoteFinale>50)">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list_alt" style="height: 40px" Text="Détails évaluations" Click="@DetailbuttonClick">
                 </RadzenButton>
                 <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 40px" Text="Sauvegarder">
                 </RadzenButton>
