@@ -1,6 +1,5 @@
 @page "/statistiques"
 @layout MainLayout
-@inherits Pes.Pages.StatistiquesComponent
 
 @using Radzen
 @using Radzen.Blazor
@@ -22,34 +21,79 @@
             </div>
             <RadzenStack Orientation="Orientation.Vertical" Gap="0">
               <RadzenText TextStyle="TextStyle.H6" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">Statistiques</RadzenText>
-              <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Indicateurs de la session active selon votre périmètre</RadzenText>
+              <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Indicateurs de la session sélectionnée selon votre périmètre</RadzenText>
             </RadzenStack>
           </RadzenStack>
-          @if (Globals.ActiveSession != null)
-          {
-            <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 600;">
-              <RadzenIcon Icon="calendar_month" Style="font-size: 16px; margin-right: 5px; vertical-align: middle;" />
-              @Globals.ActiveSession.NomSession
-            </RadzenBadge>
-          }
+
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Wrap="FlexWrap.Wrap">
+            @if (!string.IsNullOrEmpty(ScopeTitle))
+            {
+              <RadzenBadge BadgeStyle="BadgeStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.45rem 1rem; font-size: 0.85rem; font-weight: 600;">
+                <RadzenIcon Icon="domain" Style="font-size: 16px; margin-right: 5px; vertical-align: middle;" />
+                @ScopeTitle
+              </RadzenBadge>
+            }
+
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+              <RadzenText TextStyle="TextStyle.Body2" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Session :</RadzenText>
+              <RadzenDropDown AllowClear="false" Data="@SessionsList" TextProperty="NomSession" ValueProperty="Id" @bind-Value="@SelectedSessionId" Change="@OnSessionChanged" Style="min-width: 220px;" Name="SessionDropdown" />
+              @if (SessionsList.FirstOrDefault(s => s.Id == SelectedSessionId)?.EnCours == true)
+              {
+                <RadzenBadge BadgeStyle="BadgeStyle.Success" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.35rem 0.75rem; font-size: 0.75rem; font-weight: 600;">
+                  En cours
+                </RadzenBadge>
+              }
+            </RadzenStack>
+          </RadzenStack>
         </RadzenStack>
       </RadzenCard>
 
-      @if (!HasData)
+      <!-- Context Filters (Admin & Admin Regional) -->
+      @if (IsAdmin || IsAdminRegional)
       {
-        <RadzenCard>
-          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
-            <RadzenIcon Icon="info" Style="color: var(--rz-primary, #0078d4); font-size: 22px;" />
-            <RadzenText TextStyle="TextStyle.Body1" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
-              Aucun stagiaire trouvé pour la session active et votre périmètre.
-            </RadzenText>
+        <RadzenCard Class="pes-stat-card" Style="padding: 0.75rem 1.25rem;">
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem" Wrap="FlexWrap.Wrap">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+              <RadzenIcon Icon="filter_alt" Style="color: var(--rz-primary, #0078d4); font-size: 20px;" />
+              <RadzenText TextStyle="TextStyle.Subtitle2" Style="margin: 0; font-weight: 700;">Filtrer :</RadzenText>
+            </RadzenStack>
+
+            @if (IsAdmin)
+            {
+              <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0;">Région :</RadzenText>
+                <RadzenDropDown AllowClear="true" Data="@RegionsList" Placeholder="Toutes les régions" TextProperty="NomRegion" ValueProperty="Id" @bind-Value="@SelectedRegionId" Change="@OnRegionChanged" Style="width: 220px;" Name="RegionDropdown" />
+              </RadzenStack>
+            }
+
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+              <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0;">Établissement :</RadzenText>
+              <RadzenDropDown AllowClear="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@FilterEtabsList" Placeholder="@(IsAdmin ? "Tous les établissements" : "Tous les établissements de la région")" TextProperty="NomEtablissement" ValueProperty="Id" @bind-Value="@SelectedEtabId" Change="@OnEtabChanged" Style="width: 320px;" Name="EtabDropdown" />
+            </RadzenStack>
           </RadzenStack>
         </RadzenCard>
       }
-      else
-      {
-        <!-- KPI Cards -->
-        <div class="row g-3">
+
+      @* Loading indicator: always rendered. Combined with the CSS-less hiding of the content below
+         (see ShowContent), the Radzen grids/charts are never disposed and re-created while loading,
+         which previously triggered System.ObjectDisposedException in the render tree. *@
+      <RadzenCard Visible="@IsLoading" Style="text-align: center; padding: 3rem;">
+        <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Medium" />
+        <RadzenText TextStyle="TextStyle.Body1" Style="margin-top: 1rem; color: var(--rz-text-secondary-color, #64748b);">Chargement des statistiques en cours...</RadzenText>
+      </RadzenCard>
+
+      @* Empty state: also always rendered, only shown when no data matches the selection. *@
+      <RadzenCard Visible="@ShowEmptyState">
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+          <RadzenIcon Icon="info" Style="color: var(--rz-primary, #0078d4); font-size: 22px;" />
+          <RadzenText TextStyle="TextStyle.Body1" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+            Aucun stagiaire trouvé pour la session sélectionnée et votre périmètre.
+          </RadzenText>
+        </RadzenStack>
+      </RadzenCard>
+        <!-- KPI Cards: always rendered, hidden with CSS only while loading or when there is no data,
+             so the Radzen components are never disposed and re-created. -->
+        <div class="row g-3" style='@(ShowContent ? "" : "display: none;")'>
           <div class="col-xl-2 col-md-4 col-sm-6">
             <RadzenCard Class="pes-stat-card h-100">
               <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem" Style="height: 100%;">
@@ -130,16 +174,30 @@
           </div>
         </div>
 
-        <!-- Charts -->
-        <div class="row g-3">
+        <!-- Charts: always rendered, hidden with CSS only while loading or when there is no data. -->
+        <div class="row g-3" style='@(ShowContent ? "" : "display: none;")'>
           <div class="col-xl-7 col-12">
             <RadzenCard Class="pes-stat-card h-100">
-              <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Moyenne finale par établissement</RadzenText>
-              <RadzenChart Style="height: 340px;">
-                <RadzenColumnSeries Data="@EtabStats" CategoryProperty="@nameof(EtabStat.Nom)" ValueProperty="@nameof(EtabStat.Moyenne)" Title="Moyenne finale">
-                  <RadzenSeriesDataLabels Visible="true" Format="{0:P0}">
+              @* Both charts are always rendered; the inactive one is simply hidden with Visible, so no
+                 RadzenChart is ever disposed and re-created (avoids System.ObjectDisposedException). *@
+              <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">@StatsChartTitle</RadzenText>
+              <RadzenChart Style="height: 340px;" Visible="@ShowFaculteChart">
+                <RadzenColumnSeries Data="@FaculteStats" CategoryProperty="@nameof(FaculteStatItem.Nom)" ValueProperty="@nameof(FaculteStatItem.Moyenne)" Title="Moyenne finale">
+                  <RadzenSeriesDataLabels Visible="true">
                   </RadzenSeriesDataLabels>
                 </RadzenColumnSeries>
+                <RadzenValueAxis Formatter="@FormatPercent">
+                </RadzenValueAxis>
+                <RadzenLegend Position="LegendPosition.Bottom">
+                </RadzenLegend>
+              </RadzenChart>
+              <RadzenChart Style="height: 340px;" Visible="@(!ShowFaculteChart)">
+                <RadzenColumnSeries Data="@EtabStats" CategoryProperty="@nameof(EtabStatItem.Nom)" ValueProperty="@nameof(EtabStatItem.Moyenne)" Title="Moyenne finale">
+                  <RadzenSeriesDataLabels Visible="true">
+                  </RadzenSeriesDataLabels>
+                </RadzenColumnSeries>
+                <RadzenValueAxis Formatter="@FormatPercent">
+                </RadzenValueAxis>
                 <RadzenLegend Position="LegendPosition.Bottom">
                 </RadzenLegend>
               </RadzenChart>
@@ -149,10 +207,12 @@
             <RadzenCard Class="pes-stat-card h-100">
               <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Répartition des mentions</RadzenText>
               <RadzenChart Style="height: 340px;">
-                <RadzenPieSeries Data="@MentionStats" CategoryProperty="@nameof(MentionStat.Mention)" ValueProperty="@nameof(MentionStat.Count)" Title="Mentions">
-                  <RadzenSeriesDataLabels Visible="true" Format="{0:N0}">
+                <RadzenPieSeries Data="@MentionStats" CategoryProperty="@nameof(MentionStatItem.Mention)" ValueProperty="@nameof(MentionStatItem.Count)" Title="Mentions">
+                  <RadzenSeriesDataLabels Visible="true">
                   </RadzenSeriesDataLabels>
                 </RadzenPieSeries>
+                <RadzenValueAxis Formatter="@FormatCount">
+                </RadzenValueAxis>
                 <RadzenLegend Position="LegendPosition.Right">
                 </RadzenLegend>
               </RadzenChart>
@@ -161,30 +221,49 @@
         </div>
 
         <!-- Table -->
-        <RadzenCard Class="pes-stat-card">
-          <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">Détail par établissement</RadzenText>
-          <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@EtabStats" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Pages.EtabStat" PageSize="15">
-            <Columns>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Rang" Width="80px">
-                <Template Context="data">
-                  <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" IsPill="true" Text="@data.Rang.ToString("N0")">
-                  </RadzenBadge>
-                </Template>
-              </RadzenDataGridColumn>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Nom" Title="Établissement" Width="300px">
-              </RadzenDataGridColumn>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Region" Title="Région" Width="200px" Visible="@(Security.IsInRole(Constants.admin))">
-              </RadzenDataGridColumn>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Count" Title="Stagiaires" TextAlign="TextAlign.Center">
-              </RadzenDataGridColumn>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="Moyenne" Title="Note finale moyenne" FormatString="{0:P2}">
-              </RadzenDataGridColumn>
-              <RadzenDataGridColumn TItem="Pes.Pages.EtabStat" Property="TauxReussite" Title="Taux de réussite" FormatString="{0:P1}">
-              </RadzenDataGridColumn>
-            </Columns>
-          </RadzenDataGrid>
+        <RadzenCard Class="pes-stat-card" Visible="@ShowContent">
+          @* Both grids are always rendered; the inactive one is simply hidden with Visible, so no
+             RadzenDataGrid is ever disposed and re-created (avoids System.ObjectDisposedException). *@
+          <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; margin: 0 0 0.75rem 0; color: var(--rz-text-color, #1e293b);">@StatsTableTitle</RadzenText>
+          <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@FaculteStats" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Pages.FaculteStatItem" PageSize="15" Visible="@ShowFaculteTable">
+              <Columns>
+                <RadzenDataGridColumn TItem="Pes.Pages.FaculteStatItem" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Rang" Width="80px">
+                  <Template Context="data">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" IsPill="true" Text="@data.Rang.ToString("N0")">
+                    </RadzenBadge>
+                  </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.FaculteStatItem" Property="Nom" Title="Faculté" Width="350px">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.FaculteStatItem" Property="Count" Title="Stagiaires" TextAlign="TextAlign.Center">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.FaculteStatItem" Property="Moyenne" Title="Note finale moyenne" FormatString="{0:P2}">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.FaculteStatItem" Property="TauxReussite" Title="Taux de réussite" FormatString="{0:P1}">
+                </RadzenDataGridColumn>
+              </Columns>
+            </RadzenDataGrid>
+          <RadzenDataGrid AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@EtabStats" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Pages.EtabStatItem" PageSize="15" Visible="@(!ShowFaculteTable)">
+              <Columns>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Title="Rang" Width="80px">
+                  <Template Context="data">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Primary" Variant="Variant.Flat" IsPill="true" Text="@data.Rang.ToString("N0")">
+                    </RadzenBadge>
+                  </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Property="Nom" Title="Établissement" Width="300px">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Property="Region" Title="Région" Width="200px" Visible="@(IsAdmin && !SelectedRegionId.HasValue)">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Property="Count" Title="Stagiaires" TextAlign="TextAlign.Center">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Property="Moyenne" Title="Note finale moyenne" FormatString="{0:P2}">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="Pes.Pages.EtabStatItem" Property="TauxReussite" Title="Taux de réussite" FormatString="{0:P1}">
+                </RadzenDataGridColumn>
+              </Columns>
+            </RadzenDataGrid>
         </RadzenCard>
-      }
     </RadzenStack>
   </ChildContent>
 </RadzenContent>

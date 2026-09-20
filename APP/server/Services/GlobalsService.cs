@@ -32,6 +32,12 @@ namespace Pes
             }
         }
 
+        public Pes.Models.DMdel.Session CurrentSession
+        {
+            get => ActiveSession;
+            set => ActiveSession = value;
+        }
+
         Pes.Models.DMdel.Etablissement _Etab;
         public Pes.Models.DMdel.Etablissement Etab
         {
