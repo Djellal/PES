@@ -16,48 +16,81 @@
       <div class="col-md-12">
         <RadzenTemplateForm Data="@stagiaire" TItem="Pes.Models.DMdel.Stagiaire" Visible="@(stagiaire != null)" Submit="@Form0Submit">
           <ChildContent>
-            <RadzenCard style="background-color: #e6ecef">
+            <RadzenCard Class="pes-eval-header-card">
               <ChildContent>
-                <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="perm_identity" Size="AlertSize.ExtraSmall" Text="@("Faculté : " +stagiaire.Faculte?.NomFaculte+" ;Département : " +stagiaire.Departement?.NomDepartement)" Title="@("Stagiaire  : "+ stagiaire.Nom+" " + stagiaire.Prenom)">
-                </RadzenAlert>
-                <div class="row justify-content-between" style="background-color: #e6ecef; margin-bottom: 1rem">
-                  <div class="col-md-2">
-                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="link" Size="AlertSize.ExtraSmall" Title="URL Cours">
-                    </RadzenAlert>
-                    <RadzenLink Icon="link" Path="@($"{stagiaire.URLcour}")" style="text-align: center" Target="_blank" Text="URL Cour">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Wrap="FlexWrap.Wrap">
+                  <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                    <div class="pes-action-icon-box bg-primary-light">
+                      <RadzenIcon Icon="assignment_turned_in" Style="font-size: 26px; color: var(--rz-primary, #0078d4);" />
+                    </div>
+                    <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                      <RadzenText TextStyle="TextStyle.H6" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">
+                        @(stagiaire.Nom + " " + stagiaire.Prenom)
+                      </RadzenText>
+                      <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+                        Faculté : @stagiaire.Faculte?.NomFaculte · Département : @stagiaire.Departement?.NomDepartement
+                      </RadzenText>
+                    </RadzenStack>
+                  </RadzenStack>
+                  <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                    <RadzenText TextStyle="TextStyle.Body2" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Session :</RadzenText>
+                    <RadzenBadge BadgeStyle="BadgeStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.45rem 1rem; font-size: 0.85rem; font-weight: 600;">
+                      <RadzenIcon Icon="school" Style="font-size: 16px; margin-right: 5px; vertical-align: middle;" />
+                      @Globals.ActiveSession?.NomSession
+                    </RadzenBadge>
+                  </RadzenStack>
+                </RadzenStack>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem;">
+                  <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
+                    <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">URL Cours</RadzenText>
+                    <RadzenLink Icon="open_in_new" Path="@($"{stagiaire.URLcour}")" Style="font-weight: 600; text-align: center;" Target="_blank" Text="Ouvrir le cours">
                     </RadzenLink>
                   </div>
-                  <div class="col-md-2">
-                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="link" Size="AlertSize.ExtraSmall" style="display: inline-block" Title="Cours en ligne">
-                    </RadzenAlert>
-                    <RadzenCheckBox style="height: 31px; width: 36px" @bind-Value="@(stagiaire.CourEnligne)" TValue="bool?" Name="Checkbox0" Change="@Checkbox0Change">
-                    </RadzenCheckBox>
+                  <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
+                    <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Cours en ligne</RadzenText>
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                      <RadzenCheckBox Style="height: 31px; width: 36px;" @bind-Value="@(stagiaire.CourEnligne)" TValue="bool?" Name="Checkbox0" Change="@Checkbox0Change">
+                      </RadzenCheckBox>
+                      <RadzenBadge BadgeStyle="@(stagiaire.CourEnligne == true ? BadgeStyle.Success : BadgeStyle.Warning)" IsPill="true" Style="font-size: 0.8rem; font-weight: 600;">
+                        @(stagiaire.CourEnligne == true ? "En ligne" : "Présentiel")
+                      </RadzenBadge>
+                    </RadzenStack>
                   </div>
-                  <div class="col-md-2">
-                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note du Cours">
-                    </RadzenAlert>
-                    <RadzenNumeric Disabled="false" Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.Note)" Name="Notenumeric">
+                  <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
+                    <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Note du Cours</RadzenText>
+                    <RadzenNumeric Disabled="false" Format="P2" ReadOnly="true" Style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: 700; width: 100%;" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.Note)" Name="Notenumeric">
                     </RadzenNumeric>
                   </div>
-                  <div class="col-md-2">
-                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Eval.continue">
-                    </RadzenAlert>
-                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)" Name="Numeric0">
+                  <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
+                    <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Eval. continue</RadzenText>
+                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" Style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: 700; width: 100%;" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)" Name="Numeric0">
                     </RadzenNumeric>
                   </div>
-                  <div class="col-md-2">
-                    <RadzenAlert AlertStyle="AlertStyle.Primary" AllowClose="false" Icon="spellcheck" Size="AlertSize.ExtraSmall" Title="Note Finale">
-                    </RadzenAlert>
-                    <RadzenNumeric Format="P2" ReadOnly="true" style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: bold; width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteFinale)" Name="Numeric1">
+                  <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
+                    <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Note Finale</RadzenText>
+                    <RadzenNumeric Format="P2" ReadOnly="true" Style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: 700; width: 100%;" TextAlign="TextAlign.Center" @bind-Value="@(stagiaire.NoteFinale)" Name="Numeric1">
                     </RadzenNumeric>
                   </div>
                 </div>
-                <RadzenBadge BadgeStyle="BadgeStyle.Danger" style="font-size: 16px; padding-bottom: 5px; padding-top: 5px; width: 100%" Text="NB: Le cours doit être en ligne pour que l'évaluation soit calculée">
-                </RadzenBadge>
+
+                <RadzenAlert AlertStyle="AlertStyle.Info" AllowClose="false" Icon="lightbulb" Size="AlertSize.ExtraSmall" Style="border-radius: 8px; font-weight: 500; margin-bottom: 0; margin-top: 1.25rem;" Text="NB : Le cours doit être en ligne pour que l'évaluation soit calculée">
+                </RadzenAlert>
               </ChildContent>
             </RadzenCard>
-            <RadzenCard>
+            <RadzenCard Class="pes-eval-grid-card">
               <ChildContent>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="0.75rem" Wrap="FlexWrap.Wrap" Style="margin-bottom: 1rem;">
+                  <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.6rem">
+                    <div class="pes-action-icon-box bg-primary-light">
+                      <RadzenIcon Icon="fact_check" Style="font-size: 22px; color: var(--rz-primary, #0078d4);" />
+                    </div>
+                    <RadzenText TextStyle="TextStyle.Subtitle1" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">Grille d'évaluation</RadzenText>
+                  </RadzenStack>
+                  <RadzenBadge BadgeStyle="BadgeStyle.Info" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 600;">
+                    @(Evals?.Count() ?? 0) critères
+                  </RadzenBadge>
+                </RadzenStack>
                 <RadzenDataGrid @ref="grid0" AllGroupsExpanded="true" AllowFiltering="false" AllowGrouping="true" AllowMultiColumnSorting="true" AllowPaging="true" AllowSorting="true" AllowVirtualization="true" Data="@Evals" Density="Density.Default" EditMode="DataGridEditMode.Single" FilterMode="Radzen.FilterMode.Advanced" GroupFootersAlwaysVisible="false" GroupPanelText="Faites glisser un en-tête de colonne ici et déposez-le pour regrouper par cette colonne" HideGroupedColumn="true" TItem="Pes.Models.DMdel.Evaluation" KeyProperty="Id" PageSize="100" ShowExpandColumn="true" ShowPagingSummary="true" Render="@Grid0Render" RowCreate="@Grid0RowCreate" RowUpdate="@Grid0RowUpdate">
                   <Columns>
                     <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Frozen="true" Property="NomRubrique" Title="Rubrique">
@@ -100,19 +133,17 @@
                 </RadzenDataGrid>
               </ChildContent>
             </RadzenCard>
-            <div style="margin-top: 20px" class="row">
-              <div class="col  d-flex justify-content-around">
-                <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" style="height: 40px" Text="Imprimer Attestation" Visible="@(stagiaire.NoteFinale>50)">
-                </RadzenButton>
-                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list_alt" style="height: 40px" Text="Détails évaluations" Click="@DetailbuttonClick">
-                </RadzenButton>
-                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" style="height: 40px" Text="Sauvegarder">
-                </RadzenButton>
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="undo" style="margin-left: 1rem" Text="Réinitiliser" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Click="@InnitbuttonClick">
-                </RadzenButton>
-                <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="margin-left: 1rem" Text="Fermer" Click="@Button2Click">
-                </RadzenButton>
-              </div>
+            <div class="pes-eval-action-bar">
+              <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" Text="Imprimer Attestation" Visible="@(stagiaire.NoteFinale>50)">
+              </RadzenButton>
+              <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list_alt" Text="Détails évaluations" Click="@DetailbuttonClick">
+              </RadzenButton>
+              <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Sauvegarder">
+              </RadzenButton>
+              <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="undo" Text="Réinitialiser" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Click="@InnitbuttonClick">
+              </RadzenButton>
+              <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Fermer" Click="@Button2Click">
+              </RadzenButton>
             </div>
           </ChildContent>
         </RadzenTemplateForm>

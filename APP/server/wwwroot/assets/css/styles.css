@@ -389,4 +389,129 @@
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
 }
 
+/* ==========================================================================
+   Évaluation du stagiaire (EditStagiaire) Visual Polish
+   ========================================================================== */
+
+.pes-eval-header-card {
+    background-color: #ffffff !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
+    padding: 1.25rem 1.5rem 1.5rem !important;
+    margin-bottom: 1.25rem !important;
+}
+
+.pes-eval-metric {
+    background-color: var(--rz-base-background-color, #f8fafc) !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 10px !important;
+    padding: 0.9rem 1rem !important;
+    min-height: 96px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.pes-eval-metric:hover {
+    border-color: var(--rz-primary-light, #c7e0f4) !important;
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+.pes-eval-grid-card {
+    background-color: #ffffff !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+    padding: 1.25rem !important;
+}
+
+.pes-eval-action-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+    background-color: #ffffff !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+}
+
+.pes-eval-action-bar .rz-button {
+    height: 40px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+    margin-left: 0 !important;
+}
+
+/* ==========================================================================
+   Profil utilisateur (Profile) Visual Polish
+   ========================================================================== */
+
+.pes-profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.18), 0 6px 12px -4px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.pes-profile-avatar-initials {
+    width: 72px;
+    height: 72px;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #0078d4 0%, #00b4d8 100%) !important;
+    color: #ffffff !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.18), 0 6px 12px -4px rgba(0, 0, 0, 0.2);
+}
+
+.pes-profile-tile {
+    background-color: var(--rz-base-background-color, #f8fafc) !important;
+    border: 1px solid var(--rz-border-color, #e2e8f0) !important;
+    border-radius: 10px !important;
+    padding: 0.85rem 1rem !important;
+    min-height: 82px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.45rem;
+    transition: all 0.15s ease-in-out !important;
+}
+
+.pes-profile-tile:hover {
+    border-color: var(--rz-primary-light, #c7e0f4) !important;
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+.pes-profile-tile-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: var(--rz-text-secondary-color, #64748b) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.3px !important;
+}
+
+.pes-profile-tile-value {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--rz-text-color, #1e293b) !important;
+    word-break: break-word;
+}
+
 

@@ -9,68 +9,161 @@
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
-<PageTitle>Profile</PageTitle>
+<PageTitle>Mon profil</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
-    <RadzenCard>
-      <ChildContent>
-        <RadzenHeading Size="H2" style="text-align: center" Text="@("Nom de profil : "+user?.Name)">
-        </RadzenHeading>
-        <div class="row">
-          <div class="col-md-12">
-            <RadzenTemplateForm Action="account/changepassword" Data="@user" TItem="ApplicationUser" Method="post" Visible="@(user != null)">
-              <ChildContent>
-                <div style="margin-bottom: 1rem" class="row">
-                  <div class="col-md-3">
-                    <RadzenLabel Component="OldPassword" style="text-align: right; width: 100%" Text="Ancien mot de passe">
-                    </RadzenLabel>
+    <RadzenStack Orientation="Orientation.Vertical" Gap="1.25rem" Style="margin: 0 auto; max-width: 1000px;">
+      <RadzenCard Class="pes-eval-header-card" Visible="@(user != null)">
+        <ChildContent>
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Wrap="FlexWrap.Wrap">
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+              @if (!string.IsNullOrEmpty(user?.Email))
+              {
+                <RadzenGravatar Email="@user.Email" Class="pes-profile-avatar" />
+              }
+              else
+              {
+                <div class="pes-profile-avatar-initials">@UserInitials</div>
+              }
+              <RadzenStack Orientation="Orientation.Vertical" Gap="0.15rem">
+                <RadzenText TextStyle="TextStyle.H5" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">
+                  @(user?.Name)
+                </RadzenText>
+                <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
+                  @(!string.IsNullOrEmpty(user?.Email) ? user.Email : "—")
+                </RadzenText>
+                @if (!string.IsNullOrEmpty(user?.Qualite))
+                {
+                  <RadzenText TextStyle="TextStyle.Body2" Style="margin: 0; font-weight: 600;">
+                    <RadzenIcon Icon="badge" Style="font-size: 15px; margin-right: 4px; vertical-align: middle; color: var(--rz-primary, #0078d4);" />
+                    @user.Qualite
+                  </RadzenText>
+                }
+              </RadzenStack>
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem" Wrap="FlexWrap.Wrap">
+              @foreach (var role in (user?.RoleNames ?? Enumerable.Empty<string>()))
+              {
+                <RadzenBadge BadgeStyle="@GetRoleStyle(role)" Variant="Variant.Flat" Shade="Shade.Lighter" IsPill="true" Style="padding: 0.35rem 0.85rem; font-size: 0.8rem; font-weight: 600;">
+                  <RadzenIcon Icon="verified_user" Style="font-size: 14px; margin-right: 4px; vertical-align: middle;" />@role
+                </RadzenBadge>
+              }
+            </RadzenStack>
+          </RadzenStack>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem;">
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="domain" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Établissement</span>
+              </div>
+              <div class="pes-profile-tile-value">@EtabName</div>
+            </div>
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="map" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Région</span>
+              </div>
+              <div class="pes-profile-tile-value">@RegionName</div>
+            </div>
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="account_balance" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Faculté</span>
+              </div>
+              <div class="pes-profile-tile-value">@FaculteName</div>
+            </div>
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="account_tree" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Département</span>
+              </div>
+              <div class="pes-profile-tile-value">@DepartementName</div>
+            </div>
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="phone" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Téléphone</span>
+              </div>
+              <div class="pes-profile-tile-value">@(!string.IsNullOrEmpty(user?.PhoneNumber) ? user.PhoneNumber : "—")</div>
+            </div>
+            <div class="pes-profile-tile" style="flex: 1 1 240px; min-width: 220px;">
+              <div class="pes-profile-tile-label">
+                <RadzenIcon Icon="person_pin" Style="font-size: 15px; color: var(--rz-primary, #0078d4);" />
+                <span>Qualité</span>
+              </div>
+              <div class="pes-profile-tile-value">@(!string.IsNullOrEmpty(user?.Qualite) ? user.Qualite : "—")</div>
+            </div>
+          </div>
+        </ChildContent>
+      </RadzenCard>
+
+      <RadzenCard Class="pes-eval-grid-card">
+        <ChildContent>
+          <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.6rem" Style="margin-bottom: 1rem;">
+            <div class="pes-action-icon-box bg-primary-light">
+              <RadzenIcon Icon="lock" Style="font-size: 22px; color: var(--rz-primary, #0078d4);" />
+            </div>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+              <RadzenText TextStyle="TextStyle.Subtitle1" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">Changer le mot de passe</RadzenText>
+              <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">Renouvelez régulièrement votre mot de passe pour sécuriser votre compte.</RadzenText>
+            </RadzenStack>
+          </RadzenStack>
+
+          <div class="row">
+            <div class="col-md-12">
+              <RadzenTemplateForm Action="account/changepassword" Data="@user" TItem="ApplicationUser" Method="post" Visible="@(user != null)">
+                <ChildContent>
+                  <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Component="OldPassword" style="text-align: right; width: 100%" Text="Ancien mot de passe">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-5">
+                      <RadzenPassword style="display: block; width: 100%" @bind-Value="@oldPassword" Name="OldPassword" Placeholder="Votre mot de passe actuel">
+                      </RadzenPassword>
+                      <RadzenRequiredValidator Component="OldPassword" style="position: absolute" Text="L'ancien mot de passe est requis">
+                      </RadzenRequiredValidator>
+                    </div>
                   </div>
-                  <div class="col-md-5">
-                    <RadzenPassword style="display: block; width: 100%" @bind-Value="@oldPassword" Name="OldPassword">
-                    </RadzenPassword>
-                    <RadzenRequiredValidator Component="OldPassword" style="position: absolute" Text="Enter your current password">
-                    </RadzenRequiredValidator>
+                  <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Component="NewPassword" style="text-align: right; width: 100%" Text="Nouveau mot de passe">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-5">
+                      <RadzenPassword style="display: block; width: 100%" @bind-Value="@newPassword" Name="NewPassword" Placeholder="Votre nouveau mot de passe">
+                      </RadzenPassword>
+                      <RadzenRequiredValidator Component="NewPassword" style="position: absolute" Text="Le nouveau mot de passe est requis">
+                      </RadzenRequiredValidator>
+                    </div>
                   </div>
-                </div>
-                <div style="margin-bottom: 1rem" class="row">
-                  <div class="col-md-3">
-                    <RadzenLabel Component="NewPassword" style="text-align: right; width: 100%" Text="Nouveau mot de passe">
-                    </RadzenLabel>
+                  <div style="margin-bottom: 1rem" class="row">
+                    <div class="col-md-3">
+                      <RadzenLabel Component="ConfirmPassword" style="text-align: right; width: 100%" Text="Confirmer le mot de passe">
+                      </RadzenLabel>
+                    </div>
+                    <div class="col-md-5">
+                      <RadzenPassword style="display: block; width: 100%" @bind-Value="@confirmPassword" Name="ConfirmPassword" Placeholder="Confirmation du nouveau mot de passe">
+                      </RadzenPassword>
+                      <RadzenRequiredValidator Component="ConfirmPassword" style="position: absolute" Text="La confirmation est requise">
+                      </RadzenRequiredValidator>
+                      <RadzenCompareValidator Component="ConfirmPassword" style="position: absolute" Text="Les mots de passe doivent être identiques" Value="@newPassword">
+                      </RadzenCompareValidator>
+                    </div>
                   </div>
-                  <div class="col-md-5">
-                    <RadzenPassword style="display: block; width: 100%" @bind-Value="@newPassword" Name="NewPassword">
-                    </RadzenPassword>
-                    <RadzenRequiredValidator Component="NewPassword" style="position: absolute" Text="Enter your new password">
-                    </RadzenRequiredValidator>
-                  </div>
-                </div>
-                <div style="margin-bottom: 1rem" class="row">
-                  <div class="col-md-3">
-                    <RadzenLabel Component="ConfirmPassword" style="text-align: right; width: 100%" Text="Confirmer mot de passe">
-                    </RadzenLabel>
-                  </div>
-                  <div class="col-md-5">
-                    <RadzenPassword style="display: block; width: 100%" @bind-Value="@confirmPassword" Name="ConfirmPassword">
-                    </RadzenPassword>
-                    <RadzenRequiredValidator Component="ConfirmPassword" style="position: absolute" Text="Confirm your new password">
-                    </RadzenRequiredValidator>
-                    <RadzenCompareValidator Component="ConfirmPassword" style="position: absolute" Text="Passwords should be the same" Value="@newPassword">
-                    </RadzenCompareValidator>
-                  </div>
-                </div>
-                <div  class="row">
-                  <div class="col offset-sm-3 justify-content-around d-flex">
-                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Change password">
+                  <div class="pes-eval-action-bar" style="margin-left: 0; margin-right: 0;">
+                    <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Changer le mot de passe">
                     </RadzenButton>
                     <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Annuler" Click="@Button1Click">
                     </RadzenButton>
                   </div>
-                </div>
-              </ChildContent>
-            </RadzenTemplateForm>
+                </ChildContent>
+              </RadzenTemplateForm>
+            </div>
           </div>
-        </div>
-      </ChildContent>
-    </RadzenCard>
+        </ChildContent>
+      </RadzenCard>
+    </RadzenStack>
   </ChildContent>
 </RadzenContent>
