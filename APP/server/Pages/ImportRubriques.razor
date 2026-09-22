@@ -1,0 +1,105 @@
+@using Radzen
+@using Radzen.Blazor
+@using Pes.Models.DMdel
+
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject GlobalsService Globals
+@inject DMdelService DMdel
+
+<div style="padding: 20px">
+  <RadzenHeading Size="H3" style="text-align: center; color: rgb(0, 120, 212); font-family: times new roman,times,serif" Text="Importer des rubriques">
+  </RadzenHeading>
+  <div style="margin-bottom: 1rem" class="row">
+    <div class="col-md-4">
+      <RadzenLabel Component="Sessiondropdown" Text="Session précédente">
+      </RadzenLabel>
+    </div>
+    <div class="col-md-8">
+      <RadzenDropDown AllowClear="false" AllowFiltering="true" Data="@sessions" Placeholder="Choisir une session" style="width: 100%" TextProperty="NomSession" ValueProperty="Id" @bind-Value="@selectedSessionId" Change="@SessionChanged" Name="Sessiondropdown">
+      </RadzenDropDown>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <RadzenLabel Text="Rubriques à importer">
+      </RadzenLabel>
+      @if (loading)
+      {
+        <RadzenProgressBar Indeterminate="true" style="height: 5px; margin-top: 8px">
+        </RadzenProgressBar>
+      }
+      else if (rubriques != null && rubriques.Any())
+      {
+        <RadzenCheckBoxList TValue="int" Data="@rubriques" TextProperty="NomRubrique" ValueProperty="Id" @bind-Value="@selectedIds" Orientation="Orientation.Vertical" style="max-height: 320px; overflow-y: auto">
+        </RadzenCheckBoxList>
+      }
+      else if (selectedSessionId != null)
+      {
+        <p style="color: #888888; font-style: italic">Aucune rubrique dans cette session.</p>
+      }
+    </div>
+  </div>
+  <div style="margin-top: 15px; text-align: right">
+    <RadzenButton ButtonStyle="ButtonStyle.Primary" Disabled="@(!canImport)" Icon="import_export" Text="Importer" Click="@OnImport">
+    </RadzenButton>
+    <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" Text="Annuler" Click="@OnCancel">
+    </RadzenButton>
+  </div>
+</div>
+
+@code {
+    IEnumerable<Session> sessions;
+    int? selectedSessionId;
+    IEnumerable<Rubrique> rubriques;
+    IEnumerable<int> selectedIds = new List<int>();
+    bool loading = false;
+
+    bool canImport => rubriques?.Any() == true && selectedIds?.Any() == true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        int? activeSessionId = Globals.ActiveSession?.Id;
+        var allSessions = await DMdel.GetSessions();
+        sessions = allSessions.Where(s => s.Id != activeSessionId).OrderByDescending(s => s.DateDebut).ToList();
+    }
+
+    async Task SessionChanged(object args)
+    {
+        selectedSessionId = (int?)args;
+        rubriques = null;
+        selectedIds = new List<int>();
+
+        if (args == null) return;
+
+        loading = true;
+        try
+        {
+            var result = await DMdel.GetRubriques(new Query { Filter = $@"r=>r.Sessionid == {args}" });
+            rubriques = result.ToList();
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    async Task OnImport()
+    {
+        if (selectedSessionId == null || Globals.ActiveSession == null || selectedIds == null || !selectedIds.Any())
+        {
+            return;
+        }
+
+        int copied = await DMdel.CopyRubriques(selectedSessionId.Value, selectedIds.ToList(), Globals.ActiveSession.Id);
+        int skipped = selectedIds.Count() - copied;
+
+        NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Success, Summary = "Import terminé", Detail = $"{copied} rubrique(s) importée(s).{(skipped > 0 ? $" {skipped} ignorée(s) car déjà présentes." : "")}" });
+        DialogService.Close(true);
+    }
+
+    void OnCancel()
+    {
+        DialogService.Close(false);
+    }
+}

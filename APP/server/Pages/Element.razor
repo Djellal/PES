@@ -18,6 +18,8 @@
         </RadzenHeading>
         <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Ajouter" Click="@Button0Click">
         </RadzenButton>
+        <RadzenButton Icon="import_export" style="margin-bottom: 10px; margin-left: 5px" Text="Importer d'une session précédente" Click="@ImportButtonClick">
+        </RadzenButton>
         <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getElementsResult" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Element" PageSize="20" Render="@Grid0Render" RowDoubleClick="@Grid0RowDoubleClick" RowSelect="@Grid0RowSelect">
           <Columns>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Element" FilterProperty="Rubrique.NomRubrique" GroupProperty="Rubrique.NomRubrique" Property="Rubid" SortProperty="Rubrique.NomRubrique" Title="Rubrique">

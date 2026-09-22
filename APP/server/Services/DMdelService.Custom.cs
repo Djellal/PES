@@ -197,6 +197,94 @@ namespace Pes
         }
 
 
+        public async System.Threading.Tasks.Task<int> CopyRubriques(int sourceSessionId, List<int> rubriqueIds, int targetSessionId)
+        {
+            int copied = 0;
+
+            var sourceRubriques = await Context.Rubriques
+                .Include(r => r.Elements).ThenInclude(e => e.Criteres)
+                .Where(r => r.Sessionid == sourceSessionId && rubriqueIds.Contains(r.Id))
+                .ToListAsync();
+
+            foreach (var srcRubrique in sourceRubriques)
+            {
+                bool rubriqueExists = await Context.Rubriques.AnyAsync(r => r.Sessionid == targetSessionId && r.NomRubrique == srcRubrique.NomRubrique);
+                if (rubriqueExists) continue;
+
+                var newRubrique = new Rubrique { NomRubrique = srcRubrique.NomRubrique, Coeff = srcRubrique.Coeff, Sessionid = targetSessionId };
+                Context.Rubriques.Add(newRubrique);
+                await Context.SaveChangesAsync();
+
+                if (srcRubrique.Elements == null) continue;
+
+                foreach (var srcElement in srcRubrique.Elements)
+                {
+                    var newElement = new Pes.Models.DMdel.Element { NomElement = srcElement.NomElement, Rubid = newRubrique.Id, Sessionid = targetSessionId };
+                    Context.Elements.Add(newElement);
+                    await Context.SaveChangesAsync();
+
+                    if (srcElement.Criteres == null) continue;
+
+                    foreach (var srcCritere in srcElement.Criteres)
+                    {
+                        Context.Criteres.Add(new Critere { NomCritere = srcCritere.NomCritere, Elementid = newElement.Id, Sessionid = targetSessionId });
+                    }
+                }
+
+                await Context.SaveChangesAsync();
+                copied++;
+            }
+
+            return copied;
+        }
+
+        public async System.Threading.Tasks.Task<int> CopyElements(int sourceSessionId, List<int> elementIds, int targetSessionId)
+        {
+            int copied = 0;
+
+            var sourceElements = await Context.Elements
+                .Include(e => e.Rubrique)
+                .Include(e => e.Criteres)
+                .Where(e => e.Sessionid == sourceSessionId && elementIds.Contains(e.Id))
+                .ToListAsync();
+
+            foreach (var srcElement in sourceElements)
+            {
+                Rubrique targetRubrique = null;
+                if (srcElement.Rubrique != null)
+                {
+                    targetRubrique = await Context.Rubriques.FirstOrDefaultAsync(r => r.Sessionid == targetSessionId && r.NomRubrique == srcElement.Rubrique.NomRubrique);
+                    if (targetRubrique == null)
+                    {
+                        targetRubrique = new Rubrique { NomRubrique = srcElement.Rubrique.NomRubrique, Coeff = srcElement.Rubrique.Coeff, Sessionid = targetSessionId };
+                        Context.Rubriques.Add(targetRubrique);
+                        await Context.SaveChangesAsync();
+                    }
+                }
+
+                bool elementExists = await Context.Elements.AnyAsync(e => e.Sessionid == targetSessionId && e.NomElement == srcElement.NomElement
+                    && (srcElement.Rubrique == null || e.Rubid == targetRubrique.Id));
+                if (elementExists) continue;
+
+                var newElement = new Pes.Models.DMdel.Element { NomElement = srcElement.NomElement, Rubid = targetRubrique?.Id, Sessionid = targetSessionId };
+                Context.Elements.Add(newElement);
+                await Context.SaveChangesAsync();
+
+                if (srcElement.Criteres != null)
+                {
+                    foreach (var srcCritere in srcElement.Criteres)
+                    {
+                        Context.Criteres.Add(new Critere { NomCritere = srcCritere.NomCritere, Elementid = newElement.Id, Sessionid = targetSessionId });
+                    }
+                }
+
+                await Context.SaveChangesAsync();
+                copied++;
+            }
+
+            return copied;
+        }
+
         public async System.Threading.Tasks.Task SetRefAttestation(List<Stagiaire> lst, Session session)
         {
             if (session == null) return ;
