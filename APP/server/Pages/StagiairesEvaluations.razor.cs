@@ -318,5 +318,13 @@ namespace Pes.Pages
             }
 
         }
+
+        protected async System.Threading.Tasks.Task DetailsButtonClick(Pes.Models.DMdel.Stagiaire data)
+        {
+            await DialogService.OpenAsync<StagiaireEvaluationsDetail>(
+                $"Détails évaluations",
+                new Dictionary<string, object>() { { "Id", data.Id } },
+                new DialogOptions() { Width = "1300px", CloseDialogOnOverlayClick = true, Resizable = true, Draggable = true });
+        }
     }
 }

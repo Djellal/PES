@@ -109,8 +109,16 @@
               <Template Context="pesModelsDMdelStagiaire">
                 <div class="row">
                   <div class="col-md-12">
-                    <RadzenButton Disabled="@(pesModelsDMdelStagiaire.NoteCC<=0)" Icon="edit" Size="ButtonSize.Medium" style="margin-right: 5px; width: 100%" Text="Evaluer" Click="@((args) =>EditButtonClick(args, pesModelsDMdelStagiaire))">
-                    </RadzenButton>
+                    @if (Security.IsInRole(Constants.admin))
+                    {
+                      <RadzenButton Icon="visibility" Size="ButtonSize.Medium" style="margin-right: 5px; width: 100%" Text="Détails" Click="@((args) =>DetailsButtonClick(pesModelsDMdelStagiaire))">
+                      </RadzenButton>
+                    }
+                    else
+                    {
+                      <RadzenButton Disabled="@(pesModelsDMdelStagiaire.NoteCC<=0)" Icon="edit" Size="ButtonSize.Medium" style="margin-right: 5px; width: 100%" Text="Evaluer" Click="@((args) =>EditButtonClick(args, pesModelsDMdelStagiaire))">
+                      </RadzenButton>
+                    }
                   </div>
                 </div>
               </Template>
