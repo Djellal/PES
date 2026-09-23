@@ -17,13 +17,25 @@
         <RadzenHeading Size="H2" style="background-color: rgb(0, 120, 212); border-radius: 5px; color: #e6ecef; font-family: times new roman,times,serif; padding-bottom: 4px; padding-top: 2px; text-align: center" Text="Facultés & Départements">
         </RadzenHeading>
       </div>
-      <div class="col-md-12 align-items-center d-flex justify-content-between">
-        <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
-        </RadzenButton>
-        <RadzenDropDown AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 404px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Name="Dropdown0" Change="@Dropdown0Change">
-        </RadzenDropDown>
-      </div>
     </div>
+    <RadzenCard style="margin-bottom: 16px; margin-left: 0; margin-right: 0; overflow: visible">
+      <ChildContent>
+        <div class="align-items-center d-flex justify-content-between flex-wrap" style="gap: 10px">
+          <div class="align-items-center d-flex flex-wrap" style="gap: 10px">
+            <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
+            </RadzenButton>
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer depuis Excel" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))" Complete="@Upload0Complete" Error="@Upload0Error">
+            </RadzenUpload>
+            <RadzenLink Icon="link" Path="docs/facultes-departements.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
+            </RadzenLink>
+            <RadzenBadge BadgeStyle="BadgeStyle.Light" Text="@($"Facultés : {getFacultesResult?.Count().ToString()}")">
+            </RadzenBadge>
+          </div>
+          <RadzenDropDown AllowClear="true" AllowFiltering="true" Data="@getEtablissementsResult" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Placeholder="Filtrer par établissement" style="width: 404px" TextProperty="NomEtablissement" @bind-Value="@SelectedEtab" ValueProperty="Id" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Name="Dropdown0" Change="@Dropdown0Change">
+          </RadzenDropDown>
+        </div>
+      </ChildContent>
+    </RadzenCard>
     <div class="row">
       <div class="col-md-12">
         <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getFacultesResult" ExpandMode="DataGridExpandMode.Single" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Faculte" PageSize="20" RowExpand="@Grid0RowExpand" RowSelect="@Grid0RowSelect">
@@ -37,32 +49,47 @@
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Pes.Models.DMdel.Faculte" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
               <Template Context="pesModelsDMdelFaculte">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelFaculte))" @onclick:stopPropagation="true">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Tooltip="Modifier" Click="@((args) =>Grid0RowSelect(pesModelsDMdelFaculte))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Pes.Models.DMdel.Faculte" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="pesModelsDMdelFaculte">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Tooltip="Supprimer" Click="@((args) =>GridDeleteButtonClick(args, pesModelsDMdelFaculte))" @onclick:stopPropagation="true">
                 </RadzenButton>
               </Template>
             </RadzenDataGridColumn>
           </Columns>
           <Template Context="pesModelsDMdelFaculte">
-            <div class="row">
-              <div class="col-md-12" style="background-color: #e6ecef">
-                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle_outline"  Text="Ajouter" Click="@((args) =>DepartementAddButtonClick(args, pesModelsDMdelFaculte))">
+            <div class="p-3" style="background-color: #f3f6f8">
+              <div class="align-items-center d-flex justify-content-between mb-2 flex-wrap" style="gap: 10px">
+                <strong style="color: #0078d4">Départements de @pesModelsDMdelFaculte.NomFaculte (@(pesModelsDMdelFaculte.Departements?.Count().ToString()) )</strong>
+                <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle_outline"  Text="Ajouter un département" Click="@((args) =>DepartementAddButtonClick(args, pesModelsDMdelFaculte))">
                 </RadzenButton>
-                <RadzenDataGrid @ref="grid1" AllowFiltering="false" AllowPaging="true" AllowSorting="true" Data="@(pesModelsDMdelFaculte.Departements)" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Departement" PageSize="20" RowSelect="@((args) =>Grid1RowSelect(args, pesModelsDMdelFaculte))">
-                  <Columns>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Property="NomDepartement" Title="Nom de Département">
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
-                      <Template Context="pesModelsDMdelDepartement">
-                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>DepartementDeleteButtonClick(args, pesModelsDMdelDepartement))" @onclick:stopPropagation="true">
-                        </RadzenButton>
-                      </Template>
-                    </RadzenDataGridColumn>
-                  </Columns>
-                </RadzenDataGrid>
               </div>
+              <RadzenDataGrid @ref="grid1" AllowFiltering="false" AllowPaging="true" AllowSorting="true" Data="@(pesModelsDMdelFaculte.Departements)" FilterMode="Radzen.FilterMode.Simple" TItem="Pes.Models.DMdel.Departement" PageSize="20" RowSelect="@((args) =>Grid1RowSelect(args, pesModelsDMdelFaculte))">
+                <Columns>
+                  <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Property="NomDepartement" Title="Nom de Département">
+                  </RadzenDataGridColumn>
+                  <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                    <Template Context="pesModelsDMdelDepartement">
+                      <RadzenButton Icon="edit" Size="ButtonSize.Small" Tooltip="Modifier" Click="@((args) =>Grid1RowSelect(pesModelsDMdelDepartement, pesModelsDMdelFaculte))" @onclick:stopPropagation="true">
+                      </RadzenButton>
+                    </Template>
+                  </RadzenDataGridColumn>
+                  <RadzenDataGridColumn TItem="Pes.Models.DMdel.Departement" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                    <Template Context="pesModelsDMdelDepartement">
+                      <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Tooltip="Supprimer" Click="@((args) =>DepartementDeleteButtonClick(args, pesModelsDMdelDepartement))" @onclick:stopPropagation="true">
+                      </RadzenButton>
+                    </Template>
+                  </RadzenDataGridColumn>
+                </Columns>
+              </RadzenDataGrid>
             </div>
           </Template>
         </RadzenDataGrid>
+        <RadzenButton ButtonStyle="ButtonStyle.Secondary" Icon="school" style="width: 100%" Text="@("Nbr de facultés " + getFacultesResult?.Count().ToString())">
+        </RadzenButton>
       </div>
     </div>
   </ChildContent>
