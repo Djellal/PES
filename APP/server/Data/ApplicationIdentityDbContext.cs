@@ -27,5 +27,11 @@ namespace Pes.Data
             this.OnModelBuilding(builder);
         }
 
+        public DbSet<Pes.Models.AuditLog> AuditLogs
+        {
+          get;
+          set;
+        }
+
     }
 }

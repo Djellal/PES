@@ -19,13 +19,15 @@ namespace Pes
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IWebHostEnvironment env;
+        private readonly AuditService audit;
 
-        public AccountController(IWebHostEnvironment env, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(IWebHostEnvironment env, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AuditService audit)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.env = env;
+            this.audit = audit;
         }
 
         private IActionResult RedirectWithError(string error, string redirectUrl)
@@ -54,6 +56,8 @@ namespace Pes
                 roleManager.Roles.ToList().ForEach(r => claims.Add(new Claim(ClaimTypes.Role, r.Name)));
                 await signInManager.SignInWithClaimsAsync(new ApplicationUser { UserName = userName, Email = userName }, isPersistent: false, claims);
 
+                await audit.LogAsync(AuditActions.Login, "Utilisateur", userName, $"Connexion de {userName} (dev)", new { userName, redirectUrl }, userName: userName);
+
                 return Redirect($"~/{redirectUrl}");
             }
 
@@ -64,8 +68,12 @@ namespace Pes
 
                 if (result.Succeeded)
                 {
+                    await audit.LogAsync(AuditActions.Login, "Utilisateur", userName, $"Connexion de {userName}", new { userName, redirectUrl }, userName: userName);
+
                     return Redirect($"~/{redirectUrl}");
                 }
+
+                await audit.LogAsync(AuditActions.LoginFailed, "Utilisateur", userName, $"Échec de connexion de {userName}", new { userName, redirectUrl }, userName: userName);
             }
 
             return RedirectWithError("Invalid user or password", redirectUrl);
@@ -87,10 +95,15 @@ namespace Pes
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, isPersistent: false);
+
+                await audit.LogAsync(AuditActions.Register, "Utilisateur", user.Id, $"Inscription de {userName}", new { userName }, userName: userName);
+
                 return Redirect("~/");
             }
 
             var message = string.Join(", ", result.Errors.Select(error => error.Description));
+
+            await audit.LogAsync(AuditActions.Register, "Utilisateur", userName, $"Échec d'inscription de {userName} : {message}", new { userName, error = message }, userName: userName);
 
             return Redirect($"~/Login?error={message}");
         }
@@ -114,16 +127,24 @@ namespace Pes
             {
                 await signInManager.SignInAsync(user, isPersistent: true);
 
+                await audit.LogAsync(AuditActions.PasswordChange, "Utilisateur", id, $"Changement de mot de passe de {user.Email}", new { user.Email });
+
                 return Redirect("~/");
             }
 
             var message = string.Join(", ", result.Errors.Select(error => error.Description));
+
+            await audit.LogAsync(AuditActions.PasswordChange, "Utilisateur", id, $"Échec de changement de mot de passe de {user.Email} : {message}", new { user.Email, error = message });
 
             return Redirect($"~/Profile?error={message}");
         }
 
         public async Task<IActionResult> Logout()
         {
+            var userName = User.Identity?.Name;
+
+            await audit.LogAsync(AuditActions.Logout, "Utilisateur", userName, $"Déconnexion de {userName}", new { userName }, userName: userName);
+
             await signInManager.SignOutAsync();
 
             return Redirect("~/");

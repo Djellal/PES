@@ -48,6 +48,10 @@ namespace Pes
 
             services.AddScoped<EmailSender>();
             services.AddScoped<DocumentService>();
+
+            services.AddScoped<AuditUserContext>();
+            services.AddScoped<AuditInterceptor>();
+            services.AddScoped<AuditService>();
         }
 
         partial void OnConfigure(IApplicationBuilder app, IWebHostEnvironment env)

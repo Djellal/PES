@@ -58,9 +58,10 @@ namespace Pes
             services.AddHttpClient();
             services.AddAuthentication();
             services.AddAuthorization();
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            services.AddDbContext<ApplicationIdentityDbContext>((serviceProvider, options) =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DMdelConnection"));
+                options.AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>());
             }, ServiceLifetime.Transient);
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -71,9 +72,10 @@ namespace Pes
             services.AddScoped<SecurityService>();
             services.AddScoped<DMdelService>();
 
-            services.AddDbContext<Pes.Data.DMdelContext>(options =>
+            services.AddDbContext<Pes.Data.DMdelContext>((serviceProvider, options) =>
             {
               options.UseNpgsql(Configuration.GetConnectionString("DMdelConnection"));
+              options.AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>());
             }, ServiceLifetime.Transient);
 
             services.AddControllersWithViews();

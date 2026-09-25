@@ -66,6 +66,11 @@
                                             </RadzenMenuItem>
                                             <RadzenMenuItem Icon="linear_scale" Path="echelle" Text="Échelles" Visible="@(Security.IsInRole(Constants.admin))">
                                             </RadzenMenuItem>
+
+                                            <RadzenMenuItem Class="pes-menu-section" Disabled="true" Text="Sécurité">
+                                            </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="history" Path="audit-logs" Text="Journal d'audit" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
                                         </ChildContent>
                                     </RadzenMenuItem>
 

@@ -28,6 +28,7 @@ namespace Pes
         private readonly IWebHostEnvironment env;
         private readonly NavigationManager uriHelper;
         private readonly GlobalsService globals;
+        private readonly AuditService audit;
 
         public SecurityService(ApplicationIdentityDbContext context,
             IWebHostEnvironment env,
@@ -35,7 +36,8 @@ namespace Pes
             RoleManager<IdentityRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             NavigationManager uriHelper,
-            GlobalsService globals)
+            GlobalsService globals,
+            AuditService audit)
         {
             this.context = context;
             this.userManager = userManager;
@@ -44,6 +46,7 @@ namespace Pes
             this.env = env;
             this.uriHelper = uriHelper;
             this.globals = globals;
+            this.audit = audit;
         }
 
         public ApplicationIdentityDbContext context { get; set; }
@@ -157,6 +160,8 @@ namespace Pes
 
             EnsureSucceeded(result);
 
+            await audit.LogAsync(AuditActions.RoleCreate, "Rôle", role.Id, $"Rôle créé : {role.Name}", new { role.Name });
+
             return role;
         }
 
@@ -168,6 +173,8 @@ namespace Pes
 
             context.Roles.Remove(item);
             context.SaveChanges();
+
+            await audit.LogAsync(AuditActions.RoleDelete, "Rôle", id, $"Rôle supprimé : {item.Name}", new { item.Name });
 
             return item;
         }
@@ -199,6 +206,7 @@ namespace Pes
 
             user.RoleNames = roles;
 
+            await audit.LogAsync(AuditActions.UserCreate, "Utilisateur", user.Id, $"Utilisateur créé : {user.Email}", new { user.Email, Roles = roles });
 
             return user;
         }
@@ -215,6 +223,8 @@ namespace Pes
 
             context.Users.Remove(item);
             context.SaveChanges();
+
+            await audit.LogAsync(AuditActions.UserDelete, "Utilisateur", id, $"Utilisateur supprimé : {item.Email}", new { item.Email });
 
             return item;
         }
@@ -261,6 +271,8 @@ namespace Pes
 
                 EnsureSucceeded(result);
             }
+
+            await audit.LogAsync(AuditActions.UserUpdate, "Utilisateur", id, $"Utilisateur modifié : {user.Email}", new { user.Email, Roles = roles });
 
             return user;
         }
