@@ -213,6 +213,8 @@ namespace Pes.Pages
 
             var dMdelGetFacultesResult = await DMdel.GetFacultes();
             getFacultesResult = dMdelGetFacultesResult;
+
+            await ApplyRestrictions();
         }
 
         protected async System.Threading.Tasks.Task Form0Submit(ApplicationUser args)

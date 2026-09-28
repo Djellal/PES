@@ -66,7 +66,7 @@ namespace Pes.Pages
             }
             if (Security.IsInRole(Constants.coordinateur))
             {
-               roles = roles.Where(r=> r.Name != Constants.coordinateur && r.Name != Constants.admin);
+               roles = roles.Where(r=> r.Name != Constants.coordinateur && r.Name != Constants.admin && r.Name != Constants.admin_regional).ToList();
                 getEtablissementsResult = getEtablissementsResult.Where(e => e.Id == Security.User.Etabid);
 
                 user.Etabid = Security.User.Etabid;

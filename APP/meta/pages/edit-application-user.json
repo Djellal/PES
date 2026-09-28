@@ -677,6 +677,14 @@
           }
         ],
         "type": "invoke"
+      },
+      {
+        "name": "ApplyRestrictions",
+        "schema": {
+          "$ref": "#/definitions/Task",
+          "dotnetType": "System.Threading.Tasks.Task"
+        },
+        "type": "invoke-method"
       }
     ]
   },
