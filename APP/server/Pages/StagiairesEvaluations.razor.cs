@@ -48,7 +48,7 @@ namespace Pes.Pages
                     return;
                 }
 
-                if (Security.IsInRole(Constants.coordinateur, Constants.president_jury, Constants.membre_jury, Constants.expert))
+                if (Security.IsInRole(Constants.coordinateur,Constants.vice_recteur, Constants.president_jury, Constants.membre_jury, Constants.expert))
                 {
                     SelectedEtab = Security.User.Etabid;
                     var res = await DMdel.GetStagiaires(new Query() { Filter = $@"s=>s.Etabid == {Security.User.Etabid} && s.Sessionid == {Globals.ActiveSession?.Id}", Expand = "Etablissement" });

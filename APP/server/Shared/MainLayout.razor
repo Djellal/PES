@@ -38,13 +38,13 @@
                                     <RadzenMenuItem Icon="home" Path="accueil" Text="Accueil" Visible="@Security.IsAuthenticated()">
                                     </RadzenMenuItem>
 
-                                    <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                    <RadzenMenuItem Icon="assignment_turned_in" Path="stagiaires-evaluations" Text="Évaluation" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "vice_recteur", "expert", "membre_jury", "president_jury"})">
                                     </RadzenMenuItem>
 
-                                    <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                    <RadzenMenuItem Icon="leaderboard" Path="rang-etabs" Text="Classement" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))">
                                     </RadzenMenuItem>
 
-                                    <RadzenMenuItem Icon="insights" Path="statistiques" Text="Statistiques" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "expert", "membre_jury", "president_jury"})">
+                                    <RadzenMenuItem Icon="insights" Path="statistiques" Text="Statistiques" Visible="@Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "vice_recteur", "expert", "membre_jury", "president_jury"})">
                                     </RadzenMenuItem>
 
                                     <RadzenMenuItem Icon="tune" Text="Paramétrage" Visible="@(Security.IsInRole(Constants.admin))">
@@ -74,13 +74,13 @@
                                         </ChildContent>
                                     </RadzenMenuItem>
 
-                                    <RadzenMenuItem Icon="admin_panel_settings" Text="Gestion" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                    <RadzenMenuItem Icon="admin_panel_settings" Text="Gestion" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))">
                                         <ChildContent>
-                                            <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            <RadzenMenuItem Icon="school" Path="stagiairelist" Text="Stagiaires" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))">
                                             </RadzenMenuItem>
-                                            <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            <RadzenMenuItem Icon="domain" Path="facultes" Text="Facultés & Départements" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))">
                                             </RadzenMenuItem>
-                                            <RadzenMenuItem Icon="manage_accounts" Path="application-users" Text="Utilisateurs" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))">
+                                            <RadzenMenuItem Icon="manage_accounts" Path="application-users" Text="Utilisateurs" Visible="@(Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))">
                                             </RadzenMenuItem>
                                         </ChildContent>
                                     </RadzenMenuItem>

@@ -13,7 +13,7 @@ namespace Pes.Pages
         {
             
 
-            if (Security.IsInRole(new String[] { Constants.coordinateur }))
+            if (Security.IsInRole(new String[] { Constants.coordinateur, Constants.vice_recteur }))
             {
                 
                 getEtablissementsForEtabidResult = await DMdel.GetEtablissements(new Query() { Filter = $@"f=>f.Id == {Security.User.Etabid}" });

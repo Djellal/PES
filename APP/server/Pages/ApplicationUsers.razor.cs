@@ -45,7 +45,7 @@ namespace Pes.Pages
                         users = filtered;
                     }
                 }
-                else if (Security.IsInRole(new string[] { Constants.coordinateur }))
+                else if (Security.IsInRole(new string[] { Constants.coordinateur, Constants.vice_recteur }))
                 {
                     users = (await Security.GetUsersOfEtab(Security.User.Etabid, SelectedRole)).ToList();
                 }

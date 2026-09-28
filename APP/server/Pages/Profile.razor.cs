@@ -33,6 +33,7 @@ namespace Pes.Pages
             if (role == Constants.admin) return BadgeStyle.Danger;
             if (role == Constants.admin_regional) return BadgeStyle.Warning;
             if (role == Constants.coordinateur) return BadgeStyle.Info;
+            if (role == Constants.vice_recteur) return BadgeStyle.Light;
             if (role == Constants.president_jury) return BadgeStyle.Primary;
             if (role == Constants.membre_jury) return BadgeStyle.Secondary;
             if (role == Constants.expert) return BadgeStyle.Success;

@@ -20,6 +20,7 @@ namespace Pes.Layouts
             if (!roles.Any(r => r.Name == Constants.admin)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.admin));
             if (!roles.Any(r => r.Name == Constants.admin_regional)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.admin_regional));
             if (!roles.Any(r => r.Name == Constants.coordinateur)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.coordinateur));
+            if (!roles.Any(r => r.Name == Constants.vice_recteur)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.vice_recteur));
             if (!roles.Any(r => r.Name == Constants.president_jury)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.president_jury));
             if (!roles.Any(r => r.Name == Constants.membre_jury)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.membre_jury));
            // if (!roles.Any(r => r.Name == Constants.expert)) await Security.CreateRole(new Microsoft.AspNetCore.Identity.IdentityRole(Constants.expert));

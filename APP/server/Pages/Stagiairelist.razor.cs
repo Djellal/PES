@@ -35,7 +35,7 @@ namespace Pes.Pages
             {
 
 
-                if (Security.IsInRole(new String[] { Constants.coordinateur }))
+                if (Security.IsInRole(new String[] { Constants.coordinateur, Constants.vice_recteur }))
                 {
                     getEtablissementsResult = await DMdel.GetEtablissements(new Query() { Filter = $@"s=>s.Id == {Security.User.Etabid}" });
                     etabid = Security.User.Etabid;
@@ -108,7 +108,7 @@ namespace Pes.Pages
                 s.URLcour = "";
                 s.CourEnligne = false;
 
-                if (Security.IsInRole(Constants.coordinateur))
+                if (Security.IsInRole(Constants.coordinateur, Constants.vice_recteur))
                 {
                     s.Etabid = Security.User.Etabid;
                 }

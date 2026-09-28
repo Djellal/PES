@@ -8,7 +8,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, expert")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, vice_recteur, expert")]
 <PageTitle>Edit Stagiaire</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
@@ -111,7 +111,7 @@
                       @(data.Echelle?.Id)
                       </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
+                    <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}))">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
                         <RadzenNumeric Format="N0" Max="5" Min="0" ShowUpDown="true" Step="0" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
                         </RadzenNumeric>

@@ -15,7 +15,7 @@ namespace Pes.Pages
 
         private int? GetImportEtabid()
         {
-            if (Security.IsInRole(Constants.coordinateur)) return Security.User.Etabid;
+            if (Security.IsInRole(Constants.coordinateur, Constants.vice_recteur)) return Security.User.Etabid;
             return SelectedEtab;
         }
 
@@ -45,7 +45,7 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task Upload0Error(UploadErrorEventArgs args)
         {
-            if (!Security.IsInRole(Constants.coordinateur) && SelectedEtab == null)
+            if (!Security.IsInRole(Constants.coordinateur, Constants.vice_recteur) && SelectedEtab == null)
             {
                 await DialogService.Alert("Il faut séléctionner l'établissement");
             }
@@ -79,7 +79,7 @@ namespace Pes.Pages
                     filter = $@"f=>{regionFilter}";
                 }
             }
-            else if (Security.IsInRole(Constants.coordinateur))
+            else if (Security.IsInRole(Constants.coordinateur, Constants.vice_recteur))
             {
                 filter = $@"f=>f.Etabid == {Security.User.Etabid}";
             }

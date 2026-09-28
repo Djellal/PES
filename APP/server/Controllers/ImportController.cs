@@ -37,7 +37,7 @@ namespace Pes
         }
 
         // Import facultes & departements from the Excel template
-        [Authorize(Roles = "Authenticated, admin, admin_regional, coordinateur")]
+        [Authorize(Roles = "Authenticated, admin, admin_regional, coordinateur, vice_recteur")]
         [HttpPost("import/facultes/{etabid}")]
         public IActionResult facultes(IFormFile file, int etabid)
         {
@@ -47,7 +47,7 @@ namespace Pes
                     return BadRequest("Aucun fichier n'est téléchargé.");
 
                 string userName = User?.Identity?.Name;
-                if (!string.IsNullOrEmpty(userName) && (User.IsInRole(Constants.coordinateur) || User.IsInRole(Constants.admin_regional)))
+                if (!string.IsNullOrEmpty(userName) && (User.IsInRole(Constants.coordinateur) || User.IsInRole(Constants.vice_recteur) || User.IsInRole(Constants.admin_regional)))
                 {
                     var user = identityContext.Users.FirstOrDefault(u => u.Email == userName || u.UserName == userName);
                     if (user == null || user.Etabid == null || user.Etabid != etabid)

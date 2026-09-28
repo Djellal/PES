@@ -8,7 +8,7 @@
 @using Microsoft.AspNetCore.Identity;
 @using Pes.Models
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur")]
+@attribute [Authorize(Roles="Authenticated, admin, admin_regional, coordinateur, vice_recteur")]
 <PageTitle>Facultes</PageTitle>
 <RadzenContent Container="main">
   <ChildContent>
@@ -24,9 +24,9 @@
           <div class="align-items-center d-flex flex-wrap" style="gap: 10px">
             <RadzenButton Icon="add_circle_outline"  Text="Ajouter" Click="@Button0Click">
             </RadzenButton>
-            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer depuis Excel" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))" Complete="@Upload0Complete" Error="@Upload0Error">
+            <RadzenUpload Accept="xlsx" Auto="true" ChooseText="Importer depuis Excel" Url="@uploadUrl" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}))" Complete="@Upload0Complete" Error="@Upload0Error">
             </RadzenUpload>
-            <RadzenLink Icon="link" Path="docs/facultes-departements.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur}))">
+            <RadzenLink Icon="link" Path="docs/facultes-departements.xlsx" style="font-size: 12px; font-weight: bold" Target="_blank" Text="Télécharger le modèle en Excel" Visible="@(Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}))">
             </RadzenLink>
             <RadzenBadge BadgeStyle="BadgeStyle.Light" Text="@($"Facultés : {getFacultesResult?.Count().ToString()}")">
             </RadzenBadge>

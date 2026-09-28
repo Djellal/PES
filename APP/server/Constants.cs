@@ -6,6 +6,7 @@ namespace Pes
         public static string admin = "admin";
         public static string admin_regional = "admin_regional";
         public static string coordinateur = "coordinateur";
+        public static string vice_recteur = "vice_recteur";
         public static string membre_jury = "membre_jury";
         public static string president_jury = "president_jury";
         public static string expert = "expert";

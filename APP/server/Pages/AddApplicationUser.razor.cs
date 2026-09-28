@@ -19,7 +19,7 @@ namespace Pes.Pages
                 if (user.RoleNames== null) return false;
 
 
-                    if ((user.RoleNames.Contains(Constants.coordinateur)|| user.RoleNames.Contains(Constants.membre_jury) || user.RoleNames.Contains(Constants.expert) || user.RoleNames.Contains(Constants.president_jury) || user.RoleNames.Contains(Constants.admin_regional)) 
+                    if ((user.RoleNames.Contains(Constants.coordinateur)|| user.RoleNames.Contains(Constants.membre_jury) || user.RoleNames.Contains(Constants.expert) || user.RoleNames.Contains(Constants.president_jury) || user.RoleNames.Contains(Constants.admin_regional) || user.RoleNames.Contains(Constants.vice_recteur)) 
                     
                     && Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional})) return true;
                     else return false;
@@ -66,11 +66,19 @@ namespace Pes.Pages
             }
             if (Security.IsInRole(Constants.coordinateur))
             {
-               roles = roles.Where(r=> r.Name != Constants.coordinateur && r.Name != Constants.admin && r.Name != Constants.admin_regional).ToList();
+               roles = roles.Where(r=> r.Name != Constants.coordinateur && r.Name != Constants.vice_recteur && r.Name != Constants.admin && r.Name != Constants.admin_regional).ToList();
                 getEtablissementsResult = getEtablissementsResult.Where(e => e.Id == Security.User.Etabid);
 
                 user.Etabid = Security.User.Etabid;
 
+            }
+
+            if (Security.IsInRole(Constants.vice_recteur))
+            {
+                roles = roles.Where(r => r.Name != Constants.vice_recteur && r.Name != Constants.admin && r.Name != Constants.admin_regional).ToList();
+                getEtablissementsResult = getEtablissementsResult.Where(e => e.Id == Security.User.Etabid);
+
+                user.Etabid = Security.User.Etabid;
             }
 
             if (Security.IsInRole(Constants.admin_regional))

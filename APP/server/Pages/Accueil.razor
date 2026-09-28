@@ -124,7 +124,7 @@
           <div class="row g-3">
             
             <!-- Evaluations (Jury, Expert, Coordinateur, Admin) -->
-            @if (Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "expert", "membre_jury", "president_jury"}))
+            @if (Security.IsInRole(new string[]{"Authenticated", "admin", "coordinateur", "vice_recteur", "expert", "membre_jury", "president_jury"}))
             {
               <div class="col-xl-3 col-md-6">
                 <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("stagiaires-evaluations"))">
@@ -148,7 +148,7 @@
             }
 
             <!-- Classement (Admin, Coordinateur) -->
-            @if (Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur}))
+            @if (Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur,Constants.vice_recteur}))
             {
               <div class="col-xl-3 col-md-6">
                 <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("rang-etabs"))">
