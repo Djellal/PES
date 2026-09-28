@@ -8,18 +8,42 @@ namespace Pes.Models.DMdel
   [Table("Echelles", Schema = "public")]
   public partial class Echelle
   {
-    public double Val
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int IdScale
     {
       get;
       set;
     }
-    [Key]
     public string Id
     {
       get;
       set;
     }
+    public double Val
+    {
+      get;
+      set;
+    }
+    public int? Sessionid
+    {
+      get;
+      set;
+    }
+    [NotMapped]
+    public string Libelle
+    {
+      get
+      {
+        return Id;
+      }
+      set
+      {
+        Id = value;
+      }
+    }
 
+    public Session Session { get; set; }
     public ICollection<Evaluation> Evaluations { get; set; }
   }
 }

@@ -174,8 +174,10 @@ namespace Pes.Pages
             var dMdelGetEtablissementsResult = await DMdel.GetEtablissements();
             getEtablissementsForEtabidResult = dMdelGetEtablissementsResult;
 
-            var dMdelGetEchellesResult = await DMdel.GetEchelles(new Query() { OrderBy = $"c=>c.Val" });
+            var dMdelGetEchellesResult = await DMdel.GetEchelles(new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}", OrderBy = $"c=>c.Val" });
             getEchellesResult = dMdelGetEchellesResult;
+
+            EchelleMax = DMdelService.GetEchelleMax(DMdel.DMContext, Globals.ActiveSession?.Id ?? 0);
 
             var dMdelGetCriteresResult = await DMdel.GetCriteres(new Query() { Filter = $@"s=>s.Sessionid == {Globals.ActiveSession?.Id}", OrderBy = $"c=>c.NomCritere" });
             getCriteresResult = dMdelGetCriteresResult;

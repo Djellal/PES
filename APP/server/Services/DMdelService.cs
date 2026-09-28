@@ -1363,10 +1363,14 @@ namespace Pes
 
         public async Task<Models.DMdel.Echelle> DeleteEchelle(string id)
         {
-            var itemToDelete = Context.Echelles
-                              .Where(i => i.Id == id)
-                              .Include(i => i.Evaluations)
-                              .FirstOrDefault();
+            // L'echelle est identifiee par IdScale : le libelle est repete dans chaque session.
+            int idScale;
+            var query = Context.Echelles
+                              .Include(i => i.Evaluations);
+
+            var itemToDelete = int.TryParse(id, out idScale)
+                ? query.Where(i => i.IdScale == idScale).FirstOrDefault()
+                : query.Where(i => i.Id == id).FirstOrDefault();
 
             if (itemToDelete == null)
             {
@@ -1396,9 +1400,15 @@ namespace Pes
 
         public async Task<Models.DMdel.Echelle> GetEchelleById(string id)
         {
-            var items = Context.Echelles
-                              .AsNoTracking()
-                              .Where(i => i.Id == id);
+            // Id n'est plus unique : l'echelle est propriete d'une session et dupliquee par session.
+            // La cle de reference est IdScale ; le libelle reste accepte pour compatibilite.
+            var query = Context.Echelles
+                              .AsNoTracking();
+
+            int idScale;
+            var items = int.TryParse(id, out idScale)
+                ? query.Where(i => i.IdScale == idScale)
+                : query.Where(i => i.Id == id);
 
             var itemToReturn = items.FirstOrDefault();
 

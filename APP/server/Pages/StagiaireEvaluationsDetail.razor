@@ -89,8 +89,16 @@
                       <Template Context="data">
                         @if (data.EstSynthese)
                         {
-                          <RadzenBadge BadgeStyle="BadgeStyle.Info" IsPill="true" Text="@(data.NoteSynthese.ToString("F2") + " / 5")">
-                          </RadzenBadge>
+                          if (data.NoteSynthese.HasValue)
+                          {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Info" IsPill="true" Text="@(data.NoteSynthese.Value.ToString("F2") + " / " + EchelleMax.ToString("0.##"))">
+                            </RadzenBadge>
+                          }
+                          else
+                          {
+                            <RadzenBadge BadgeStyle="BadgeStyle.Light" IsPill="true" Text="Non évalué">
+                            </RadzenBadge>
+                          }
                         }
                         else
                         {

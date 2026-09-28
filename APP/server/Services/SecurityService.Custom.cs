@@ -15,7 +15,6 @@ namespace Pes
             var users =  await  userManager.GetUsersInRoleAsync(role);
             return await Task.FromResult(users);
         }
-
         public async Task<IEnumerable<ApplicationUser>> GetUsersInRoleAndEtab(string[] roles,int? etabid)
         {
             // roleManager
@@ -25,9 +24,10 @@ namespace Pes
             {
                 users.AddRange((await userManager.GetUsersInRoleAsync(r)).Where(u => u.Etabid == etabid).ToList());
             }
-                   
-            
-            return await Task.FromResult(users);
+
+            // Un membre portant plusieurs des roles demandes apparait une fois par role :
+            // sans ce Distinct ses evaluations sont comptees plusieurs fois dans les moyennes.
+            return await Task.FromResult(users.GroupBy(u => u.Id).Select(g => g.First()).ToList());
         }
 
 

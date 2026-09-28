@@ -70,6 +70,11 @@ namespace Pes.Data
               .HasOne(i => i.Echelle)
               .WithMany(i => i.Evaluations)
               .HasForeignKey(i => i.Echellid)
+              .HasPrincipalKey(i => i.IdScale);
+        builder.Entity<Pes.Models.DMdel.Echelle>()
+              .HasOne(i => i.Session)
+              .WithMany()
+              .HasForeignKey(i => i.Sessionid)
               .HasPrincipalKey(i => i.Id);
         builder.Entity<Pes.Models.DMdel.Faculte>()
               .HasOne(i => i.Etablissement)
@@ -114,7 +119,7 @@ namespace Pes.Data
 
         builder.Entity<Pes.Models.DMdel.Evaluation>()
               .Property(p => p.NoteSynthese)
-              .HasDefaultValueSql("0.0").ValueGeneratedNever();
+              .ValueGeneratedNever();
 
         builder.Entity<Pes.Models.DMdel.RangsEtab>()
               .Property(p => p.Moyenne)

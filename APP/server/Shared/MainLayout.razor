@@ -71,6 +71,8 @@
                                             </RadzenMenuItem>
                                             <RadzenMenuItem Icon="history" Path="audit-logs" Text="Journal d'audit" Visible="@(Security.IsInRole(Constants.admin))">
                                             </RadzenMenuItem>
+                                            <RadzenMenuItem Icon="published_with_changes" Path="reprise-notes" Text="Reprise des notes" Visible="@(Security.IsInRole(Constants.admin))">
+                                            </RadzenMenuItem>
                                         </ChildContent>
                                     </RadzenMenuItem>
 

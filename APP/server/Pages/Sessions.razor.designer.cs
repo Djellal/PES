@@ -154,6 +154,14 @@ namespace Pes.Pages
         protected async System.Threading.Tasks.Task Grid0RowCreate(dynamic args)
         {
             var dMdelCreateSessionResult = await DMdel.CreateSession(args);
+            try
+            {
+                await DMdel.CopyEchelleDefautPourSession((int)dMdelCreateSessionResult.Id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Echelle non copiee pour la session " + dMdelCreateSessionResult.Id + " : " + ex.Message);
+            }
             await grid0.Reload();
 
             await InvokeAsync(() => { StateHasChanged(); });

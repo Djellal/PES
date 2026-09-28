@@ -64,7 +64,7 @@
                   </div>
                   <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
                     <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; font-weight: 600; color: var(--rz-text-secondary-color, #64748b);">Eval. continue</RadzenText>
-                    <RadzenNumeric Format="P2" Max="1" Min="0" ReadOnly="@(!Security.IsInRole(new String[]{Constants.admin,Constants.admin_regional}))" Step="0.01" Style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: 700; width: 100%;" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)" Name="Numeric0">
+                    <RadzenNumeric Format="P2" Max="1" Min="0" Step="0.01" Style="background-color: rgba(93, 191, 116, 0.29); font-family: tahoma,geneva,sans-serif; font-weight: 700; width: 100%;" TextAlign="TextAlign.Center" Value="@(stagiaire.NoteCC)" Name="Numeric0">
                     </RadzenNumeric>
                   </div>
                   <div class="pes-eval-metric" style="flex: 1 1 180px; min-width: 180px;">
@@ -104,7 +104,7 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" FilterProperty="Echelle.Id" GroupProperty="Echelle.Id" Property="Echellid" SortProperty="Echelle.Id" Title="Echelle" Visible="@(Security.IsInRole(new string[]{Constants.expert,Constants.membre_jury,Constants.president_jury}))" Width="150px">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
-                        <RadzenDropDown Data="@getEchellesResult" style="display: block; width: 100%" TextProperty="Id" @bind-Value="@(pesModelsDMdelEvaluation.Echellid)" ValueProperty="Id" Name="Echellid">
+                        <RadzenDropDown AllowClear="true" Data="@getEchellesResult" style="display: block; width: 100%" TextProperty="Id" @bind-Value="@(pesModelsDMdelEvaluation.Echellid)" ValueProperty="IdScale" Name="Echellid">
                         </RadzenDropDown>
                       </EditTemplate>
                       <Template Context="data">
@@ -113,9 +113,12 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Property="NoteSynthese" Title="Note Synthese" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}))">
                       <EditTemplate Context="pesModelsDMdelEvaluation">
-                        <RadzenNumeric Format="N0" Max="5" Min="0" ShowUpDown="true" Step="0" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
+                        <RadzenNumeric Format="N0" Max="@((decimal)EchelleMax)" Min="0" ShowUpDown="true" Step="0.01" style="width: 100%" TextAlign="TextAlign.Center" @bind-Value="@(pesModelsDMdelEvaluation.NoteSynthese)" Name="Numeric2">
                         </RadzenNumeric>
                       </EditTemplate>
+                      <Template Context="pesModelsDMdelEvaluation">
+                        @(pesModelsDMdelEvaluation.NoteSynthese.HasValue ? pesModelsDMdelEvaluation.NoteSynthese.Value.ToString("N2") + " / " + EchelleMax.ToString("0.##") : "Non évalué")
+                      </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="Pes.Models.DMdel.Evaluation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Visible="@(Security.IsInRole(new string[]{Constants.membre_jury,Constants.president_jury,Constants.expert}))" Width="180px">
                       <Template Context="pesModelsDMdelEvaluation">
@@ -134,7 +137,7 @@
               </ChildContent>
             </RadzenCard>
             <div class="pes-eval-action-bar">
-              <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" Text="Imprimer Attestation" Visible="@(stagiaire.NoteFinale>50)">
+              <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" Text="Imprimer Attestation" Visible="@(stagiaire.Note>0 && stagiaire.NoteFinale>=0.5)">
               </RadzenButton>
               <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list_alt" Text="Détails évaluations" Click="@DetailbuttonClick">
               </RadzenButton>

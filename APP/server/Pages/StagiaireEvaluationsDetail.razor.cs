@@ -18,11 +18,16 @@ namespace Pes.Pages
 
         public Dictionary<string, string> MembresNames { get; private set; } = new Dictionary<string, string>();
 
+        /// <summary>Valeur maximale de l'echelle de la session, affichee a cote de la synthese.</summary>
+        public double EchelleMax { get; private set; }
+
         protected async System.Threading.Tasks.Task LoadEvals()
         {
             try
             {
                 if (stagiaire == null) return;
+
+                EchelleMax = DMdelService.GetEchelleMax(DMdel.DMContext, Globals.ActiveSession?.Id ?? 0);
 
                 Membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury, Constants.expert }, stagiaire.Etabid);
                 MembresNames = (Membresjury ?? Enumerable.Empty<ApplicationUser>())

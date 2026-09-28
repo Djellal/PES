@@ -102,7 +102,7 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
-            var dMdelGetEchellesResult = await DMdel.GetEchelles();
+            var dMdelGetEchellesResult = await DMdel.GetEchelles(new Query() { Filter = $"s=>s.Sessionid == {Globals.ActiveSession?.Id}", OrderBy = $"c=>c.Val" });
             getEchellesResult = dMdelGetEchellesResult;
         }
 
@@ -116,7 +116,7 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task Grid0RowSelect(Pes.Models.DMdel.Echelle args)
         {
-            var dialogResult = await DialogService.OpenAsync<EditEchelle>("Edit Echelle", new Dictionary<string, object>() { {"Id", args.Id} });
+            var dialogResult = await DialogService.OpenAsync<EditEchelle>("Edit Echelle", new Dictionary<string, object>() { {"Id", args.IdScale} });
             await grid0.Reload();
 
             await InvokeAsync(() => { StateHasChanged(); });
@@ -128,11 +128,12 @@ namespace Pes.Pages
             {
                 if (await DialogService.Confirm("Voulez-vous vraiment supprimer cette ligne ?") == true)
                 {
-                    var dMdelDeleteEchelleResult = await DMdel.DeleteEchelle($"{data.Id}");
-                    if (dMdelDeleteEchelleResult != null)
+                    if (!await DMdel.SupprimerEchelleSiLibre((int)data.IdScale))
                     {
-                        await grid0.Reload();
+                        NotificationService.Notify(new NotificationMessage(){ Severity = NotificationSeverity.Warning,Summary = "Suppression impossible",Detail = "Cette échelle est utilisée par des évaluations. Supprimez-la uniquement si elle n'a jamais servi." });
+                        return;
                     }
+                    await grid0.Reload();
                 }
             }
             catch (System.Exception dMdelDeleteEchelleException)

@@ -101,7 +101,7 @@ namespace Pes.Pages
         }
         protected async System.Threading.Tasks.Task Load()
         {
-            echelle = new Pes.Models.DMdel.Echelle(){};
+            echelle = new Pes.Models.DMdel.Echelle(){ Sessionid = Globals.ActiveSession?.Id };
         }
 
         protected async System.Threading.Tasks.Task Form0Submit(Pes.Models.DMdel.Echelle args)

@@ -24,7 +24,7 @@ namespace Pes.Models.DMdel
       set;
     }
     public Critere Critere { get; set; }
-    public double NoteSynthese
+    public double? NoteSynthese
     {
       get;
       set;
@@ -51,7 +51,7 @@ namespace Pes.Models.DMdel
       get;
       set;
     }
-    public string Echellid
+    public int? Echellid
     {
       get;
       set;

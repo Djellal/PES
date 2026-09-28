@@ -34,11 +34,11 @@ namespace DataModel.Models
 
 
         [ForeignKey("Echelle")]
-        public String? Echellid { get; set; }
+        public int? Echellid { get; set; }
         public Echelle? Echelle { get; set; }
 
 
-        public double NoteSynthese { get; set; } = 0;
+        public double? NoteSynthese { get; set; }
 
     }
 }

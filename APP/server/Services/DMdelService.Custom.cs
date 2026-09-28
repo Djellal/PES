@@ -52,12 +52,9 @@ namespace Pes
         }
         public async System.Threading.Tasks.Task ReintEvals(int StagId, int SessionId)
         {
-            var stagiaire = await GetStagiaireById(StagId);
+            var evals = Context.Evaluations.Where(ev => ev.Stagid == StagId).ToList();
 
-
-            var Evals = Context.Evaluations.Where(ev => ev.Stagid == StagId);
-
-            Context.Evaluations.RemoveRange(Evals);
+            Context.Evaluations.RemoveRange(evals);
 
             await  Context.SaveChangesAsync();
 
@@ -72,7 +69,8 @@ namespace Pes
 
             var criteres = Context.Criteres.Where(c=>c.Sessionid == SessionId).Include(ev => ev.Element).ThenInclude(e => e.Rubrique).OrderBy(c=>c.NomCritere).ToList(); //(await DMdel. GetCriteres()).ToList();
 
-            var membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.expert, Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid);
+            var membresjury = (await Security.GetUsersInRoleAndEtab(new string[] { Constants.expert, Constants.membre_jury, Constants.president_jury }, stagiaire.Etabid))?.ToList() ?? new List<ApplicationUser>();
+            membresjury = membresjury.GroupBy(m => m.Id).Select(g => g.First()).ToList();
 
 
             string NomElem, NomRubrique;
@@ -87,7 +85,8 @@ namespace Pes
                 NomElem = critr.Element?.NomElement;
                 NomRubrique = critr.Element?.Rubrique?.NomRubrique;
 
-                if (!Evals.Any(v => v.Criterid == critr.Id && v.EstSynthese))
+                if (!Evals.Any(v => v.Criterid == critr.Id && v.EstSynthese)
+                    && !evaluations.Any(v => v.Criterid == critr.Id && v.EstSynthese))
                 {
                     evaluations.Add(new Models.DMdel.Evaluation { Criterid = critr.Id, Stagid = StagId, MembreId = string.Empty, NomElement = NomElem, NomRubrique = NomRubrique, EstSynthese = true });
 
@@ -95,7 +94,8 @@ namespace Pes
 
                 foreach (var membre in membresjury)
                 {
-                    if (!Evals.Any(v => v.Criterid == critr.Id && v.MembreId == membre.Id && !v.EstSynthese))
+                    if (!Evals.Any(v => v.Criterid == critr.Id && v.MembreId == membre.Id && !v.EstSynthese)
+                        && !evaluations.Any(v => v.Criterid == critr.Id && v.MembreId == membre.Id && !v.EstSynthese))
                     {
                         evaluations.Add(new Models.DMdel.Evaluation { Criterid = critr.Id, Stagid = StagId, MembreId = membre.Id, NomElement = NomElem, NomRubrique = NomRubrique, EstSynthese = false });
                     }
@@ -114,6 +114,8 @@ namespace Pes
 
         protected async System.Threading.Tasks.Task CalculerMoyeneCritere(int stagiairId, int criterid, List<ApplicationUser> Membresjury)
         {
+            if (Membresjury == null) Membresjury = new List<ApplicationUser>();
+
             var AllEvals = Context.Evaluations.Include(ev => ev.Echelle).Where(ev => ev.Stagid == stagiairId && ev.Criterid == criterid);
             if (!AllEvals.Any()) return;
             double somme = 0;
@@ -133,57 +135,246 @@ namespace Pes
 
             if (synthese != null)
             {
-                synthese.NoteSynthese = somme / count;
+                // Aucun membre du jury n'a note ce critere -> NULL (« non evalue »), jamais NaN.
+                synthese.NoteSynthese = count == 0 ? (double?)null : somme / count;
                 await Context.SaveChangesAsync();
 
             }
 
         }
 
+        /// <summary>
+        /// Valeur maximale de l'echelle de la session. 0 si l'echelle est vide : la note vaut alors 0.
+        /// </summary>
+        public static double GetEchelleMax(DMdelContext context, int sessionId)
+        {
+            var max = context.Echelles
+                .Where(e => e.Sessionid == sessionId || (e.Sessionid == null && !context.Echelles.Any(x => x.Sessionid == sessionId)))
+                .Select(e => (double?)e.Val)
+                .Max();
+
+            return max ?? 0d;
+        }
+
+        /// <summary>
+        /// Moyenne des notes de jury pour un critere. null = aucun membre du jury n'a note
+        /// (criteres « non evalue »). Calcul pur, sans ecriture.
+        /// </summary>
+        private static double? MoyenneCritere(IEnumerable<Evaluation> allEvals, List<ApplicationUser> membresjury)
+        {
+            if (membresjury == null) membresjury = new List<ApplicationUser>();
+            var ids = membresjury.Select(m => m.Id).ToHashSet();
+
+            double somme = 0, count = 0;
+            foreach (var item in allEvals)
+            {
+                if (item.EstSynthese || item.Echelle == null) continue;
+                if (!ids.Contains(item.MembreId)) continue;
+                somme += item.Echelle.Val;
+                count++;
+            }
+
+            return count == 0 ? (double?)null : somme / count;
+        }
+
         public async System.Threading.Tasks.Task CalculerNote(int StagId, int SessionId)
         {
-           
-                var stagiaire = Context.Stagiaires.FirstOrDefault(s=>s.Id == StagId);
-                if (stagiaire == null) return;
+            await CalculerNoteInterne(StagId, SessionId, true);
+        }
 
-                var criteres = Context.Criteres.Where(r=>r.Sessionid == SessionId).ToList();
+        /// <summary>Note recalculee sans rien enregistrer (diagnostic de la page de reprise).</summary>
+        public async System.Threading.Tasks.Task<double> CalculerNoteSimulation(int StagId, int SessionId)
+        {
+            return await CalculerNoteInterne(StagId, SessionId, false);
+        }
 
-               var rubriques = Context.Rubriques.Where(r => r.Sessionid == SessionId).ToList();
+        /// <summary>
+        /// Calcul de la note d'un stagiaire, en deux niveaux (identique a EditStagiaire.razor.cs) :
+        ///   Moy_rubrique = somme des syntheses evaluables / (nb de criteres de la rubrique * echelle max)
+        ///   MG           = somme(coeff_rubrique * Moy_rubrique) / somme(coeff_rubrique)
+        /// Un critere sans aucune note de jury compte pour 0 au numerateur mais garde son poids au
+        /// denominateur : l'etudiant est penalise tant que le jury n'a pas tout saisi.
+        /// </summary>
+        private async System.Threading.Tasks.Task<double> CalculerNoteInterne(int StagId, int SessionId, bool enregistrer)
+        {
+            var stagiaire = Context.Stagiaires.FirstOrDefault(s => s.Id == StagId);
+            if (stagiaire == null) return 0;
 
+            var criteres = Context.Criteres.Where(r => r.Sessionid == SessionId).ToList();
 
+            var Membresjury = (await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury, Constants.expert }, stagiaire.Etabid))?.ToList() ?? new List<ApplicationUser>();
+            Membresjury = Membresjury.GroupBy(m => m.Id).Select(g => g.First()).ToList();
 
-                var Membresjury = (await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury, Constants.expert }, stagiaire.Etabid)).ToList();
+            var AllEvals = Context.Evaluations
+                .Include(ev => ev.Echelle)
+                .Where(ev => ev.Stagid == stagiaire.Id)
+                .ToList();
 
-                foreach ( var item in criteres)
+            // elementId -> rubriqueId, chargee explicitement : pas de lazy loading dans ce projet.
+            var rubIdParElement = await Context.Elements
+                .Where(el => el.Rubid != null)
+                .Select(el => new { el.Id, el.Rubid })
+                .ToListAsync();
+            var rubIdParElementDict = rubIdParElement.ToDictionary(x => x.Id, x => (int?)x.Rubid);
+            var rubIdParCritere = new Dictionary<int, int?>();
+            foreach (var c in criteres)
+            {
+                rubIdParCritere[c.Id] = c.Elementid.HasValue && rubIdParElementDict.TryGetValue(c.Elementid.Value, out var rid) ? rid : null;
+            }
+
+            // Synthese de chaque critere. En simulation le resultat reste dans un dictionnaire,
+            // aucune entite suivie n'est modifiee.
+            var syntheseParCritere = new Dictionary<int, double?>();
+            foreach (var item in criteres)
+            {
+                var synthese = AllEvals.FirstOrDefault(ev => ev.EstSynthese && ev.Criterid == item.Id);
+                if (synthese == null) continue;
+                double? valeur = MoyenneCritere(AllEvals.Where(ev => ev.Criterid == item.Id), Membresjury);
+                syntheseParCritere[item.Id] = valeur;
+                if (enregistrer) synthese.NoteSynthese = valeur;
+            }
+
+            var syntheses = criteres
+                .Where(c => syntheseParCritere.ContainsKey(c.Id))
+                .Select(c => new { c.Id, Valeur = syntheseParCritere[c.Id] })
+                .ToList();
+
+            var echelleMax = GetEchelleMax(Context, SessionId);
+
+            if (syntheses.Count == 0 || echelleMax <= 0)
+            {
+                if (enregistrer)
                 {
-                    await CalculerMoyeneCritere(stagiaire.Id, item.Id, Membresjury);
+                    stagiaire.Note = 0;
+                    stagiaire.NoteFinale = stagiaire.NoteCC / 2;
+                    await Context.SaveChangesAsync();
                 }
+                return 0;
+            }
 
-                var AllSyntheseEvals = Context.Evaluations.Include(ev => ev.Echelle).Include(ev => ev.Critere).Where(ev => ev.Stagid == stagiaire.Id && ev.EstSynthese).ToList();
-
-
-                if (AllSyntheseEvals.Count() == 0) { stagiaire.Note = 0; return; }
-
-                double s = 0, cnt = 0;
-                foreach (var item in AllSyntheseEvals)
+            // Niveau 1 : moyenne de chaque rubrique. Le denominateur compte TOUS les criteres
+            // de la rubrique, y compris ceux que le jury n'a pas notes.
+            // Un critere dont l'element n'est rattache a aucune rubrique est ignore (comme dans EditStagiaire).
+            var moyennesRubrique = syntheses
+                .Where(s => rubIdParCritere.TryGetValue(s.Id, out var r0) && r0.HasValue)
+                .GroupBy(s => rubIdParCritere[s.Id].Value)
+                .Select(g =>
                 {
-                    cnt++;
-                    if (!Double.IsNaN(item.NoteSynthese))
-                        s += item.NoteSynthese;
-                    else
-                        s += 0;
-                }
+                    var rubId = g.Key;
+                    var nbCriteres = criteres.Count(c => rubIdParCritere.TryGetValue(c.Id, out var r2) && r2.HasValue && r2.Value == rubId);
+                    var somme = g.Sum(s => s.Valeur ?? 0d);
+                    var poidsMax = nbCriteres * echelleMax;
+                    var coeff = Context.Rubriques.Where(r => r.Id == rubId).Select(r => (double?)r.Coeff).FirstOrDefault() ?? 0d;
+                    return new
+                    {
+                        Moyenne = poidsMax > 0 ? somme / poidsMax : 0d,
+                        Coeff = coeff
+                    };
+                })
+                .ToList();
 
-                if (stagiaire.CourEnligne != null)
-                    if ((bool)stagiaire.CourEnligne && cnt != 0)
-                        stagiaire.Note = s / (cnt * 5);
-                    else stagiaire.Note = 0;
+            double s = 0, cnt = 0;
+            foreach (var item in moyennesRubrique)
+            {
+                var coeff = item.Coeff;
+                if (coeff <= 0) coeff = 1; // coefficient nul : on neutralise plutot que de fausser la moyenne
+                s += coeff * item.Moyenne;
+                cnt += coeff;
+            }
 
-                stagiaire.NoteFinale = ((stagiaire.Note + stagiaire.NoteCC) / 2);
+            // Niveau 2 : moyenne ponderee de la session.
+            double mg = cnt > 0 ? s / cnt : 0;
 
+            // Un cours hors ligne n'a pas de note de jury : Note = 0, NoteFinale repose sur NoteCC.
+            double note = (stagiaire.CourEnligne == true) ? mg : 0;
+            double noteFinale = (note + stagiaire.NoteCC) / 2;
 
+            if (enregistrer)
+            {
+                stagiaire.Note = note;
+                stagiaire.NoteFinale = noteFinale;
+                await Context.SaveChangesAsync();
+            }
 
-            await Context.SaveChangesAsync();           
+            return note;
+        }
+
+        /// <summary>
+        /// Supprime les evaluations en double : un membre de jury portant plusieurs des roles
+        /// demandes etait enregistre une fois par role, ce qui comptait sa note plusieurs fois.
+        /// Conserve la ligne portant une note si elle existe, sinon la plus ancienne.
+        /// </summary>
+        public async System.Threading.Tasks.Task<int> SupprimerDoublonsEvaluations(int SessionId)
+        {
+            var evals = Context.Evaluations
+                .Where(ev => ev.EstSynthese == false && ev.Criterid != null)
+                .Where(ev => Context.Criteres.Any(c => c.Id == ev.Criterid && c.Sessionid == SessionId))
+                .ToList();
+
+            var doublons = evals
+                .GroupBy(ev => new { ev.Stagid, ev.Criterid, ev.MembreId })
+                .Where(g => g.Count() > 1)
+                .SelectMany(g => g
+                    .OrderByDescending(ev => ev.Echellid.HasValue)
+                    .ThenBy(ev => ev.Id)
+                    .Skip(1))
+                .ToList();
+
+            if (doublons.Count == 0) return 0;
+
+            Context.Evaluations.RemoveRange(doublons);
+            await Context.SaveChangesAsync();
+
+            return doublons.Count;
+        }
+
+        /// <summary>
+        /// Duplique l'echelle par defaut pour une nouvelle session, afin que chaque session
+        /// dispose de sa propre echelle modifiable sans affecter les sessions precedentes.
+        /// Ne fait rien si la session possede deja une echelle.
+        /// </summary>
+        public async System.Threading.Tasks.Task<int> CopyEchelleDefautPourSession(int sessionId)
+        {
+            if (sessionId <= 0) return 0;
+
+            bool existe = await Context.Echelles.AnyAsync(e => e.Sessionid == sessionId);
+            if (existe) return 0;
+
+            var defauts = await Context.Echelles
+                .Where(e => e.Sessionid == null)
+                .OrderBy(e => e.Val)
+                .ToListAsync();
+
+            if (defauts.Count == 0) return 0;
+
+            foreach (var d in defauts)
+            {
+                Context.Echelles.Add(new Pes.Models.DMdel.Echelle
+                {
+                    Id = d.Id,
+                    Val = d.Val,
+                    Sessionid = sessionId
+                });
+            }
+
+            await Context.SaveChangesAsync();
+            return defauts.Count;
+        }
+
+        /// <summary>
+        /// Empeche la suppression d'une echelle encore utilisee par des evaluations.
+        /// </summary>
+        public async System.Threading.Tasks.Task<bool> SupprimerEchelleSiLibre(int idScale)
+        {
+            int utilisee = await Context.Evaluations.CountAsync(ev => ev.Echellid == idScale);
+            if (utilisee > 0) return false;
+
+            var echelle = await Context.Echelles.FirstOrDefaultAsync(e => e.IdScale == idScale);
+            if (echelle == null) return false;
+
+            Context.Echelles.Remove(echelle);
+            await Context.SaveChangesAsync();
+            return true;
         }
 
         public async System.Threading.Tasks.Task DeleteEvalsOfStagiaire(int id)
