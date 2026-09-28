@@ -18,6 +18,30 @@
           <ChildContent>
             <div style="margin-bottom: 1rem" class="row">
               <div class="col-md-3">
+                <RadzenLabel Component="Nom" style="text-align: right; width: 100%" Text="Nom">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(user.Nom)" MaxLength="300" Name="Nom">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Nom" style="position: absolute" Text="Le nom est requis">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Prenom" style="text-align: right; width: 100%" Text="Prénom">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="display: block; width: 100%" @bind-Value="@(user.Prenom)" MaxLength="300" Name="Prenom">
+                </RadzenTextBox>
+                <RadzenRequiredValidator Component="Prenom" style="position: absolute" Text="Le prénom est requis">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
                 <RadzenLabel Component="Email" style="text-align: right; width: 100%" Text="Email">
                 </RadzenLabel>
               </div>
@@ -30,7 +54,7 @@
             </div>
             <div style="margin-bottom: 1rem" class="row">
               <div class="col-md-3">
-                <RadzenLabel Component="Email" style="text-align: right; width: 100%" Text="Tél">
+                <RadzenLabel Component="Textbox0" style="text-align: right; width: 100%" Text="Tél">
                 </RadzenLabel>
               </div>
               <div class="col-md-9">

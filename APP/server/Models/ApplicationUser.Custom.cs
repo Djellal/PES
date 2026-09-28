@@ -2,6 +2,7 @@
 using Pes.Models.DMdel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Pes.Models
 {
@@ -29,7 +30,27 @@ namespace Pes.Models
         [MaxLength(200)]
         public string Qualite { get; set; }
 
-       
+        [MaxLength(300)]
+        public string Nom { get; set; }
+
+        [MaxLength(300)]
+        public string Prenom { get; set; }
+
+        [NotMapped]
+        public string FullName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Nom) && string.IsNullOrWhiteSpace(Prenom))
+                {
+                    return UserName;
+                }
+
+                return string.Join(" ", new[] { Nom, Prenom }.Where(s => !string.IsNullOrWhiteSpace(s)));
+            }
+        }
+
+
 
     }
     

@@ -27,7 +27,7 @@ namespace Pes.Pages
                 Membresjury = await Security.GetUsersInRoleAndEtab(new string[] { Constants.membre_jury, Constants.president_jury, Constants.expert }, stagiaire.Etabid);
                 MembresNames = (Membresjury ?? Enumerable.Empty<ApplicationUser>())
                     .Where(m => !string.IsNullOrEmpty(m.Id))
-                    .ToDictionary(m => m.Id, m => m.Name);
+                    .ToDictionary(m => m.Id, m => m.FullName);
 
                 Evals = DMdel.DMContext.Evaluations
                     .Include(ev => ev.Critere)

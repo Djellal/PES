@@ -18,7 +18,7 @@ namespace Pes.Pages
         {
             get
             {
-                var name = user?.Name;
+                var name = user?.FullName;
                 if (string.IsNullOrWhiteSpace(name)) return "?";
 
                 var parts = name.Split(new[] { ' ', '.', '_', '-' }, StringSplitOptions.RemoveEmptyEntries);

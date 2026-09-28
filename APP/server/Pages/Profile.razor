@@ -27,7 +27,7 @@
               }
               <RadzenStack Orientation="Orientation.Vertical" Gap="0.15rem">
                 <RadzenText TextStyle="TextStyle.H5" Style="margin: 0; font-weight: 700; color: var(--rz-text-color, #1e293b);">
-                  @(user?.Name)
+                  @(user?.FullName)
                 </RadzenText>
                 <RadzenText TextStyle="TextStyle.Caption" Style="margin: 0; color: var(--rz-text-secondary-color, #64748b);">
                   @(!string.IsNullOrEmpty(user?.Email) ? user.Email : "—")

@@ -32,6 +32,10 @@
       <div class="col-md-12">
         <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@users" FilterMode="Radzen.FilterMode.Simple" TItem="ApplicationUser" PageSize="30" RowSelect="@Grid0RowSelect">
           <Columns>
+            <RadzenDataGridColumn TItem="ApplicationUser" Property="Nom" Title="Nom">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="ApplicationUser" Property="Prenom" Title="Prénom">
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="ApplicationUser" Property="UserName" Title="User Name">
             </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="ApplicationUser" Property="Etabid" Title="Etablissement">
