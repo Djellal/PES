@@ -25,13 +25,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.Compression.Portable">
-      <HintPath>..\..\others\Syncfusion.Compression.Portable.dll</HintPath>
+      <HintPath>Syncfusion.Compression.Portable.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Licensing">
-      <HintPath>..\..\others\Syncfusion.Licensing.dll</HintPath>
+      <HintPath>Syncfusion.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Pdf.Portable">
-      <HintPath>..\..\others\Syncfusion.Pdf.Portable.dll</HintPath>
+      <HintPath>Syncfusion.Pdf.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -7,6 +7,11 @@ publish/
 *.pdb
 *.cache
 
+# Keep Syncfusion DLLs tracked (required for build, referenced by Pes.csproj).
+!others/Syncfusion.Compression.Portable.dll
+!others/Syncfusion.Licensing.dll
+!others/Syncfusion.Pdf.Portable.dll
+
 # ===== Visual Studio =====
 .vs/
 *.user
