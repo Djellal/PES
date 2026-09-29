@@ -87,13 +87,13 @@
                 </div>
                 <div style="padding-top: 0px" class="row">
                   <div class="col-md-12">
-                    <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="verified_user" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold; margin-bottom: 0px; margin-top: 0px" Text="Compétences visées validées" Visible="@(pesModelsDMdelStagiaire.NoteFinale>=0.5)">
+                    <RadzenAlert AlertStyle="AlertStyle.Success" AllowClose="false" Icon="verified_user" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold; margin-bottom: 0px; margin-top: 0px" Text="Compétences visées validées" Visible="@(pesModelsDMdelStagiaire.EstAdmissibleAttestation)">
                     </RadzenAlert>
-                    <RadzenAlert AlertStyle="AlertStyle.Danger" AllowClose="false" Icon="cancel" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold; margin-bottom: 0px; margin-top: 0px" Text="Compétences visées non validées" Visible="@(pesModelsDMdelStagiaire.NoteFinale<0.5)">
+                    <RadzenAlert AlertStyle="AlertStyle.Danger" AllowClose="false" Icon="cancel" Size="AlertSize.ExtraSmall" style="border-radius: 30px; font-size: 15px; font-weight: bold; margin-bottom: 0px; margin-top: 0px" Text="Compétences visées non validées" Visible="@(!pesModelsDMdelStagiaire.EstAdmissibleAttestation)">
                     </RadzenAlert>
                   </div>
                   <div class="col-md-12 justify-content-center d-flex align-items-center" style="margin-top: 5px">
-                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}) && pesModelsDMdelStagiaire.Note>0 && pesModelsDMdelStagiaire.NoteFinale>=0.5)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
+                    <RadzenSplitButton ButtonStyle="ButtonStyle.Warning" Icon="card_membership" style="border-radius: 5px" Text="Attestation" Visible="@(Security.IsInRole(new string[]{Constants.admin,Constants.admin_regional,Constants.coordinateur,Constants.vice_recteur}) && pesModelsDMdelStagiaire.EstAdmissibleAttestation)" Click="@((args) =>Splitbutton1Click(args, pesModelsDMdelStagiaire))">
                       <ChildContent>
                         <RadzenSplitButtonItem Icon="print" Text="Imprimer" Value="0">
                         </RadzenSplitButtonItem>

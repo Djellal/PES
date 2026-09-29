@@ -110,11 +110,11 @@ namespace Pes.Pages
 
         protected async System.Threading.Tasks.Task GetAttestationsList()
         {
-            var stagwin = SelectedStagiares.Where(s => s.NoteFinale >= 0.5);
+            var stagwin = SelectedStagiares.Where(s => s.EstAdmissibleAttestation);
 
             if (!stagwin.Any())
             {
-                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "Il faut d'abord sélectionner des stagiaires dont la moyennes >= 50% " });
+                NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "Il faut d'abord sélectionner des stagiaires dont la Note Finale et la note de cours sont >= 50%" });
                 return;
             }
 
@@ -132,11 +132,11 @@ namespace Pes.Pages
         {
             try
             {
-                var stagwin = SelectedStagiares.Where(s => s.NoteFinale >= 0.5);
+                var stagwin = SelectedStagiares.Where(s => s.EstAdmissibleAttestation);
 
                 if (!stagwin.Any())
                 {
-                    NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "Il faut d'abord sélectionner des stagiaires dont la moyennes >= 50% " });
+                    NotificationService.Notify(new NotificationMessage() { Severity = NotificationSeverity.Error, Summary = $"Erreur", Detail = "Il faut d'abord sélectionner des stagiaires dont la Note Finale et la note de cours sont >= 50%" });
                     return;
                 }
 

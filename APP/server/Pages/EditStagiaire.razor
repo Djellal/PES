@@ -137,7 +137,7 @@
               </ChildContent>
             </RadzenCard>
             <div class="pes-eval-action-bar">
-              <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" Text="Imprimer Attestation" Visible="@(stagiaire.Note>0 && stagiaire.NoteFinale>=0.5)">
+              <RadzenButton ButtonStyle="ButtonStyle.Success" ButtonType="ButtonType.Submit" Icon="print" Text="Imprimer Attestation" Visible="@(stagiaire.EstAdmissibleAttestation)">
               </RadzenButton>
               <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="list_alt" Text="Détails évaluations" Click="@DetailbuttonClick">
               </RadzenButton>
