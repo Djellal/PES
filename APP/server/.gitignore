@@ -1,0 +1,43 @@
+# ===== .NET build outputs =====
+**/bin/
+**/obj/
+publish/
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# ===== Visual Studio =====
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# ===== Rider / VS Code / other IDEs =====
+.idea/
+.vscode/
+*.swp
+
+# ===== Test results & coverage =====
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+coverage*.xml
+**/coverage/
+
+# ===== Logs & diagnostics =====
+*.log
+*.txt.log
+
+# ===== Runtime-generated data (attestations, uploads) =====
+APP/server/documents/
+
+# ===== OS noise =====
+.DS_Store
+Thumbs.db
+
+# ===== Local secrets / environment =====
+*.env
+.env.*
