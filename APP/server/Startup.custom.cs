@@ -54,12 +54,21 @@ namespace Pes
             services.AddScoped<AuditService>();
         }
 
-        partial void OnConfigure(IApplicationBuilder app, IWebHostEnvironment env)
+        partial void OnConfiguring(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // En-tetes du reverse proxy (Apache2) : a resoudre AVANT toute lecture de
+            // RemoteIpAddress. OnConfiguring est appele en premier dans le pipeline.
+            // Seul le proxy local (loopback) est fiable.
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                ForwardLimit = 1,
+                KnownProxies = { System.Net.IPAddress.Loopback, System.Net.IPAddress.IPv6Loopback }
             });
+        }
+
+        partial void OnConfigure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
         }
 
     }
