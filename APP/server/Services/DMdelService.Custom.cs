@@ -306,9 +306,16 @@ namespace Pes
         /// </summary>
         public async System.Threading.Tasks.Task<int> SupprimerDoublonsEvaluations(int SessionId)
         {
+            // Identifiants des criteres de la session precharges : le filtre par Contains
+            // est plus robuste (traductible) que la sous-requete correlee .Any(...).
+            var critereIds = await Context.Criteres
+                .Where(c => c.Sessionid == SessionId)
+                .Select(c => (int?)c.Id)
+                .ToListAsync();
+
             var evals = Context.Evaluations
-                .Where(ev => ev.EstSynthese == false && ev.Criterid != null)
-                .Where(ev => Context.Criteres.Any(c => c.Id == ev.Criterid && c.Sessionid == SessionId))
+                .Where(ev => ev.EstSynthese == false && ev.Criterid != null && ev.Stagid != null)
+                .Where(ev => critereIds.Contains(ev.Criterid))
                 .ToList();
 
             var doublons = evals

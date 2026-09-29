@@ -66,25 +66,34 @@ namespace Pes.Pages
 
             try
             {
+                // Identifiants des criteres de la session, precharges pour pouvoir filtrer
+                // par Contains (la sous-requete correlee + GroupBy n'est pas traduisible).
+                var critereIds = await Ctx.Criteres
+                    .Where(c => c.Sessionid == sessionId)
+                    .Select(c => (int?)c.Id)
+                    .ToListAsync();
+
+                var lignes = await Ctx.Evaluations
+                    .Where(ev => ev.EstSynthese == false && ev.Criterid != null && ev.Stagid != null)
+                    .Where(ev => critereIds.Contains(ev.Criterid))
+                    .Select(ev => new { ev.Stagid, ev.Criterid, ev.MembreId })
+                    .ToListAsync();
+
                 int doublons = 0;
-                foreach (var g in await Ctx.Evaluations
-                             .Where(ev => ev.EstSynthese == false && ev.Criterid != null)
-                             .Where(ev => Ctx.Criteres.Any(c => c.Id == ev.Criterid && c.Sessionid == sessionId))
-                             .GroupBy(ev => new { ev.Stagid, ev.Criterid, ev.MembreId })
-                             .Where(g => g.Count() > 1)
-                             .ToListAsync())
+                foreach (var g in lignes.GroupBy(x => new { x.Stagid, x.Criterid, x.MembreId }))
                 {
-                    doublons += g.Count() - 1;
+                    int n = g.Count();
+                    if (n > 1) doublons += n - 1;
                 }
 
-                var syntheseIds = await Ctx.Evaluations
-                    .Where(ev => ev.EstSynthese && ev.Stagid != null)
-                    .Where(ev => Ctx.Stagiaires.Any(s => s.Id == ev.Stagid && s.Sessionid == sessionId))
-                    .Select(ev => ev.Id)
+                var stagiaireIdsSess = await Ctx.Stagiaires
+                    .Where(s => s.Sessionid == sessionId)
+                    .Select(s => (int?)s.Id)
                     .ToListAsync();
 
                 int synthesesNonEvaluees = await Ctx.Evaluations
-                    .CountAsync(ev => syntheseIds.Contains(ev.Id) && ev.NoteSynthese == null);
+                    .CountAsync(ev => ev.EstSynthese && ev.NoteSynthese == null
+                        && ev.Stagid != null && stagiaireIdsSess.Contains(ev.Stagid));
 
                 int nbStagiaires = await Ctx.Stagiaires.CountAsync(s => s.Sessionid == sessionId);
 
