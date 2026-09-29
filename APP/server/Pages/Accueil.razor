@@ -192,6 +192,75 @@
               </div>
             }
 
+            <!-- Statistiques -->
+            @if (Security.IsInRole(new string[]{"Authenticated", "admin", "admin_regional", "coordinateur", "vice_recteur", "expert", "membre_jury", "president_jury"}))
+            {
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("statistiques"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-success-light">
+                        <RadzenIcon Icon="insights" Style="font-size: 24px; color: #16a34a;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Statistiques</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Indicateurs & Bilans</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Consulter les indicateurs et les bilans chiffrés de la session.
+                    </RadzenText>
+                    <RadzenButton Text="Consulter" Icon="arrow_forward" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+            }
+
+            <!-- Utilisateurs & Facultés (Gestion) -->
+            @if (Security.IsInRole(new string[]{Constants.admin, Constants.admin_regional, Constants.coordinateur, Constants.vice_recteur}))
+            {
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("application-users"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-primary-light">
+                        <RadzenIcon Icon="manage_accounts" Style="font-size: 24px; color: #0078d4;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Utilisateurs</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Comptes & Rôles</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Gérer les comptes des utilisateurs et leurs rôles d'accès.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Facultés & Départements -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("facultes"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-warning-light">
+                        <RadzenIcon Icon="domain" Style="font-size: 24px; color: #d97706;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Facultés & Départements</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Organisation territoriale</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Administrer les facultés et leurs départements.
+                    </RadzenText>
+                    <RadzenButton Text="Consulter" Icon="arrow_forward" ButtonStyle="ButtonStyle.Warning" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+            }
+
             <!-- Mon Profil -->
             <div class="col-xl-3 col-md-6">
               <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("profile"))">
@@ -214,6 +283,143 @@
             </div>
 
           </div>
+
+          <!-- Administration & Paramétrage (Admin) -->
+          @if (Security.IsInRole(Constants.admin))
+          {
+            <RadzenText TextStyle="TextStyle.H6" Style="font-weight: 700; color: var(--rz-text-color, #1e293b); margin-top: 0.75rem;">
+              Administration & Paramétrage
+            </RadzenText>
+            <div class="row g-3">
+
+              <!-- Sessions -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("sessions"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-primary-light">
+                        <RadzenIcon Icon="calendar_month" Style="font-size: 24px; color: #0078d4;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Sessions</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Calendrier des évaluations</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Planifier et paramétrer les sessions d'évaluation.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Rubriques -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("rubriques"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-info-light">
+                        <RadzenIcon Icon="category" Style="font-size: 24px; color: #0284c7;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Rubriques</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Grille d'évaluation</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Structurer la grille d'évaluation des productions.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Indicateurs & Critères -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("element"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-success-light">
+                        <RadzenIcon Icon="fact_check" Style="font-size: 24px; color: #16a34a;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Indicateurs & Critères</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Barème de notation</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Définir les indicateurs et leurs critères d'évaluation.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Échelles -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("echelle"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-warning-light">
+                        <RadzenIcon Icon="linear_scale" Style="font-size: 24px; color: #d97706;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Échelles</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Notes par session</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Gérer les échelles de notation associées aux sessions.
+                    </RadzenText>
+                    <RadzenButton Text="Gérer" Icon="arrow_forward" ButtonStyle="ButtonStyle.Warning" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Journal d'audit -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("audit-logs"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-info-light">
+                        <RadzenIcon Icon="history" Style="font-size: 24px; color: #0284c7;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Journal d'audit</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Traçabilité</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Consulter l'historique des actions des utilisateurs.
+                    </RadzenText>
+                    <RadzenButton Text="Consulter" Icon="arrow_forward" ButtonStyle="ButtonStyle.Info" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+              <!-- Reprise des notes -->
+              <div class="col-xl-3 col-md-6">
+                <RadzenCard Class="pes-action-card h-100" @onclick="@(() => UriHelper.NavigateTo("reprise-notes"))">
+                  <RadzenStack Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Gap="1rem" Style="height: 100%;">
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.75rem">
+                      <div class="pes-action-icon-box bg-primary-light">
+                        <RadzenIcon Icon="published_with_changes" Style="font-size: 24px; color: #0078d4;" />
+                      </div>
+                      <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1" Style="font-weight: 700; margin: 0;">Reprise des notes</RadzenText>
+                        <RadzenText TextStyle="TextStyle.Caption" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">Nettoyage des données</RadzenText>
+                      </RadzenStack>
+                    </RadzenStack>
+                    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color, #64748b); margin: 0;">
+                      Diagnostiquer et corriger les données de notation.
+                    </RadzenText>
+                    <RadzenButton Text="Ouvrir" Icon="arrow_forward" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Flat" Size="ButtonSize.Small" Style="align-self: flex-start; border-radius: 6px;" />
+                  </RadzenStack>
+                </RadzenCard>
+              </div>
+
+            </div>
+          }
 
         </RadzenStack>
       }
